@@ -365,7 +365,7 @@ add_action( 'init', 'bkkp_register_post_type_tax_return' );
 /*** +~+~+~+~+~+~+ ***/
 
 // Add existing taxonomies to post types
-add_action( 'init', 'bkkp_add_taxonomies_to_cpts' );
+add_action( 'init', 'bkkp_add_taxonomies_to_cpts', 20 );
 function bkkp_add_taxonomies_to_cpts() {
 	register_taxonomy_for_object_type( 'admin_tag', 'paycheck' );
 }
