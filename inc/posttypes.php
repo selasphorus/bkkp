@@ -180,7 +180,7 @@ function bkkp_register_post_type_paycheck() {
 	 	'menu_icon'          => 'dashicons-yes-alt',
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-		'taxonomies' => array( 'admin_tag', 'income_category' ), 
+		'taxonomies' => array( 'income_category' ), //'admin_tag', 
 		'show_in_rest' => false,
 	);
 
