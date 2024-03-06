@@ -395,7 +395,7 @@ function display_income ( $atts = [] ) {
 				$wp_args['meta_query'] = $meta_query;
 				$arr_transactions = new WP_Query( $wp_args );
 				$transactions = $arr_transactions->posts;
-				$info .= "[".count($transactions)."] transactions found for ".get_the_title($employer_id)." (employer_id [$employer_id]) in year $year.<br />";
+				//$info .= "[".count($transactions)."] transactions found for ".get_the_title($employer_id)." (employer_id [$employer_id]) in year $year.<br />";
 				if ( empty($transactions) ) {
 					//$info .= "[".count($transactions)."] transactions found for employer_id [$employer_id] in year $year.<br />";
 					//$ts_info .= "WP_Query run as follows:";
