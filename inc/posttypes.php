@@ -89,7 +89,7 @@ function bkkp_register_post_type_transaction() {
         'map_meta_cap'       => true,
         'has_archive'        => true,
         'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-yes-alt',
+	 	'menu_icon'          => 'dashicons-yes-alt',
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
 		'taxonomies' => array( 'admin_tag', 'ledger_category' ), 
