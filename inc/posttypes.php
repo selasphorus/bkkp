@@ -146,48 +146,7 @@ function bkkp_register_post_type_ledger_entry() {
 add_action( 'init', 'bkkp_register_post_type_ledger_entry' );
 
 /*** EMPLOYMENT & INCOME ***/
-
-// Paychecks -- paycheck
-function bkkp_register_post_type_paycheck() {
-
-	if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
-
-	$labels = array(
-		'name' => __( 'Paychecks', 'bkkp' ),
-		'singular_name' => __( 'Paycheck', 'bkkp' ),
-		'add_new' => __( 'New Paycheck', 'bkkp' ),
-		'add_new_item' => __( 'Add New Paycheck', 'bkkp' ),
-		'edit_item' => __( 'Edit Paycheck', 'bkkp' ),
-		'new_item' => __( 'New Paycheck', 'bkkp' ),
-		'view_item' => __( 'View Paycheck', 'bkkp' ),
-		'search_items' => __( 'Search Paychecks', 'bkkp' ),
-		'not_found' =>  __( 'No Paychecks Found', 'bkkp' ),
-		'not_found_in_trash' => __( 'No Paychecks found in Trash', 'bkkp' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true, //'show_in_menu'       => 'edit.php?post_type=account',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'paychecks' ),
-        'capability_type' => $caps,
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	'menu_icon'          => 'dashicons-yes-alt',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-		'taxonomies' => array( 'income_category' ), //'admin_tag', 
-		'show_in_rest' => false,
-	);
-
-	register_post_type( 'paycheck', $args );
-	
-}
-add_action( 'init', 'bkkp_register_post_type_paycheck' );
+// Eliminated: special posttype for paycheck >> folded into document posttype
 
 /*** TAXES ***/
 
@@ -224,7 +183,7 @@ function bkkp_register_post_type_document() {
 	 	'menu_icon'          => 'dashicons-media-document',
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-		'taxonomies' => array( 'admin_tag', 'document_category' ), 
+		'taxonomies' => array( 'admin_tag', 'document_category', 'income_category' ), // WIP re 'income_category'
 		'show_in_rest' => false,    
 	);
 
