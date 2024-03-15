@@ -110,13 +110,12 @@ function bkkp_save_post_callback( $post_id, $post, $update ) {
     
     $post_type = get_post_type( $post_id );
     
+    // Update transaction types, as needed
     if ( $post_type == 'transaction' ) {
     	// TODO: detect whether amount is positive or negative number => if transaction type is not set already, set it, and update negative amounts to abs value
     	// Also add transaction_tag to indicate that record has been updated post-import?
     	$transaction_type = get_field('transaction_type', $post_id);
-    	if ( $transaction_type ) {
-    		//
-    	} else {
+    	if ( empty($transaction_type) || $transaction_type == "unknown" ) {
     		$amount = get_field('amount', $post_id);
     		if ( $amount > 0 ) {
     			$transaction_type = 'credit';
