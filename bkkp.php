@@ -26,15 +26,25 @@ $plugin_path = plugin_dir_path( __FILE__ );
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
+// Get plugin options -- WIP
+$options = get_option( 'bkkp_settings' );
+if ( isset($options['bkkp_modules']) ) { $modules = $options['bkkp_modules']; } else { $modules = array( 'documents' ); }
+$includes = array( 'posttypes', 'taxonomies' );
+
 // Include sub-files
 // TODO: make them required? Otherwise dependencies may be an issue.
 // TODO: maybe: convert to classes/methods approach??
-
-$includes = array( 'posttypes', 'taxonomies' ); // , 'events', 'sermons'
-
 foreach ( $includes as $inc ) {
     $filepath = $plugin_path . 'inc/'.$inc.'.php'; 
     if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
+}
+
+foreach ( $modules as $module ) {
+    $filepath = $plugin_path . 'modules/'.$module.'.php';
+    $arr_exclusions = array(); //$arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'organs', 'press', 'projects', 'sources' );
+    if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
+    	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "module file $filepath not found"; }
+    }
 }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
@@ -60,23 +70,141 @@ function add_post_type_query_var( $url, $post_id, $context ) {
  *
  */
 
-//add_filter('pods_api_pre_save_pod_item_paycheck', 'bkkp_pre_pod_save_function', 10, 2); //pods_api_pre_save_pod_item_my_pod_name
-function bkkp_pre_pod_save_function($pieces, $is_new_item) { 
+
+
+/*** WIP FUNCTIONS ***/
+
+add_action( 'save_post', 'bkkp_save_post_callback', 10, 3 );
+function bkkp_save_post_callback( $post_id, $post, $update ) {
     
-    global $post;
-    $post_id = $post->ID;
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline1", $do_log );
+    //sdg_log( "action: save_post", $do_log );
+    //sdg_log( "action: save_post_event", $do_log );
+    sdg_log( "function called: bkkp_save_post_callback", $do_log );
     
-    $info = ""; // init
-    $total_due = "0"; // init
+   // if ( is_dev_site() ) { sdg_add_post_term( $post_id, 'dev-test-tmp', 'admin_tag', true ); }
     
-    $total_due = calculate_worklog_total_due ( $post_id );
+    // Don't run if this is an auto-draft
+    if ( isset($post->post_status) && 'auto-draft' == $post->post_status ) {
+        return;
+    }
+
+    // Don't run if this is an Autosave operation
+    if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+        return;
+    }
+    
+    // If this is a post revision, then abort
+    if ( wp_is_post_revision( $post_id ) ) { 
+        sdg_log( "[sspc] is post revision >> abort.", $do_log );
+        return;
+    }
+    
+    $post_type = $post->post_type;
+    //$post_type = get_post_type( $post_id );
+    // get custom fields from $_POST var?
+    sdg_log( "[sspc] post_type: ".$post_type, $do_log );
+    
+    $post_type = get_post_type( $post_id );
+    
+    if ( $post_type == 'transaction' ) {
+    	// TODO: detect whether amount is positive or negative number => if transaction type is not set already, set it, and update negative amounts to abs value
+    	// Also add transaction_tag to indicate that record has been updated post-import?
+    	$transaction_type = get_field('transaction_type', $post_id);
+    	if ( $transaction_type ) {
+    		//
+    	} else {
+    		$amount = get_field('amount', $post_id);
+    		if ( $amount > 0 ) {
+    			$transaction_type = 'credit';
+    		} else {
+    			$transaction_type = 'debit';
+    			$amount = abs($amount);
+    			update_field('amount', $amount, $post_id);
+    		}
+    		update_field('transaction_type', $transaction_type, $post_id); // update_field($selector, $value, $post_id);
+    	}
+    }
+    
+    
+    // Check for CPT-specific build_the_title function
+    // WIP
+    /*
+    $function_name = "build_".$post_type."_title";
+    if ( function_exists($function_name) ) {
+    
+    	// Get post obj, post_title
+        $the_post = get_post( $post_id );
+        $post_title = $the_post->post_title;
+        
+        // Get title/slug based on post field values
+        $new_title = $function_name( $post_id );
+        $new_slug = sanitize_title($new_title);
+
+        // If we've got a new post_title, prep to run the update
+    
+    	// Check to see if new_slug is really new. If it's identical to the existing slug, skip the update process.
+        if ( $new_title != $post_title ) {
+
+			sdg_log( "[sspc] update the post_title", $do_log );
+			
+			// TODO: figure out how NOT to trigger wp_insert_post_data when running this update...
+			
+            // unhook this function to prevent infinite looping
+            remove_action( 'save_post', 'bkkp_save_post_callback' );
+
+            // Update the post
+            $update_args = array(
+                'ID'       	=> $post_id,
+                'post_title'=> $new_title,
+                'post_name'	=> $new_slug,
+            );
+
+            // Update the post into the database
+            wp_update_post( $update_args, true );    
+
+            if ( ! is_wp_error($post_id) ) {
+                // If update was successful, add admin tag to note that slug has been updated
+                sdg_add_post_term( $post_id, 'title-updated', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+                //$info .= sdg_add_post_term( $post_id, 'slug-updated', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+            }
+
+            // re-hook this function
+            add_action( 'save_post', 'bkkp_save_post_callback', 10, 3 );
+
+        }
+      
+    } // end post_type check
+	*/
+}
+
+function bkkp_acf_field_calc($post_id) {
+
+	$calc = get_field('field_name_one') + get_field('field_name_two');
+	$value = $calc;
+	$field_to_update = "field_name_three";
+	update_field($field_to_update, $value, $post_id);
+	
+	//total_earnings == calc from earnings repeater
+	//total_deductions == calc from deductions repeater
+	//net_xcheck = total_earnings - total_deductions;
+	
+	//worklog_total_due
+	
+	/*
+	$total_due = calculate_worklog_total_due ( $post_id );
     $info .= "total_due: $total_due<br />";
     //echo $info;
-    
-    $pieces[ 'fields' ][ 'worklog_total_due' ][ 'value' ] = $total_due; 
+    */
+	
+}
+add_action('save_post', 'bkkp_acf_field_calc');
 
-    return $pieces; 
-} 
+
+
 
 function calculate_worklog_total_due ( $post_id ) {
     
@@ -117,8 +245,6 @@ function calculate_worklog_total_due ( $post_id ) {
     
 }
 
-
-/*** WIP FUNCTIONS ***/
 
 add_shortcode('tax_docs', 'display_tax_docs');
 function display_tax_docs ( $atts = [] ) {
@@ -430,6 +556,7 @@ function display_income ( $atts = [] ) {
 				$display_format = 'table';
 				$show_subtitles = true;
 				$show_content = true;
+				// Add cols: num docs, num transactions
 				$display_atts = array( 'fields' => array( 'title', 'abbr', 'total_comp', 'total_withheld', 'total_deposits', 'diff' ), 'headers' => array( 'Employer Name', 'Abbr', 'Total Compensation', 'Total Withheld', 'Total Deposits', 'diff' ) ); // fields, headers
 				$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $items, 'display_atts' => $display_atts, 'do_ts' => true ); //
 				//$ts_info .= "display_args: <pre>".print_r($display_args,true)."</pre>";
