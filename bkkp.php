@@ -125,6 +125,7 @@ function bkkp_save_post_callback( $post_id, $post, $update ) {
     			update_field('amount', $amount, $post_id);
     		}
     		update_field('transaction_type', $transaction_type, $post_id); // update_field($selector, $value, $post_id);
+    		sdg_add_post_term( $post_id, 'programmatically-updated', 'transaction_tag', true );
     	}
     }
     
