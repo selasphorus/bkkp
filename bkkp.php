@@ -78,7 +78,7 @@ add_action( 'save_post', 'bkkp_save_post_callback', 10, 3 );
 function bkkp_save_post_callback( $post_id, $post, $update ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active();
     $do_log = false;
     sdg_log( "divline1", $do_log );
     //sdg_log( "action: save_post", $do_log );
@@ -132,7 +132,7 @@ function bkkp_save_post_callback( $post_id, $post, $update ) {
     
     // Check for CPT-specific build_the_title function
     // WIP
-    /*
+    
     $function_name = "build_".$post_type."_title";
     if ( function_exists($function_name) ) {
     
@@ -142,7 +142,7 @@ function bkkp_save_post_callback( $post_id, $post, $update ) {
         
         // Get title/slug based on post field values
         $new_title = $function_name( $post_id );
-        $new_slug = sanitize_title($new_title);
+        if ( function_exists('sanitize_title') ) { $new_slug = sanitize_title($new_title); }
 
         // If we've got a new post_title, prep to run the update
     
@@ -177,8 +177,8 @@ function bkkp_save_post_callback( $post_id, $post, $update ) {
 
         }
       
-    } // end post_type check
-	*/
+    } //
+	
 }
 
 function bkkp_acf_field_calc($post_id) {
@@ -250,7 +250,7 @@ add_shortcode('tax_docs', 'display_tax_docs');
 function display_tax_docs ( $atts = [] ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active();
     $do_log = false;
     //sdg_log( "divline2", $do_log );
     //sdg_log( "function called: show_snippets", $do_log );
@@ -341,7 +341,7 @@ add_shortcode('income', 'display_income');
 function display_income ( $atts = [] ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active();
     $do_log = false;
     //sdg_log( "divline2", $do_log );
     //sdg_log( "function called: show_snippets", $do_log );
