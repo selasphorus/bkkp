@@ -374,6 +374,9 @@ function display_income ( $atts = [] ) {
 		// WIP get year(s) from YYYY or YYYY-mm-dd or range
 		if ( strlen($dates) == 4 ) { // && is_int($dates)
 			$years[] = (int) $dates;
+		} else if ( strpos($dates,",") ) {
+			// multiple years
+			$years = explode(",",$dates);
 		}
 	}
 	
