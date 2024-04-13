@@ -41,6 +41,7 @@ function build_document_title( $post_id = null, $arr = array() ) {
 		$payment_amount = get_field('payment_amount', $post_id); // for tax payments (x-check with transactions)
 		$estimated_payment = get_field('estimated_payment', $post_id); // for tax payments (T/F)
 		$employer = get_field('employer', $post_id);
+		$account = get_field('account', $post_id);
 		$tax_forms = get_field('tax_forms', $post_id);
 		//$check_num = get_field('check_num', $post_id);
 		$jurisdiction = get_field('jurisdiction', $post_id); // federal, nys, nj
