@@ -291,7 +291,6 @@ function bkkp ( $atts = [] ) {
 			$years = explode(",",$dates);
 		}
 	}
-	$args['years'] = $years;
 	
 	// TODO: do this only for income queries?
 	if ( $data_type == "income" ) {
@@ -304,6 +303,8 @@ function bkkp ( $atts = [] ) {
 	}
 	
 	foreach ( $years as $year ) {
+	
+		$args['year'] = $year;
 	
 		// Display header
 		if ( $show_headers ) {
@@ -414,7 +415,7 @@ function display_income ( $args = array() ) {
 	// WIP
 	//$info .= "display_income -- args: <pre>".print_r($args, true).'</pre>';
 	// If not dealing w/ employment income, then we'll query transactions and docs differently
-	if ( is_array($sources) && in_array( 'employment', $sources ) ) {
+	if ( in_array( 'employment', $sources ) ) { // is_array($sources) && 
 	
 		// Get Employers
 		// +~+~+~+~+~+~+
