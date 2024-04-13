@@ -489,8 +489,8 @@ function display_income ( $atts = [] ) {
 				}
 				//$info .= "arr_obj_docs: ".print_r($arr_obj_docs, true)."<hr />"; // tft
 				
-				$field_values['total_comp'] = number_format_i18n($total_comp); // TODO: currency formatting
-				$field_values['total_withheld'] = number_format_i18n($total_withheld); // TODO: currency formatting
+				$field_values['total_comp'] = $total_comp; // TODO: currency formatting
+				$field_values['total_withheld'] = $total_withheld; // TODO: currency formatting
 				
 				/*********************/
 				// Get corresponding deposits total (transactions)
@@ -541,7 +541,7 @@ function display_income ( $atts = [] ) {
 					}
 				}
 		
-				$field_values['total_deposits'] = number_format_i18n($total_deposits); // TODO: currency formatting
+				$field_values['total_deposits'] = $total_deposits; // TODO: currency formatting
 				
 				/*********************/
 				// Calc comp/deposits diff
