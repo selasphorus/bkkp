@@ -403,10 +403,12 @@ function display_income ( $args = array() ) {
     // Init vars
     $info = "";
 	$ts_info = "";
+	$items = array();
 	
 	// WIP
+	$info .= "display_income -- args: <pre>".print_r($args, true).'</pre>';
 	// If not dealing w/ employment income, then we'll query transactions and docs differently
-	if ( in_array( 'employment', $sources ) ) {
+	if ( is_array($sources) && in_array( 'employment', $sources ) ) {
 	
 		// Get Employers
 		// +~+~+~+~+~+~+
@@ -447,8 +449,6 @@ function display_income ( $args = array() ) {
 		
 			// Build array of items each of which includes:
 			// Employer Name, Abbr, Work Cat, 1099/W2, Total Amnt (1099/W2), Total Taxes Withheld, % Withheld, Total Deposits (transactions), Deposits vs IRS (diff); Total Net Income, Total Gross Income, Notes
-		
-			$items = array();
 		
 			foreach ( $employers as $employer_id ) {
 		
@@ -587,7 +587,7 @@ function display_income ( $args = array() ) {
 		
 	}
 	
-	if ( function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
+	if ( !empty($items) && function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
 		$content_type = 'posts'; // ?
 		$display_format = 'table';
 		$show_subtitles = true;
