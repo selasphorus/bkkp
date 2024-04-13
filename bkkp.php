@@ -294,7 +294,14 @@ function bkkp ( $atts = [] ) {
 	$args['years'] = $years;
 	
 	// TODO: do this only for income queries?
-	if ( !is_array($sources) ) { $sources = explode(",",$sources); $args['sources'] = $sources; }
+	if ( $data_type == "income" ) {
+		if ( !is_array($sources) ) {
+			$sources = explode(",",$sources);
+			$args['sources'] = $sources;
+		}		
+	} else {
+		unset($args['sources']);
+	}
 	
 	foreach ( $years as $year ) {
 	
