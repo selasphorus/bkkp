@@ -246,126 +246,35 @@ function calculate_worklog_total_due ( $post_id ) {
 }
 
 
-add_shortcode('tax_docs', 'display_tax_docs');
-function display_tax_docs ( $atts = [] ) {
+add_shortcode('bkkp', 'bkkp');
+function bkkp ( $atts = [] ) {
 
 	// TS/logging setup
     $do_ts = devmode_active();
     $do_log = false;
     //sdg_log( "divline2", $do_log );
-    //sdg_log( "function called: show_snippets", $do_log );
+    //sdg_log( "function called: bkkp", $do_log );
     
     // Init vars
     $info = "";
 	$ts_info = "";
     
     $args = shortcode_atts( array(
-		'dates'   => 'this_year', // 'last_year', 'YYYY-mm-dd, YYYY-mm-dd' [start/end]
-        //'return' => 'info',
-    ), $atts );
-    
-    // Extract
-	extract( $args );
-	
-	// Get year or years
-	$years = array();
-	if ( $dates == 'this_year' ) {
-		$years[] = date('Y');
-	} else if ( $dates == 'last_year' ) {
-		$years[] = date('Y')-1;
-	} else {
-		// WIP get year(s) from YYYY or YYYY-mm-dd or range
-	}
-	
-	// Get Tax Docs per year
-	foreach ( $years as $year ) {
-		
-		$info = "<h3>Tax Year: $year</h3>";
-		
-		// Set up basic query args
-		$wp_args = array(
-			'post_type'		=> 'document',
-			'post_status'	=> 'publish',
-			//'posts_per_page'=> $limit,
-			'fields'		=> 'ids',
-			//'orderby'		=> 'meta_value',
-			//'order'			=> 'ASC',
-		);	
-	
-		// Set up meta query
-		$meta_query = array(
-			'relation' => 'AND',
-			'tax_year' => array(
-				'key' => 'tax_year',
-				'compare' => '=',
-				'value' 	=> $year,
-			),
-		);
-		$wp_args['meta_query'] = $meta_query;
-	
-		$arr_posts = new WP_Query( $wp_args );
-		$docs = $arr_posts->posts;
-		$ts_info .= "[".count($docs)."] docs found.<br />";
-		//$ts_info .= "docs: <pre>".print_r($docs,true)."</pre>";
-		if ( empty($docs) ) {
-			//$ts_info .= "WP_Query run as follows:";
-			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-			$ts_info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
-		} else {
-			if ( function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
-				$content_type = 'posts';
-				$display_format = 'table';
-				$show_subtitles = true;
-				$show_content = true;
-				$display_atts = array( 'fields' => array( 'tax_year', 'title', 'total_comp' ), 'headers' => array( 'Tax Year', 'Title', 'Total Compensation' ), 'totals' => array('total_comp') ); // fields, headers
-				$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $docs, 'display_atts' => $display_atts, 'do_ts' => $do_ts ); //
-				//$ts_info .= "display_args: <pre>".print_r($display_args,true)."</pre>";
-				$info .= birdhive_display_collection( $display_args );
-			}
-        
-		}
-	
-	}
-	
-	//
-	//
-	
-	// Build table: Year, Doc Title, ....
-	
-	if ( $do_ts ) { $info .= $ts_info; } //$info .= '<div class="code">'.$ts_info.'</div>';
-	return $info;
-	
-}
-
-add_shortcode('income', 'display_income');
-function display_income ( $atts = [] ) {
-
-	// TS/logging setup
-    $do_ts = devmode_active();
-    $do_log = false;
-    //sdg_log( "divline2", $do_log );
-    //sdg_log( "function called: show_snippets", $do_log );
-    
-    // Init vars
-    $info = "";
-	$ts_info = "";
-    
-    $args = shortcode_atts( array(
-    	'sources' => array( 'employment' ), // (employment/other; transactions, docs, events, etc)
-    	//'sources' => array( 'employment' ), // 'interest', 'dividends', 'gifts', 'other'
+		'dates'   => 'ytd', // 'last_year', 'this_year', 'YYYY-mm-dd, YYYY-mm-dd' [start/end]
+		'data_type'	=> 'transactions', // income, tax_docs, transactions...
+		//
+    	'sources' => array( 'employment' ), // (employment/other; transactions, docs, events, etc) // 'interest', 'dividends', 'gifts', 'other'
     	//'categories' => array( 'employment' ), // 'interest', 'dividends', 'gifts', 'other'
+    	
+		'accounts' => 'all',
 		'groups' => 'all',
 		'people' => 'all',
-		'dates'   => 'ytd', // 'last_year', 'this_year', 'YYYY-mm-dd, YYYY-mm-dd' [start/end]
         //'return' => 'info',
         'show_headers'  => true,
     ), $atts );
     
     // Extract
 	extract( $args );
-	
-	// 
-	if ( !is_array($sources) ) { $sources = explode(",",$sources); }
 	
 	// Get year or years
 	$years = array();
@@ -382,227 +291,308 @@ function display_income ( $atts = [] ) {
 			$years = explode(",",$dates);
 		}
 	}
+	$args['years'] = $years;
+	
+	// TODO: do this only for income queries?
+	if ( !is_array($sources) ) { $sources = explode(",",$sources); }
 	
 	foreach ( $years as $year ) {
 	
 		// Display header
 		if ( $show_headers ) {
 			if ( count($years) > 1 ) {
-				$info .= "<h2>$year</h2>";
+				$info .= "<h3>$year</h3>";
 			} else if ( $year == date('Y') ) {
-				$info .= "<h2>This Year ($year/YTD)</h2>";		
+				$info .= "<h3>This Year ($year/YTD)</h3>";		
 			} else if ( $year == date('Y')-1 ) {
-				$info .= "<h2>Last Year ($year)</h2>";
+				$info .= "<h3>Last Year ($year)</h3>";
 			} else {
-				$info .= "<h2>$year</h2>";
+				$info .= "<h3>$year</h3>";
 			}
-		}		
-		
-		// TODO: if in_array( 'employment', $sources ) ...
-		// If not dealing w/ employment income, then we'll query transactions and docs differently
-		// WIP
-		if ( in_array( 'employment', $sources ) ) {
-		
-			// Get Employers
-			// +~+~+~+~+~+~+
-		
-			// Set up basic query args
-			$wp_args = array(
-				'post_type'		=> array('group', 'person'),
-				'post_status'	=> 'publish',
-				//'posts_per_page'=> $limit,
-				'posts_per_page'=> '-1',
-				'fields'		=> 'ids',
-				'orderby'		=> 'title',
-				//'orderby'		=> 'meta_value',
-				'order'			=> 'ASC',
-			);
-	
-			// Set up meta query
-			$meta_query = array(
-				'relation' => 'AND',
-				'years_of_employment' => array(
-					'key' => 'years_of_employment',
-					'compare' => 'LIKE',
-					'value' 	=> '"'.$year.'"', // matches exactly "123", not just 123. This prevents a match for "1234"
-				),
-			);
-			$wp_args['meta_query'] = $meta_query;
-	
-			$arr_employers = new WP_Query( $wp_args );
-			$employers = $arr_employers->posts;
-			$ts_info .= "[".count($employers)."] employers found.<br />";
-			if ( empty($employers) ) {
-		
-				//$ts_info .= "WP_Query run as follows:";
-				$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-				$ts_info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
-			
-			} else {
-			
-				// Build array of items each of which includes:
-				// Employer Name, Abbr, Work Cat, 1099/W2, Total Amnt (1099/W2), Total Taxes Withheld, % Withheld, Total Deposits (transactions), Deposits vs IRS (diff); Total Net Income, Total Gross Income, Notes
-			
-				$items = array();
-			
-				foreach ( $employers as $employer_id ) {
-			
-					$field_values = array();
-				
-					/*********************/
-					// Get W2s/1099 amounts
-					$total_comp = 0;
-					$total_withheld = 0;
-					// TODO: mod get_related_posts to accept meta_query? or use birdhive_get_posts instead? so as to not have to do tax_year check, below...
-					$arr_obj_docs = get_related_posts( $employer_id, 'document', 'employer' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
-					if ( $arr_obj_docs ) {
-			
-						//$info .= "<h3>Docs:</h3>";
-			
-						if ( is_array($arr_obj_docs) ) {
-							//$info .= "<p>arr_compositions (".count($arr_compositions)."): <pre>".print_r($arr_compositions, true)."</pre></p>";
-							foreach ( $arr_obj_docs as $doc ) {
-								$doc_id = $doc->ID;
-								$tax_year = get_field( 'tax_year', $doc_id );
-								if ( $tax_year == $year ) { 
-									//$info .= $doc->post_title."<br />";
-									$comp = get_field( 'total_comp', $doc_id );
-									$total_comp += $comp;
-									// TODO: rename fields to match vars; update DB records
-									$fed_tax = get_field( 'fed_tax_withheld', $doc_id );
-									$total_withheld += (float) $fed_tax;
-									//$info .= "fed_tax for doc_id [$doc_id]: $fed_tax<br />";
-									$socsec_tax = get_field( 'ss_tax_withheld', $doc_id );
-									$total_withheld += (float) $socsec_tax;
-									$medicare_tax = get_field( 'medicare_tax_withheld', $doc_id );
-									$total_withheld += (float) $medicare_tax;
-									$state_tax = get_field( 'state_tax_withheld', $doc_id );
-									$total_withheld += (float) $state_tax;
-									$local_tax = get_field( 'local_tax_withheld', $doc_id );
-									$total_withheld += (float) $local_tax;
-									//$rep_info = get_rep_info( $doc->ID, 'display', false, true ); // ( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
-									//$info .= make_link( get_permalink($doc->ID), $rep_info, "TEST rep title" )."<br />";
-								}
-							}
-						} else {
-							//$info .= print_r($arr_obj_docs, true);
-						}
-					
-					} else {
-						$ts_info .= "No docs found for get_related_posts (document -> employer = employer_id: $employer_id)<br />";
-					}
-					//$info .= "arr_obj_docs: ".print_r($arr_obj_docs, true)."<hr />"; // tft
-				
-					$field_values['total_comp'] = $total_comp; // TODO: currency formatting
-					$field_values['total_withheld'] = $total_withheld; // TODO: currency formatting
-				
-					/*********************/
-					// Get corresponding deposits total (transactions)
-					$total_deposits = 0;
-				
-					// Set up basic args
-					$wp_args = array(
-						'post_type'		=> 'transaction',
-						'post_status'	=> 'publish',
-						'fields'		=> 'ids',
-						'posts_per_page'=> '-1',
-					);
-	
-					// Set up meta query
-					$meta_query = array(
-						'relation' => 'AND',
-						'employer' => array(
-							'relation' => 'OR',
-							array(
-								'key' => 'transactions_groups',
-								'value' 	=> $employer_id,
-							),
-							array(
-								'key' => 'transactions_people',
-								'value' 	=> $employer_id,
-							),
-						),
-						'tax_year' => array(
-							'key' => 'tax_year',
-							'value' 	=> $year,
-						),
-					);
-					$wp_args['meta_query'] = $meta_query;
-					$arr_transactions = new WP_Query( $wp_args );
-					$transactions = $arr_transactions->posts;
-					//$info .= "[".count($transactions)."] transactions found for ".get_the_title($employer_id)." (employer_id [$employer_id]) in year $year.<br />";
-					if ( empty($transactions) ) {
-						//$info .= "[".count($transactions)."] transactions found for employer_id [$employer_id] in year $year.<br />";
-						//$ts_info .= "WP_Query run as follows:";
-						//$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-						//$ts_info .= "wp_query: <pre>".$arr_transactions->request."</pre>"; // print sql tft			
-					} else {
-						foreach ( $transactions as $transaction_id ) {
-							$amount = get_field( 'amount', $transaction_id );
-							$total_deposits += $amount;
-							//$rep_info = get_rep_info( $doc->ID, 'display', false, true ); // ( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
-							//$info .= make_link( get_permalink($doc->ID), $rep_info, "TEST rep title" )."<br />";
-						}
-					}
-		
-					$field_values['total_deposits'] = $total_deposits; // TODO: currency formatting
-				
-					/*********************/
-					// Calc comp/deposits diff
-					$diff = $total_comp-$total_withheld-$total_deposits;
-					if ( $diff <> 0 ) { $field_values['diff'] = number_format_i18n($diff); } else { $field_values['diff'] = '--'; }
-				
-					/*********************/
-					// Finish assembling item and add to items array to be passed to birdhive_display_collection
-					$arr_item = array();
-					$arr_item['post_id'] = $employer_id;
-					$arr_item['field_values'] = $field_values;
-					$items[] = $arr_item;
-					
-				} // END foreach employers
-			
-			} // END if ( empty($employers) )
-		
-			// Set display_atts for display_collection
-			$table_fields = array( 'title', 'abbr', 'total_comp', 'total_withheld', 'total_deposits', 'diff' );
-			$table_headers = array( 'Employer Name', 'Abbr', 'Total Compensation', 'Total Withheld', 'Total Deposits', 'diff' );
-			$table_totals = array('total_comp', 'total_withheld', 'total_deposits' );
-				
-		} else {
-		
-			// NOT employment income
-			// other -- or more specific?
-			
-			// WIP
-			
-			// Set display_atts for display_collection
-			$table_fields = array( 'title', 'abbr', 'total_comp', 'total_withheld', 'total_deposits', 'diff' );
-			$table_headers = array( 'Employer Name', 'Abbr', 'Total Compensation', 'Total Withheld', 'Total Deposits', 'diff' );
-			$table_totals = array('total_comp', 'total_withheld', 'total_deposits' );
-			
 		}
 		
+		// call display_tax_docs; display_income
+		$function_name = "display_".$data_type;
+		if ( function_exists($function_name) ) {
+			$info .= $function_name($args);
+		}		
+		
+	}	
+	
+	if ( $do_ts ) { $info .= $ts_info; } //$info .= '<div class="code">'.$ts_info.'</div>';
+	return $info;
+	
+}
+
+function display_tax_docs ( $args = array() ) {
+
+	// TS/logging setup
+    $do_ts = devmode_active();
+    $do_log = false;
+    //sdg_log( "divline2", $do_log );
+    //sdg_log( "function called: show_snippets", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+    
+    ////	
+		
+	// Set up basic query args
+	$wp_args = array(
+		'post_type'		=> 'document',
+		'post_status'	=> 'publish',
+		//'posts_per_page'=> $limit,
+		'fields'		=> 'ids',
+		//'orderby'		=> 'meta_value',
+		//'order'			=> 'ASC',
+	);	
+
+	// Set up meta query
+	$meta_query = array(
+		'relation' => 'AND',
+		'tax_year' => array(
+			'key' => 'tax_year',
+			'compare' => '=',
+			'value' 	=> $year,
+		),
+	);
+	$wp_args['meta_query'] = $meta_query;
+
+	$arr_posts = new WP_Query( $wp_args );
+	$docs = $arr_posts->posts;
+	$ts_info .= "[".count($docs)."] docs found.<br />";
+	//$ts_info .= "docs: <pre>".print_r($docs,true)."</pre>";
+	if ( empty($docs) ) {
+		//$ts_info .= "WP_Query run as follows:";
+		$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+		$ts_info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
+	} else {
 		if ( function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
-			$content_type = 'posts'; // ?
+			$content_type = 'posts';
 			$display_format = 'table';
 			$show_subtitles = true;
 			$show_content = true;
-			
-			// TODO: Add cols: num docs, num transactions?
-			// Set display_atts for display_collection
-			$display_atts = array( 'fields' => $table_fields, 'headers' => $table_headers, 'totals' => $table_totals ); // fields, headers, totals
-			$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $items, 'display_atts' => $display_atts, 'do_ts' => $do_ts ); //
+			$display_atts = array( 'fields' => array( 'tax_year', 'title', 'total_comp' ), 'headers' => array( 'Tax Year', 'Title', 'Total Compensation' ), 'totals' => array('total_comp') ); // fields, headers
+			$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $docs, 'display_atts' => $display_atts, 'do_ts' => $do_ts ); //
 			//$ts_info .= "display_args: <pre>".print_r($display_args,true)."</pre>";
 			$info .= birdhive_display_collection( $display_args );
-		}
-		
-	
-		
-	
+		}	
 	}
 	
-	//
-	//
+	if ( $do_ts ) { $info .= $ts_info; } //$info .= '<div class="code">'.$ts_info.'</div>';
+	return $info;
+	
+}
+
+function display_income ( $args = array() ) {
+
+	// TS/logging setup
+    $do_ts = devmode_active();
+    $do_log = false;
+    //sdg_log( "divline2", $do_log );
+    //sdg_log( "function called: show_snippets", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+	
+	// WIP
+	// If not dealing w/ employment income, then we'll query transactions and docs differently
+	if ( in_array( 'employment', $sources ) ) {
+	
+		// Get Employers
+		// +~+~+~+~+~+~+
+	
+		// Set up basic query args
+		$wp_args = array(
+			'post_type'		=> array('group', 'person'),
+			'post_status'	=> 'publish',
+			//'posts_per_page'=> $limit,
+			'posts_per_page'=> '-1',
+			'fields'		=> 'ids',
+			'orderby'		=> 'title',
+			//'orderby'		=> 'meta_value',
+			'order'			=> 'ASC',
+		);
+
+		// Set up meta query
+		$meta_query = array(
+			'relation' => 'AND',
+			'years_of_employment' => array(
+				'key' => 'years_of_employment',
+				'compare' => 'LIKE',
+				'value' 	=> '"'.$year.'"', // matches exactly "123", not just 123. This prevents a match for "1234"
+			),
+		);
+		$wp_args['meta_query'] = $meta_query;
+
+		$arr_employers = new WP_Query( $wp_args );
+		$employers = $arr_employers->posts;
+		$ts_info .= "[".count($employers)."] employers found.<br />";
+		if ( empty($employers) ) {
+	
+			//$ts_info .= "WP_Query run as follows:";
+			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			$ts_info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
+		
+		} else {
+		
+			// Build array of items each of which includes:
+			// Employer Name, Abbr, Work Cat, 1099/W2, Total Amnt (1099/W2), Total Taxes Withheld, % Withheld, Total Deposits (transactions), Deposits vs IRS (diff); Total Net Income, Total Gross Income, Notes
+		
+			$items = array();
+		
+			foreach ( $employers as $employer_id ) {
+		
+				$field_values = array();
+			
+				/*********************/
+				// Get W2s/1099 amounts
+				$total_comp = 0;
+				$total_withheld = 0;
+				// TODO: mod get_related_posts to accept meta_query? or use birdhive_get_posts instead? so as to not have to do tax_year check, below...
+				$arr_obj_docs = get_related_posts( $employer_id, 'document', 'employer' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
+				if ( $arr_obj_docs ) {
+		
+					//$info .= "<h3>Docs:</h3>";
+		
+					if ( is_array($arr_obj_docs) ) {
+						//$info .= "<p>arr_compositions (".count($arr_compositions)."): <pre>".print_r($arr_compositions, true)."</pre></p>";
+						foreach ( $arr_obj_docs as $doc ) {
+							$doc_id = $doc->ID;
+							$tax_year = get_field( 'tax_year', $doc_id );
+							if ( $tax_year == $year ) { 
+								//$info .= $doc->post_title."<br />";
+								$comp = get_field( 'total_comp', $doc_id );
+								$total_comp += $comp;
+								// TODO: rename fields to match vars; update DB records
+								$fed_tax = get_field( 'fed_tax_withheld', $doc_id );
+								$total_withheld += (float) $fed_tax;
+								//$info .= "fed_tax for doc_id [$doc_id]: $fed_tax<br />";
+								$socsec_tax = get_field( 'ss_tax_withheld', $doc_id );
+								$total_withheld += (float) $socsec_tax;
+								$medicare_tax = get_field( 'medicare_tax_withheld', $doc_id );
+								$total_withheld += (float) $medicare_tax;
+								$state_tax = get_field( 'state_tax_withheld', $doc_id );
+								$total_withheld += (float) $state_tax;
+								$local_tax = get_field( 'local_tax_withheld', $doc_id );
+								$total_withheld += (float) $local_tax;
+								//$rep_info = get_rep_info( $doc->ID, 'display', false, true ); // ( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
+								//$info .= make_link( get_permalink($doc->ID), $rep_info, "TEST rep title" )."<br />";
+							}
+						}
+					} else {
+						//$info .= print_r($arr_obj_docs, true);
+					}
+				
+				} else {
+					$ts_info .= "No docs found for get_related_posts (document -> employer = employer_id: $employer_id)<br />";
+				}
+				//$info .= "arr_obj_docs: ".print_r($arr_obj_docs, true)."<hr />"; // tft
+			
+				$field_values['total_comp'] = $total_comp; // TODO: currency formatting
+				$field_values['total_withheld'] = $total_withheld; // TODO: currency formatting
+			
+				/*********************/
+				// Get corresponding deposits total (transactions)
+				$total_deposits = 0;
+			
+				// Set up basic args
+				$wp_args = array(
+					'post_type'		=> 'transaction',
+					'post_status'	=> 'publish',
+					'fields'		=> 'ids',
+					'posts_per_page'=> '-1',
+				);
+
+				// Set up meta query
+				$meta_query = array(
+					'relation' => 'AND',
+					'employer' => array(
+						'relation' => 'OR',
+						array(
+							'key' => 'transactions_groups',
+							'value' 	=> $employer_id,
+						),
+						array(
+							'key' => 'transactions_people',
+							'value' 	=> $employer_id,
+						),
+					),
+					'tax_year' => array(
+						'key' => 'tax_year',
+						'value' 	=> $year,
+					),
+				);
+				$wp_args['meta_query'] = $meta_query;
+				$arr_transactions = new WP_Query( $wp_args );
+				$transactions = $arr_transactions->posts;
+				//$info .= "[".count($transactions)."] transactions found for ".get_the_title($employer_id)." (employer_id [$employer_id]) in year $year.<br />";
+				if ( empty($transactions) ) {
+					//$info .= "[".count($transactions)."] transactions found for employer_id [$employer_id] in year $year.<br />";
+					//$ts_info .= "WP_Query run as follows:";
+					//$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+					//$ts_info .= "wp_query: <pre>".$arr_transactions->request."</pre>"; // print sql tft			
+				} else {
+					foreach ( $transactions as $transaction_id ) {
+						$amount = get_field( 'amount', $transaction_id );
+						$total_deposits += $amount;
+						//$rep_info = get_rep_info( $doc->ID, 'display', false, true ); // ( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
+						//$info .= make_link( get_permalink($doc->ID), $rep_info, "TEST rep title" )."<br />";
+					}
+				}
+	
+				$field_values['total_deposits'] = $total_deposits; // TODO: currency formatting
+			
+				/*********************/
+				// Calc comp/deposits diff
+				$diff = $total_comp-$total_withheld-$total_deposits;
+				if ( $diff <> 0 ) { $field_values['diff'] = number_format_i18n($diff); } else { $field_values['diff'] = '--'; }
+			
+				/*********************/
+				// Finish assembling item and add to items array to be passed to birdhive_display_collection
+				$arr_item = array();
+				$arr_item['post_id'] = $employer_id;
+				$arr_item['field_values'] = $field_values;
+				$items[] = $arr_item;
+				
+			} // END foreach employers
+		
+		} // END if ( empty($employers) )
+	
+		// Set display_atts for display_collection
+		$table_fields = array( 'title', 'abbr', 'total_comp', 'total_withheld', 'total_deposits', 'diff' );
+		$table_headers = array( 'Employer Name', 'Abbr', 'Total Compensation', 'Total Withheld', 'Total Deposits', 'diff' );
+		$table_totals = array('total_comp', 'total_withheld', 'total_deposits' );
+			
+	} else {
+	
+		// NOT employment income
+		// other -- or more specific?
+		
+		// WIP
+		
+		// Set display_atts for display_collection
+		$table_fields = array( 'title', 'abbr', 'total_comp', 'total_withheld', 'total_deposits', 'diff' );
+		$table_headers = array( 'Employer Name', 'Abbr', 'Total Compensation', 'Total Withheld', 'Total Deposits', 'diff' );
+		$table_totals = array('total_comp', 'total_withheld', 'total_deposits' );
+		
+	}
+	
+	if ( function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
+		$content_type = 'posts'; // ?
+		$display_format = 'table';
+		$show_subtitles = true;
+		$show_content = true;
+		
+		// TODO: Add cols: num docs, num transactions?
+		// Set display_atts for display_collection
+		$display_atts = array( 'fields' => $table_fields, 'headers' => $table_headers, 'totals' => $table_totals ); // fields, headers, totals
+		$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $items, 'display_atts' => $display_atts, 'do_ts' => $do_ts ); //
+		//$ts_info .= "display_args: <pre>".print_r($display_args,true)."</pre>";
+		$info .= birdhive_display_collection( $display_args );
+	}
 	
 	if ( $do_ts ) { $info .= $ts_info; } //$info .= '<div class="code">'.$ts_info.'</div>';
 	return $info;
