@@ -364,6 +364,9 @@ function display_income ( $atts = [] ) {
     // Extract
 	extract( $args );
 	
+	// 
+	if ( !is_array($sources) ) { $sources = explode(",",$sources); }
+	
 	// Get year or years
 	$years = array();
 	if ( $dates == 'ytd' || $dates == 'this_year' ) {
