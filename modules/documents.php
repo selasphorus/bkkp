@@ -100,7 +100,7 @@ function build_document_title( $post_id = null, $arr = array() ) {
     // Account Statements:
     // DATESTR -- ACCOUNT
     // todo: get employer post_title from id?
-    if ( !empty($account) ) { $new_title .= $account." -- "; }
+    if ( !empty($account) ) { $new_title .= $account->post_title." -- "; }
     
     // Tax Forms:
     // TAX_YEAR -- FORM NAME -- EMPLOYER NAME
