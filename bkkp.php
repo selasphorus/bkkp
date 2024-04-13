@@ -318,7 +318,7 @@ function display_tax_docs ( $atts = [] ) {
 				$show_subtitles = true;
 				$show_content = true;
 				$display_atts = array( 'fields' => array( 'tax_year', 'title', 'total_comp' ), 'headers' => array( 'Tax Year', 'Title', 'Total Compensation' ), 'totals' => array('total_comp') ); // fields, headers
-				$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $docs, 'display_atts' => $display_atts, 'do_ts' => true ); //
+				$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $docs, 'display_atts' => $display_atts, 'do_ts' => $do_ts ); //
 				//$ts_info .= "display_args: <pre>".print_r($display_args,true)."</pre>";
 				$info .= birdhive_display_collection( $display_args );
 			}
@@ -563,7 +563,7 @@ function display_income ( $atts = [] ) {
 				$show_content = true;
 				// Add cols: num docs, num transactions
 				$display_atts = array( 'fields' => array( 'title', 'abbr', 'total_comp', 'total_withheld', 'total_deposits', 'diff' ), 'headers' => array( 'Employer Name', 'Abbr', 'Total Compensation', 'Total Withheld', 'Total Deposits', 'diff' ), 'totals' => array('total_comp', 'total_withheld', 'total_deposits' ) ); // fields, headers, totals
-				$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $items, 'display_atts' => $display_atts, 'do_ts' => true ); //
+				$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $items, 'display_atts' => $display_atts, 'do_ts' => $do_ts ); //
 				//$ts_info .= "display_args: <pre>".print_r($display_args,true)."</pre>";
 				$info .= birdhive_display_collection( $display_args );
 			}
