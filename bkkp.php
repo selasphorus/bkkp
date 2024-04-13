@@ -342,6 +342,9 @@ function display_tax_docs ( $args = array() ) {
     // Init vars
     $info = "";
 	$ts_info = "";
+	
+    // Extract
+	extract( $args );
     
     ////	
 		
@@ -403,10 +406,13 @@ function display_income ( $args = array() ) {
     // Init vars
     $info = "";
 	$ts_info = "";
+	
+    // Extract
+	extract( $args );
 	$items = array();
 	
 	// WIP
-	$info .= "display_income -- args: <pre>".print_r($args, true).'</pre>';
+	//$info .= "display_income -- args: <pre>".print_r($args, true).'</pre>';
 	// If not dealing w/ employment income, then we'll query transactions and docs differently
 	if ( is_array($sources) && in_array( 'employment', $sources ) ) {
 	
