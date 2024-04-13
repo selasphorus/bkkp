@@ -485,7 +485,7 @@ function display_income ( $atts = [] ) {
 					}
 					
 				} else {
-					$info .= "No docs found for get_related_posts (document -> employer = employer_id: $employer_id)<br />";
+					$ts_info .= "No docs found for get_related_posts (document -> employer = employer_id: $employer_id)<br />";
 				}
 				//$info .= "arr_obj_docs: ".print_r($arr_obj_docs, true)."<hr />"; // tft
 				
