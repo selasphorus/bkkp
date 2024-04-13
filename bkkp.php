@@ -332,7 +332,7 @@ function display_tax_docs ( $atts = [] ) {
 	
 	// Build table: Year, Doc Title, ....
 	
-	$info .= '<div class="code">'.$ts_info.'</div>';
+	if ( $do_ts ) { $info .= $ts_info; } //$info .= '<div class="code">'.$ts_info.'</div>';
 	return $info;
 	
 }
@@ -578,9 +578,7 @@ function display_income ( $atts = [] ) {
 	//
 	//
 	
-	
-	
-	$info .= '<div class="code">'.$ts_info.'</div>';
+	if ( $do_ts ) { $info .= $ts_info; } //$info .= '<div class="code">'.$ts_info.'</div>';
 	return $info;
 	
 }
