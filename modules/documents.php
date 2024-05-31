@@ -44,7 +44,7 @@ function build_document_title( $post_id = null, $arr = array() ) {
 		$account = get_field('account', $post_id);
 		$tax_forms = get_field('tax_forms', $post_id);
 		//$check_num = get_field('check_num', $post_id);
-		$jurisdiction = get_field('jurisdiction', $post_id); // federal, nys, nj
+		$jurisdiction = strtoupper(get_field('jurisdiction', $post_id)); // federal, nys, nj -- ucwords
     
     }
     
@@ -87,15 +87,6 @@ function build_document_title( $post_id = null, $arr = array() ) {
 		// Trim trailing comma and space
 		if ( substr($forms_str, -2) == ', ' ) { $forms_str = substr($forms_str, 0, -2); }		
 	}
-    /*
-    $hymn_cat_id = "1452"; // "Hymns" -- same id on live and dev
-	$psalm_cat_id = "1461"; // "Psalms" -- same id on live and dev
-	$chant_cat_id = "1528"; // "Anglican Chant" -- same id on live and dev
-	
-	if ( in_array($hymn_cat_id, $rep_categories) ) {
-	
-	}
-	*/
     
     // Account Statements:
     // DATESTR -- ACCOUNT

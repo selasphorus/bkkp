@@ -261,6 +261,8 @@ function bkkp ( $atts = [] ) {
     
     $args = shortcode_atts( array(
 		'dates'   => 'ytd', // 'last_year', 'this_year', 'YYYY-mm-dd, YYYY-mm-dd' [start/end]
+		// TODO/WIP: change 'dates' to 'scope' and integrate bkkp with birdhive-events with display-content so they all handle scope the same way
+		'scope'		=> 'ytd',
 		'data_type'	=> 'transactions', // income, tax_docs, transactions...
 		//
     	'sources' => array( 'employment' ), // (employment/other; transactions, docs, events, etc) // 'interest', 'dividends', 'gifts', 'other'
@@ -586,6 +588,9 @@ function display_income ( $args = array() ) {
 		// other -- or more specific?
 		
 		// WIP
+		// investments -- table summary to include dividends, capital gains, foreign tax paid, etc.
+		
+		// interest income, gifts, jury duty, etc...
 		
 		// Set display_atts for display_collection
 		$table_fields = array( 'title', 'abbr', 'total_comp', 'total_withheld', 'total_deposits', 'diff' );
