@@ -245,7 +245,8 @@ function calculate_worklog_total_due ( $post_id ) {
     
 }
 
-
+// Shortcode/function for displaying bookkeeping data.
+// Default: transactions relating to employment income
 add_shortcode('bkkp', 'bkkp');
 function bkkp ( $atts = [] ) {
 
@@ -334,6 +335,7 @@ function bkkp ( $atts = [] ) {
 	
 }
 
+add_shortcode('display_tax_docs', 'display_tax_docs');
 function display_tax_docs ( $args = array() ) {
 
 	// TS/logging setup
