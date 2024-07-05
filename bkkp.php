@@ -290,12 +290,14 @@ function bkkp ( $atts = [] ) {
 	// Check for queryvars
 	if ( get_query_var('scope') ) {
 		$scope = get_query_var('scope');
+		$args['scope'] = $scope;
 		$ts_info .= "scope via query_var: ".$scope."<br />";
 	} else {
 		$ts_info .= "scope query_var not set<br />";
 	}
 	if ( get_query_var('dates') ) {
 		$dates = get_query_var('dates');
+		$args['dates'] = $dates;
 		$ts_info .= "dates via query_var: ".$dates."<br />";
 	} else {
 		$ts_info .= "dates query_var not set<br />";
