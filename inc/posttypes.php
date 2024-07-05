@@ -50,7 +50,7 @@ function bkkp_register_post_type_account() {
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
 		'taxonomies' => array( 'admin_tag', 'account_category' ), 
-		'show_in_rest' => false,    
+		'show_in_rest' => true,    
 	);
 
 	register_post_type( 'account', $args );
