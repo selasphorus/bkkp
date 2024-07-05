@@ -70,7 +70,15 @@ function add_post_type_query_var( $url, $post_id, $context ) {
  *
  */
 
-
+// Add custom query vars
+// TBD -- IMPORTANT: will this cause issues with EM?
+add_filter( 'query_vars', 'bkkp_query_vars' );
+function bkkp_query_vars( $qvars ) {
+	$qvars[] = 'scope';
+	$qvars[] = 'dates';
+	//?
+    return $qvars;
+}
 
 /*** WIP FUNCTIONS ***/
 
