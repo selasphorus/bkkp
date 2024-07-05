@@ -330,6 +330,13 @@ function bkkp ( $atts = [] ) {
 		unset($args['sources']);
 	}
 	
+	// Context
+	// If we're looking at a single account page, replace accounts arg with that account's ID
+	if ( is_singular('account') ) {
+		$accounts = array( get_the_ID() );
+		$args['accounts'] = $accounts;
+	}
+	
 	$ts_info .= "args: <pre>".print_r($args,true)."</pre>";
 	$ts_info .= "years: <pre>".print_r($years,true)."</pre>";
 	
@@ -364,8 +371,8 @@ function bkkp ( $atts = [] ) {
 }
 
 // Call via bkkp shortcode
-function display_documents ( $args = array() ) {
 //function display_tax_docs ( $args = array() ) {
+function display_documents ( $args = array() ) {
 
 	// TS/logging setup
     $do_ts = devmode_active();
@@ -379,8 +386,6 @@ function display_documents ( $args = array() ) {
 	
     // Extract
 	extract( $args );
-    
-    ////	
 		
 	// Set up basic query args
 	$wp_args = array(
@@ -401,6 +406,16 @@ function display_documents ( $args = array() ) {
 			'value' 	=> $year,
 		),
 	);
+    
+    // WIP
+    if ( isset($accounts) && $accounts != "all" ) {
+    	$meta_query['account'] = array(
+			'key' => 'account',
+			'compare' => 'IN',
+			'value' 	=> $accounts,    	
+    	);
+    }
+    
 	$wp_args['meta_query'] = $meta_query;
 
 	$arr_posts = new WP_Query( $wp_args );
