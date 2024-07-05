@@ -364,7 +364,8 @@ function bkkp ( $atts = [] ) {
 }
 
 // Call via bkkp shortcode
-function display_tax_docs ( $args = array() ) {
+function display_documents ( $args = array() ) {
+//function display_tax_docs ( $args = array() ) {
 
 	// TS/logging setup
     $do_ts = devmode_active();
