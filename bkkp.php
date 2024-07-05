@@ -279,6 +279,21 @@ function bkkp ( $atts = [] ) {
     // Extract
 	extract( $args );
 	
+	// Check for queryvars
+	if ( get_query_var('scope') ) {
+		$scope = get_query_var('scope');
+		$ts_info .= "scope via query_var: ".$scope."<br />";
+	} else {
+		$ts_info .= "scope query_var not set<br />";
+	}
+	if ( get_query_var('dates') ) {
+		$dates = get_query_var('dates');
+		$ts_info .= "dates via query_var: ".$dates."<br />";
+	} else {
+		$ts_info .= "dates query_var not set<br />";
+	}
+	//
+	
 	// Get year or years
 	$years = array();
 	if ( $dates == 'ytd' || $dates == 'this_year' ) {
