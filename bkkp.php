@@ -328,6 +328,9 @@ function bkkp ( $atts = [] ) {
 		unset($args['sources']);
 	}
 	
+	$ts_info .= "args: ".print_r($args,true)."<br />";
+	$ts_info .= "years: ".print_r($years,true)."<br />";
+	
 	foreach ( $years as $year ) {
 	
 		$args['year'] = $year;
