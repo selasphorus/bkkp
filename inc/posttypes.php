@@ -10,6 +10,19 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*** BOOKKEEPING ***/
 
+/*
+// Get plugin options to determine which modules are active
+$options = get_option( 'bkkp_settings' );
+if ( isset($options['bkkp_modules']) ) { $bkkp_modules = $options['bkkp_modules']; } else { $bkkp_modules = array(); }
+
+function bkkp_custom_caps() {
+	$use_custom_caps = false;
+	if ( isset($options['use_custom_caps']) && !empty($options['use_custom_caps']) ) {
+		$use_custom_caps = true;
+	}
+	return $use_custom_caps;
+}
+*/
 
 // TODO: Phase out Ledger, Documents >> loaded via recordkeeper instead
 
@@ -19,7 +32,7 @@ if ( !function_exists( 'add_action' ) ) {
 // Accounts -- account
 function bkkp_register_post_type_account() {
 
-	if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
+	$caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
 	
 	$labels = array(
 		'name' => __( 'Accounts', 'bkkp' ),
@@ -62,7 +75,7 @@ add_action( 'init', 'bkkp_register_post_type_account' );
 // ACF fields: 
 function bkkp_register_post_type_transaction() {
 
-	if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
+	$caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
 	
 	$labels = array(
 		'name' => __( 'Transactions', 'bkkp' ),
@@ -106,7 +119,7 @@ add_action( 'init', 'bkkp_register_post_type_transaction' );
 // ACF fields: tax_year (date/num); amount (currency/number); notes
 function bkkp_register_post_type_ledger_entry() {
 
-	if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
+	$caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
 	
 	$labels = array(
 		'name' => __( 'Ledger', 'bkkp' ),
@@ -153,7 +166,7 @@ add_action( 'init', 'bkkp_register_post_type_ledger_entry' );
 // Documents -- document
 function bkkp_register_post_type_document() {
 
-	if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
+	$caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
 
 	$labels = array(
 		'name' => __( 'Documents', 'bkkp' ),
@@ -196,7 +209,7 @@ add_action( 'init', 'bkkp_register_post_type_document' );
 // Tax Forms -- tax_form
 function bkkp_register_post_type_tax_form() {
 
-	if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
+	$caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
 
 	$labels = array(
 		'name' => __( 'Tax Forms', 'bkkp' ),
@@ -238,7 +251,7 @@ add_action( 'init', 'bkkp_register_post_type_tax_form' );
 // Tax Payments
 function bkkp_register_post_type_tax_payment() {
 
-	if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
+	$caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
 
 	$labels = array(
 		'name' => __( 'Tax Payments', 'bkkp' ),
@@ -281,7 +294,7 @@ add_action( 'init', 'bkkp_register_post_type_tax_payment' );
 // Tax Returns
 function bkkp_register_post_type_tax_return() {
 
-	if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
+	$caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
 
 	$labels = array(
 		'name' => __( 'Tax Returns', 'bkkp' ),
