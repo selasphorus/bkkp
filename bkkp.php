@@ -371,6 +371,81 @@ function bkkp ( $atts = [] ) {
 }
 
 // Call via bkkp shortcode
+
+
+// TODO: consolidate the following several functions; reduce redundancy
+function display_accounts ( $args = array() ) {
+
+	// TS/logging setup
+    $do_ts = devmode_active( array("bkkp") );
+    $do_log = false;
+    //sdg_log( "divline2", $do_log );
+    //sdg_log( "function called: display_accounts", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+	
+    // Extract
+	extract( $args );
+		
+	// Set up basic query args
+	$wp_args = array(
+		'post_type'		=> 'account',
+		'post_status'	=> 'publish',
+		//'posts_per_page'=> $limit,
+		'fields'		=> 'ids',
+		//'orderby'		=> 'meta_value',
+		//'order'			=> 'ASC',
+	);	
+
+	// Set up meta query
+	$meta_query = array(
+		'relation' => 'AND',
+		'tax_year' => array(
+			'key' => 'tax_year',
+			'compare' => '=',
+			'value' 	=> $year,
+		),
+	);
+    
+    // WIP
+    /*if ( isset($accounts) && $accounts != "all" ) {
+    	$meta_query['account'] = array(
+			'key' => 'account',
+			'compare' => 'IN',
+			'value' 	=> $accounts,    	
+    	);
+    }*/
+    
+	$wp_args['meta_query'] = $meta_query;
+
+	$arr_posts = new WP_Query( $wp_args );
+	$accounts = $arr_posts->posts;
+	$ts_info .= "[".count($accounts)."] accounts found.<br />";
+	//$ts_info .= "docs: <pre>".print_r($docs,true)."</pre>";
+	if ( empty($accounts) ) {
+		//$ts_info .= "WP_Query run as follows:";
+		$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+		$ts_info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
+	} else {
+		if ( function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
+			$content_type = 'posts';
+			$display_format = 'table';
+			$show_subtitles = true;
+			$show_content = true;
+			$display_atts = array( 'fields' => array( 'tax_year', 'title', 'total_comp' ), 'headers' => array( 'Tax Year', 'Title', 'Total Compensation' ), 'totals' => array('total_comp') ); // fields, headers
+			$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $accounts, 'display_atts' => $display_atts, 'do_ts' => $do_ts ); //
+			//$ts_info .= "display_args: <pre>".print_r($display_args,true)."</pre>";
+			$info .= birdhive_display_collection( $display_args );
+		}	
+	}
+	
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "bkkp" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	return $info;
+	
+}
+
 //function display_tax_docs ( $args = array() ) {
 function display_documents ( $args = array() ) {
 
