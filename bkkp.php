@@ -498,7 +498,7 @@ function display_income ( $args = array() ) {
 	
 			//$ts_info .= "WP_Query run as follows:";
 			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-			$ts_info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
+			$ts_info .= "wp_query: <pre>".$arr_employers->request."</pre>"; // print sql tft
 		
 		} else {
 		
