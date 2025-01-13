@@ -259,7 +259,7 @@ add_shortcode('bkkp', 'bkkp');
 function bkkp ( $atts = [] ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("bkkp") );
     $do_log = false;
     //sdg_log( "divline2", $do_log );
     //sdg_log( "function called: bkkp", $do_log );
@@ -365,7 +365,7 @@ function bkkp ( $atts = [] ) {
 		
 	}	
 	
-	if ( $do_ts ) { $info .= $ts_info; } //$info .= '<div class="code">'.$ts_info.'</div>';
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "bkkp" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	return $info;
 	
 }
@@ -375,7 +375,7 @@ function bkkp ( $atts = [] ) {
 function display_documents ( $args = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("bkkp") );
     $do_log = false;
     //sdg_log( "divline2", $do_log );
     //sdg_log( "function called: show_snippets", $do_log );
@@ -439,7 +439,7 @@ function display_documents ( $args = array() ) {
 		}	
 	}
 	
-	if ( $do_ts ) { $info .= $ts_info; } //$info .= '<div class="code">'.$ts_info.'</div>';
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "bkkp" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	return $info;
 	
 }
@@ -447,7 +447,7 @@ function display_documents ( $args = array() ) {
 function display_income ( $args = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("bkkp") );
     $do_log = false;
     //sdg_log( "divline2", $do_log );
     //sdg_log( "function called: show_snippets", $do_log );
@@ -659,7 +659,7 @@ function display_income ( $args = array() ) {
 		$info .= birdhive_display_collection( $display_args );
 	}
 	
-	if ( $do_ts ) { $info .= $ts_info; } //$info .= '<div class="code">'.$ts_info.'</div>';
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "bkkp" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	return $info;
 	
 }
