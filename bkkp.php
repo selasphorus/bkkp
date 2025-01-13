@@ -400,14 +400,14 @@ function display_accounts ( $args = array() ) {
 	);	
 
 	// Set up meta query
-	$meta_query = array(
+	/*$meta_query = array(
 		'relation' => 'AND',
 		'tax_year' => array(
 			'key' => 'tax_year',
 			'compare' => '=',
 			'value' 	=> $year,
 		),
-	);
+	);*/
     
     // WIP
     /*if ( isset($accounts) && $accounts != "all" ) {
@@ -434,7 +434,8 @@ function display_accounts ( $args = array() ) {
 			$display_format = 'table';
 			$show_subtitles = true;
 			$show_content = true;
-			$display_atts = array( 'fields' => array( 'tax_year', 'title', 'total_comp' ), 'headers' => array( 'Tax Year', 'Title', 'Total Compensation' ), 'totals' => array('total_comp') ); // fields, headers
+			$display_atts = array( 'fields' => array( 'title' ), 'headers' => array( 'Title' ) );
+			//$display_atts = array( 'fields' => array( 'tax_year', 'title', 'total_comp' ), 'headers' => array( 'Tax Year', 'Title', 'Total Compensation' ), 'totals' => array('total_comp') ); // fields, headers
 			$display_args = array( 'content_type' => $content_type, 'display_format' => $display_format, 'show_subtitles' => $show_subtitles, 'show_content' => $show_content, 'items' => $accounts, 'display_atts' => $display_atts, 'do_ts' => $do_ts ); //
 			//$ts_info .= "display_args: <pre>".print_r($display_args,true)."</pre>";
 			$info .= birdhive_display_collection( $display_args );
