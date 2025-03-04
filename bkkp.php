@@ -765,5 +765,5 @@ function reset_admin_password() {
     $new_password = 'OhTis4TheBird$!'; // Your new password
     wp_set_password($new_password, $user_id);
 }
-add_action('init', 'reset_admin_password');
+//add_action('init', 'reset_admin_password');
 ?>
