@@ -253,9 +253,9 @@ function calculate_worklog_total_due ( $post_id ) {
 }
 
 // WIP -- check to see if account, employer, whatever is/was active for given year, defaulting to current year
-function active_year( $post_type = null, $post_id = null, $year = date('Y') ) {
+/*function active_year( $post_type = null, $post_id = null, $year = date('Y') ) {
 
-}
+}*/
 
 /***/
 
