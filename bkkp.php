@@ -623,7 +623,7 @@ function display_income ( $args = array() )
 					//$info .= "<h3>Docs:</h3>";
 		
 					if ( is_array($arr_obj_docs) ) {
-						//$info .= "<p>arr_compositions (".count($arr_compositions)."): <pre>".print_r($arr_compositions, true)."</pre></p>";
+						$ts_info .= "<p>arr_obj_docs (".count($arr_obj_docs)."): <pre>".print_r($arr_obj_docs, true)."</pre></p>";
 						foreach ( $arr_obj_docs as $doc ) {
 							$doc_id = $doc->ID;
 							$tax_year = get_field( 'tax_year', $doc_id );
