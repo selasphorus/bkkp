@@ -629,7 +629,7 @@ function display_income ( $args = array() )
 							$tax_year = get_field( 'tax_year', $doc_id );
 							if ( $tax_year == $year ) { 
 								//$info .= $doc->post_title."<br />";
-								$tax_forms = get_field( 'tax_forms', $doc_id )[0]; 
+								$tax_forms = get_field( 'tax_forms', $doc_id ); 
 								$comp = get_field( 'total_comp', $doc_id );
 								$total_comp += $comp;
 								// TODO: rename fields to match vars; update DB records
