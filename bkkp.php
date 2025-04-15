@@ -623,13 +623,14 @@ function display_income ( $args = array() )
 					//$info .= "<h3>Docs:</h3>";
 		
 					if ( is_array($arr_obj_docs) ) {
-						$ts_info .= "<p>arr_obj_docs (".count($arr_obj_docs)."): <pre>".print_r($arr_obj_docs, true)."</pre></p>";
+						//$ts_info .= "arr_obj_docs (".count($arr_obj_docs)."): <pre>".print_r($arr_obj_docs, true)."</pre>";
 						foreach ( $arr_obj_docs as $doc ) {
 							$doc_id = $doc->ID;
 							$tax_year = get_field( 'tax_year', $doc_id );
 							if ( $tax_year == $year ) { 
 								//$info .= $doc->post_title."<br />";
-								$tax_forms = get_field( 'tax_forms', $doc_id ); 
+								$tax_forms = get_field( 'tax_forms', $doc_id );
+								$ts_info .= "tax_forms (".count($tax_forms)."): <pre>".print_r($tax_forms, true)."</pre>";
 								$comp = get_field( 'total_comp', $doc_id );
 								$total_comp += $comp;
 								// TODO: rename fields to match vars; update DB records
