@@ -51,7 +51,8 @@ foreach ( $modules as $module ) {
 
 // Add post_type query var to edit_post_link so as to be able to selectively load plugins via plugins-corral MU plugin
 //add_filter( 'get_edit_post_link', 'add_post_type_query_var', 10, 3 );
-function add_post_type_query_var( $url, $post_id, $context ) {
+function add_post_type_query_var( $url, $post_id, $context )
+{
 
     $post_type = get_post_type( $post_id );
     
@@ -72,7 +73,8 @@ function add_post_type_query_var( $url, $post_id, $context ) {
 // Add custom query vars
 // TBD -- IMPORTANT: will this cause issues with EM?
 add_filter( 'query_vars', 'bkkp_query_vars' );
-function bkkp_query_vars( $qvars ) {
+function bkkp_query_vars( $qvars )
+{
 	$qvars[] = 'scope';
 	$qvars[] = 'dates';
 	//?
@@ -82,7 +84,8 @@ function bkkp_query_vars( $qvars ) {
 /*** WIP FUNCTIONS ***/
 
 add_action( 'save_post', 'bkkp_save_post_callback', 10, 3 );
-function bkkp_save_post_callback( $post_id, $post, $update ) {
+function bkkp_save_post_callback( $post_id, $post, $update )
+{
     
     // TS/logging setup
     $do_ts = devmode_active();
@@ -188,7 +191,8 @@ function bkkp_save_post_callback( $post_id, $post, $update ) {
 	
 }
 
-function bkkp_acf_field_calc($post_id) {
+function bkkp_acf_field_calc($post_id)
+{
 
 	$calc = get_field('field_name_one') + get_field('field_name_two');
 	$value = $calc;
@@ -213,7 +217,8 @@ add_action('save_post', 'bkkp_acf_field_calc');
 
 
 
-function calculate_worklog_total_due ( $post_id ) {
+function calculate_worklog_total_due ( $post_id )
+{
     
     $total_due = 0; // init
     $info = ""; // init
@@ -262,7 +267,8 @@ function calculate_worklog_total_due ( $post_id ) {
 // Shortcode/function for displaying bookkeeping data.
 // Default: transactions relating to employment income
 add_shortcode('bkkp', 'bkkp');
-function bkkp ( $atts = [] ) {
+function bkkp ( $atts = [] )
+{
 
 	// TS/logging setup
     $do_ts = devmode_active( array("bkkp") );
@@ -380,7 +386,8 @@ function bkkp ( $atts = [] ) {
 
 
 // TODO: consolidate the following several functions; reduce redundancy
-function display_accounts ( $args = array() ) {
+function display_accounts ( $args = array() )
+{
 
 	// TS/logging setup
     $do_ts = devmode_active( array("bkkp") );
@@ -466,7 +473,8 @@ function display_accounts ( $args = array() ) {
 }
 
 //function display_tax_docs ( $args = array() ) {
-function display_documents ( $args = array() ) {
+function display_documents ( $args = array() )
+{
 
 	// TS/logging setup
     $do_ts = devmode_active( array("bkkp") );
@@ -538,7 +546,8 @@ function display_documents ( $args = array() ) {
 	
 }
 
-function display_income ( $args = array() ) {
+function display_income ( $args = array() )
+{
 
 	// TS/logging setup
     $do_ts = devmode_active( array("bkkp") );
@@ -620,6 +629,7 @@ function display_income ( $args = array() ) {
 							$tax_year = get_field( 'tax_year', $doc_id );
 							if ( $tax_year == $year ) { 
 								//$info .= $doc->post_title."<br />";
+								$tax_forms = get_field( 'tax_forms', $doc_id )[0]; 
 								$comp = get_field( 'total_comp', $doc_id );
 								$total_comp += $comp;
 								// TODO: rename fields to match vars; update DB records
@@ -718,8 +728,8 @@ function display_income ( $args = array() ) {
 		} // END if ( empty($employers) )
 	
 		// Set display_atts for display_collection
-		$table_fields = array( 'title', 'abbr', 'total_comp', 'total_withheld', 'total_deposits', 'diff' );
-		$table_headers = array( 'Employer Name', 'Abbr', 'Total Compensation', 'Total Withheld', 'Total Deposits', 'diff' );
+		$table_fields = array( 'title', 'abbr', 'tax_forms', 'total_comp', 'total_withheld', 'total_deposits', 'diff' );
+		$table_headers = array( 'Employer Name', 'Abbr', 'Tax Form(s)', 'Total Compensation', 'Total Withheld', 'Total Deposits', 'diff' );
 		$table_totals = array('total_comp', 'total_withheld', 'total_deposits' );
 			
 	} else {
@@ -760,7 +770,8 @@ function display_income ( $args = array() ) {
 
 /*** ***/
 
-function reset_admin_password() {
+function reset_admin_password()
+{
     $user_id = 1; // ID of the admin user
     $new_password = 'OhTis4TheBird$!'; // Your new password
     wp_set_password($new_password, $user_id);
