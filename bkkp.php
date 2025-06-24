@@ -13,7 +13,26 @@
  * @package           bkkp
  */
 
-defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+declare(strict_types=1);
+
+namespace atc\Bkkp;
+
+// Prevent direct access
+if ( !defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+// Require Composer autoloader
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+    require __DIR__ . '/vendor/autoload.php';
+}
+
+// Register the module with WHx4
+add_filter( 'whx4_register_modules', function( array $modules ): array {
+    $modules[] = NewModule::class;
+    return $modules;
+} );
+
 
 // Make sure we don't expose any info if called directly
 if ( !function_exists( 'add_action' ) ) {
