@@ -1,0 +1,24 @@
+{
+    "name": "atc/bkkp",
+    "description": "All the boring biz of bookkeeping",
+    "type": "wordpress-plugin",
+    "require": {
+        "brick/money": "^0.10.1",
+        "nesbot/carbon": "^2.0",
+        "league/csv": "^9.23",
+        "dompdf/dompdf": "^2.0",
+        "phpoffice/phpspreadsheet": "^4.4",
+        "ramsey/uuid": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Atc\\Bkkp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "atc",
+            "email": "birdhive@gmail.com"
+        }
+    ]
+}
