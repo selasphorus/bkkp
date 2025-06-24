@@ -72,7 +72,6 @@ foreach ( $modules as $module ) {
 //add_filter( 'get_edit_post_link', 'add_post_type_query_var', 10, 3 );
 function add_post_type_query_var( $url, $post_id, $context )
 {
-
     $post_type = get_post_type( $post_id );
 
     // TODO: consider whether to add query_arg only for certain CPTS?
@@ -91,7 +90,7 @@ function add_post_type_query_var( $url, $post_id, $context )
 
 // Add custom query vars
 // TBD -- IMPORTANT: will this cause issues with EM?
-add_filter( 'query_vars', 'bkkp_query_vars' );
+//add_filter( 'query_vars', 'bkkp_query_vars' );
 function bkkp_query_vars( $qvars )
 {
     $qvars[] = 'scope';
