@@ -36,44 +36,45 @@ use atc\Bkkp\Modules\PayDocs\PayDocsModule as PayDocs;
 use atc\Bkkp\Modules\TaxPrep\TaxPrepModule as TaxPrep;
 //use atc\Bkkp\Modules\Documents\DocumentsModule as Documents; // TODO: create separate mini-plugin to handle documents
 
-// Register the module with WHx4
-add_filter( 'whx4_register_modules', function( array $modules ): array {
-    return array_merge( $modules, [
-        'transactions' => Transactions::class, //\YourPlugin\Modules\Supernatural\Module::class,
-        'paydocs'       => PayDocs::class,
-        'taxprep'       => TaxPrep::class,
-        //'documents'       => Documents::class
-    ]);
-} );
-
-add_filter( 'whx4_registered_field_keys', function() {
-    if ( ! function_exists( 'acf_get_local_fields' ) ) {
-        return [];
-    }
-
-    $fields = acf_get_local_fields();
-    $keys = [];
-
-    foreach ( $fields as $field ) {
-        if ( isset( $field['key'] ) ) {
-            $keys[] = $field['key'];
-        }
-    }
-
-    return $keys;
-});
-
 // Once plugins are loaded, boot everything up
-add_action( 'plugins_loaded', function() {
-    Plugin::getInstance()->boot();
-});
+add_action( 'whx4_pre_boot', function() {
+    // Wait until WHx4 is loaded, but BEFORE it boots
+    if ( class_exists( Plugin::class ) ) {
+        // Register the module with WHx4
+        add_filter( 'whx4_register_modules', function( array $modules ): array {
+            return array_merge( $modules, [
+                'transactions' => Transactions::class, //\YourPlugin\Modules\Supernatural\Module::class,
+                'paydocs'       => PayDocs::class,
+                'taxprep'       => TaxPrep::class,
+                //'documents'       => Documents::class
+            ]);
+        } );
+
+        add_filter( 'whx4_registered_field_keys', function() {
+            if ( ! function_exists( 'acf_get_local_fields' ) ) {
+                return [];
+            }
+
+            $fields = acf_get_local_fields();
+            $keys = [];
+
+            foreach ( $fields as $field ) {
+                if ( isset( $field['key'] ) ) {
+                    $keys[] = $field['key'];
+                }
+            }
+
+            return $keys;
+        });
+    }
+}, 15 ); // Priority < 20 to run before WHx4 boot()
 
 // On activation, set up post types and capabilities
-register_activation_hook( __FILE__, function() {
+/*register_activation_hook( __FILE__, function() {
     $plugin = Plugin::getInstance();
     $plugin->boot();
     $plugin->assignPostTypeCapabilities();
-});
+});*/
 
 /*
 // Make sure we don't expose any info if called directly
