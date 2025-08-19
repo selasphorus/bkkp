@@ -49,6 +49,7 @@ add_action( 'whx4_pre_boot', function() {
 
         // Register the module with WHx4
         add_filter( 'whx4_register_modules', function( array $modules ): array {
+            error_log( '$$$ whx4_register_modules fired $$$' );
             return array_merge( $modules, [
                 'accounting' => Accounting::class,
                 //'employment' => Employment::class,
