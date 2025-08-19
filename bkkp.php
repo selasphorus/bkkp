@@ -28,12 +28,15 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 }
 
 use atc\WHx4\Plugin;
-//use atc\Bkkp\Plugin; // No separate plugin singleton needed -- use WHx4
+//use atc\Bkkp\Plugin; // NO -- no separate plugin singleton needed -- use WHx4
 //use atc\Bkkp\Core\PostUtils;
 // TBD whether there's a way to streamline the following
-use atc\Bkkp\Modules\Transactions\TransactionsModule as Transactions;
-use atc\Bkkp\Modules\PayDocs\PayDocsModule as PayDocs;
-use atc\Bkkp\Modules\TaxPrep\TaxPrepModule as TaxPrep;
+use atc\Bkkp\Modules\Accounting\AccountingModule as Accounting;
+//use atc\Bkkp\Modules\Employment\EmploymentModule as Employment;
+//
+//use atc\Bkkp\Modules\Transactions\TransactionsModule as Transactions;
+//se atc\Bkkp\Modules\PayDocs\PayDocsModule as PayDocs;
+//use atc\Bkkp\Modules\TaxPrep\TaxPrepModule as TaxPrep;
 //use atc\Bkkp\Modules\Documents\DocumentsModule as Documents; // TODO: create separate mini-plugin to handle documents
 
 // Once plugins are loaded, boot everything up
@@ -43,9 +46,12 @@ add_action( 'whx4_pre_boot', function() {
         // Register the module with WHx4
         add_filter( 'whx4_register_modules', function( array $modules ): array {
             return array_merge( $modules, [
-                'transactions' => Transactions::class, //\YourPlugin\Modules\Supernatural\Module::class,
-                'paydocs'      => PayDocs::class,
-                'taxprep'      => TaxPrep::class,
+                'accounting' => Accounting::class,
+                //'employment' => Employment::class,
+                //
+                //'transactions' => Transactions::class, //\YourPlugin\Modules\Supernatural\Module::class,
+                //'paydocs'      => PayDocs::class,
+                //'taxprep'      => TaxPrep::class,
                 //'documents'  => Documents::class
             ]);
         } );
@@ -70,11 +76,18 @@ add_action( 'whx4_pre_boot', function() {
 }, 15 ); // Priority < 20 to run before WHx4 boot()
 
 // On activation, set up post types and capabilities
-/*register_activation_hook( __FILE__, function() {
+/*
+// Once plugins are loaded, boot everything up
+add_action( 'plugins_loaded', function() {
+    Plugin::getInstance()->boot();
+}, 20 ); // Use a priority high enough to allow addons to hook before it runs
+
+// On activation, set up post types and capabilities
+register_activation_hook( __FILE__, function() {
     $plugin = Plugin::getInstance();
     $plugin->boot();
-    $plugin->assignPostTypeCapabilities();
-});*/
+});
+*/
 
 /*
 // Make sure we don't expose any info if called directly
