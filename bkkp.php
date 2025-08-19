@@ -42,6 +42,7 @@ use atc\Bkkp\Modules\Accounting\AccountingModule as Accounting;
 // Once plugins are loaded, boot everything up
 add_action( 'whx4_pre_boot', function() {
     // Wait until WHx4 is loaded, but BEFORE it boots
+    error_log( '$$$ whx4_pre_boot $$$' );
     if ( class_exists( Plugin::class ) ) {
         // Register the module with WHx4
         add_filter( 'whx4_register_modules', function( array $modules ): array {
@@ -72,6 +73,8 @@ add_action( 'whx4_pre_boot', function() {
 
             return $keys;
         });
+    } else {
+       error_log( '$$$ Plugin class DNE $$$' );
     }
 }, 15 ); // Priority < 20 to run before WHx4 boot()
 
