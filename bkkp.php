@@ -44,6 +44,9 @@ add_action( 'whx4_pre_boot', function() {
     // Wait until WHx4 is loaded, but BEFORE it boots
     error_log( '$$$ whx4_pre_boot $$$' );
     if ( class_exists( Plugin::class ) ) {
+
+        error_log( '$$$ about to attempt to register additional modules $$$' );
+
         // Register the module with WHx4
         add_filter( 'whx4_register_modules', function( array $modules ): array {
             return array_merge( $modules, [
