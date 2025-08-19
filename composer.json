@@ -15,6 +15,11 @@
             "Atc\\Bkkp\\": "src/"
         }
     },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
     "authors": [
         {
             "name": "atc",
