@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Birdhive Bookkeeping
  * Description:       A WordPress plugin for personal bookkeeping
- * //Dependencies:      Requires SDG for various utility functions
- * //Requires Plugins:  sdg
+ * //Dependencies:      Requires WHx4 for various utility functions
+ * Requires Plugins:  whx4
  * Version:           0.1
  * Author:            atc
  * License:           GPL-2.0-or-later
