@@ -42,13 +42,13 @@ use atc\Bkkp\Modules\Accounting\AccountingModule as Accounting;
 // Once plugins are loaded, boot everything up
 add_action( 'whx4_pre_boot', function() {
     // Wait until WHx4 is loaded, but BEFORE it boots
-    error_log( '$$$ whx4_pre_boot $$$' );
+    //error_log( '$$$ whx4_pre_boot $$$' );
     if ( class_exists( Plugin::class ) ) {
         //error_log( '$$$ about to attempt to register additional modules $$$' );
 
         // Register the module with WHx4
         add_filter( 'whx4_register_modules', function( array $modules ): array {
-            error_log( '$$$ whx4_register_modules fired $$$' );
+            error_log( '$$$ whx4_register_modules hook fired $$$' );
             /*return array_merge( $modules, [
                 'accounting' => Accounting::class,
                 //'employment' => Employment::class,
@@ -63,6 +63,7 @@ add_action( 'whx4_pre_boot', function() {
         } );
 
         add_filter( 'whx4_registered_field_keys', function() {
+            error_log( '$$$ whx4_registered_field_keys hook fired $$$' );
             if ( ! function_exists( 'acf_get_local_fields' ) ) {
                 return [];
             }
