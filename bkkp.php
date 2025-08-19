@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Birdhive Bookkeeping
  * Description:       A WordPress plugin for personal bookkeeping
- * //Dependencies:      Requires WHx4 for various utility functions
+ * Dependencies:      Requires WHx4 -- and SDG? for various utility functions?
  * Requires Plugins:  whx4
  * Version:           0.1
  * Author:            atc
@@ -44,9 +44,9 @@ add_action( 'whx4_pre_boot', function() {
         add_filter( 'whx4_register_modules', function( array $modules ): array {
             return array_merge( $modules, [
                 'transactions' => Transactions::class, //\YourPlugin\Modules\Supernatural\Module::class,
-                'paydocs'       => PayDocs::class,
-                'taxprep'       => TaxPrep::class,
-                //'documents'       => Documents::class
+                'paydocs'      => PayDocs::class,
+                'taxprep'      => TaxPrep::class,
+                //'documents'  => Documents::class
             ]);
         } );
 
