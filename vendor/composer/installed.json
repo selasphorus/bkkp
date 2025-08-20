@@ -1935,6 +1935,6 @@
             "install-path": "../symfony/translation-contracts"
         }
     ],
-    "dev": true,
+    "dev": false,
     "dev-package-names": []
 }
