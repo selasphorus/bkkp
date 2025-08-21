@@ -31,7 +31,7 @@ class AccountFields implements FieldGroupInterface
         */
 
         acf_add_local_field_group([
-            'key' => 'group_account_details',
+            'key' => 'group_account_details', // was: group_630787f837b02
             'title' => 'Account Details',
             'fields' => [
                 [
