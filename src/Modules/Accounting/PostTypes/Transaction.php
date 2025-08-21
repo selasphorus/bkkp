@@ -9,7 +9,7 @@ class Transaction extends PostTypeHandler
 	public function __construct(WP_Post|null $post = null) {
 		$config = [
 			'slug'        => 'transaction',
-			//'menu_icon'   => 'dashicons-palmtree',
+			'menu_icon'   => 'dashicons-yes-alt',
 		];
 
 		parent::__construct( $config, $post );
