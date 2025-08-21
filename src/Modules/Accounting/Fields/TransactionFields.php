@@ -4,8 +4,7 @@ namespace atc\Bkkp\Modules\Accounting\Fields;
 
 use atc\WHx4\Core\Contracts\FieldGroupInterface;
 
-// TODO: make this final class?
-class TransactionFields implements FieldGroupInterface
+final class TransactionFields implements FieldGroupInterface
 {
     public static function register(): void
     {
