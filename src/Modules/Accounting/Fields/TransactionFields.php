@@ -621,7 +621,7 @@ class TransactionFields implements FieldGroupInterface
                     [
                         'param' => 'post_type',
                         'operator' => '==',
-                        'value' => 'employer',
+                        'value' => 'transaction',
                     ],
                 ],
             ],
