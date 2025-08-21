@@ -9,7 +9,7 @@ class Account extends PostTypeHandler
 	public function __construct(WP_Post|null $post = null) {
 		$config = [
 			'slug'        => 'account',
-			//'menu_icon'   => 'dashicons-palmtree',
+			'menu_icon'   => 'dashicons-bank',
 		];
 
 		parent::__construct( $config, $post );
