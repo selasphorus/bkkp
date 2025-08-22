@@ -4,8 +4,7 @@ namespace atc\Bkkp\Modules\Employment\Fields;
 
 use atc\WHx4\Core\Contracts\FieldGroupInterface;
 
-// TODO: make this final class?
-class WorkPaymentFields implements FieldGroupInterface
+final class WorkPaymentFields implements FieldGroupInterface
 {
     public static function register(): void
     {

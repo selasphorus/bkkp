@@ -6,6 +6,7 @@ use atc\WHx4\Core\Module as BaseModule;
 //
 use atc\Bkkp\Modules\Accounting\PostTypes\Account;
 use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
+use atc\Bkkp\Modules\Accounting\PostTypes\WorkPayment;
 //use atc\Bkkp\Modules\Accounting\PostTypes\LedgerEntry;
 
 // Define the module class
@@ -22,6 +23,7 @@ final class AccountingModule extends BaseModule
         return [
             Account::class,
             Transaction::class,
+            WorkPayment::class,
             //LedgerEntry::class,
         ];
     }
