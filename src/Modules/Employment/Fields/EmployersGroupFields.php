@@ -18,7 +18,7 @@ final class EmployersGroupFields implements FieldGroupInterface, SubtypeFieldGro
         return 'employers';
     }
 
-    public function register(): void
+    public static function register(): void
     {
         //error_log( '=== EmployersGroupFields: register()) ===' );
         if ( ! function_exists( 'acf_add_local_field_group' ) ) {
