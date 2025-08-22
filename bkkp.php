@@ -59,6 +59,7 @@ add_action( 'whx4_pre_boot', function() {
                 //'documents'  => Documents::class
             ]);*/
             $modules['accounting'] = Accounting::class;
+            $modules['employment'] = Employment::class;
             return $modules;
         } );
 
