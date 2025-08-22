@@ -32,7 +32,7 @@ use atc\WHx4\Plugin;
 //use atc\Bkkp\Core\PostUtils;
 // TBD whether there's a way to streamline the following
 use atc\Bkkp\Modules\Accounting\AccountingModule as Accounting;
-//use atc\Bkkp\Modules\Employment\EmploymentModule as Employment;
+use atc\Bkkp\Modules\Employment\EmploymentModule as Employment;
 //
 //use atc\Bkkp\Modules\Transactions\TransactionsModule as Transactions;
 //se atc\Bkkp\Modules\PayDocs\PayDocsModule as PayDocs;
