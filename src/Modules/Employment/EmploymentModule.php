@@ -27,8 +27,8 @@ final class EmploymentModule extends BaseModule
     public function getPostTypeHandlerClasses(): array
     {
         return [
-            Employer::class,
             WorkPayment::class,
+            //Employer::class, // subtype, not posttype
             //EarningsStatement::class,
         ];
     }
