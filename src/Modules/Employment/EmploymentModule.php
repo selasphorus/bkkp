@@ -4,7 +4,7 @@ namespace atc\Bkkp\Modules\Employment;
 
 use atc\WHx4\Core\Module as BaseModule;
 
-use atc\Bkkp\Modules\Employment\PostTypes\Employer;
+//use atc\Bkkp\Modules\Employment\PostTypes\Employer;
 use atc\Bkkp\Modules\Employment\PostTypes\WorkPayment;
 //use atc\Bkkp\Modules\Employment\PostTypes\EarningsStatement;
 
@@ -27,8 +27,8 @@ final class EmploymentModule extends BaseModule
     public function getPostTypeHandlerClasses(): array
     {
         return [
-            WorkPayment::class,
             //Employer::class, // subtype, not posttype
+            WorkPayment::class,
             //EarningsStatement::class,
         ];
     }
