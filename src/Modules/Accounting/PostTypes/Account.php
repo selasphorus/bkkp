@@ -10,6 +10,7 @@ class Account extends PostTypeHandler
 		$config = [
 			'slug'        => 'account',
 			'menu_icon'   => 'dashicons-bank',
+			'capability_type' => ['account','accounts'],
 		];
 
 		parent::__construct( $config, $post );

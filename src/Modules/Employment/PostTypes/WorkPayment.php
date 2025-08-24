@@ -10,6 +10,7 @@ class WorkPayment extends PostTypeHandler
 		$config = [
 			'slug'        => 'workpayment',
 			//'menu_icon'   => 'dashicons-palmtree',
+			'capability_type' => ['account','accounts'],
 		];
 
 		parent::__construct( $config, $post );

@@ -10,6 +10,7 @@ class Transaction extends PostTypeHandler
 		$config = [
 			'slug'        => 'transaction',
 			'menu_icon'   => 'dashicons-yes-alt',
+			'capability_type' => ['account','accounts'],
 		];
 
 		parent::__construct( $config, $post );
