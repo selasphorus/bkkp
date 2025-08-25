@@ -50,10 +50,6 @@ add_action( 'whx4_pre_boot', function() {
         add_filter( 'whx4_register_modules', function( array $modules ): array {
             error_log( '$$$ whx4_register_modules hook fired $$$' );
             /*return array_merge( $modules, [
-                'accounting' => Accounting::class,
-                //'employment' => Employment::class,
-                //
-                //'transactions' => Transactions::class, //\YourPlugin\Modules\Supernatural\Module::class,
                 //'paydocs'      => PayDocs::class,
                 //'taxprep'      => TaxPrep::class,
                 //'documents'  => Documents::class
