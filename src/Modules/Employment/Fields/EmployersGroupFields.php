@@ -25,9 +25,10 @@ final class EmployersGroupFields implements FieldGroupInterface, SubtypeFieldGro
             return;
         }
 
-        $tax = SubtypeRegistrar::getTaxonomyForPostType( 'group' ); // rex_group_type
+        //$tax = SubtypeRegistrar::getTaxonomyForPostType( 'group' ); // rex_group_type
+        $taxonomy = "group_category";
 
-        acf_add_local_field_group( [
+        /*acf_add_local_field_group( [
             'key'    => 'field_rex_employment_group_fields',
             'title'  => 'Employment (Employer Details)',
             'fields' => [
@@ -39,6 +40,6 @@ final class EmployersGroupFields implements FieldGroupInterface, SubtypeFieldGro
                 ],
                 // …
             ],
-        ] );
+        ] );*/
     }
 }
