@@ -78,5 +78,3 @@ add_action( 'whx4_pre_boot', function() {
        error_log( '$$$ Plugin class DNE $$$' );
     }
 }, 15 ); // Priority < 20 to run before WHx4 boot()
-
-?>
