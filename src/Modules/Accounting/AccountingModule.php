@@ -22,7 +22,7 @@ final class AccountingModule extends BaseModule
         return [
             Account::class,
             Transaction::class,
-            //LedgerEntry::class,
+            LedgerEntry::class,
         ];
     }
 }
