@@ -1,7 +1,6 @@
 <?php
 
 namespace atc\Bkkp\Modules\Accounting\Fields;
-//namespace atc\WHx4\Modules\Employment\Fields;
 
 use atc\WHx4\Core\Contracts\FieldGroupInterface;
 
@@ -18,12 +17,12 @@ final class AccountFields implements FieldGroupInterface
         // Migrate
         FieldKeyMigrator::migrate([
             'field_624775f4b6221' => [
-                'new_field_key' => 'field_rex_modulename_first_name',
+                'new_field_key' => 'field_whx4_modulename_first_name',
                 'old_meta_key'  => 'first_name',
-                'new_meta_key'  => 'rex_modulename_first_name',
+                'new_meta_key'  => 'whx4_modulename_first_name',
             ],
             'field_abc123xyz456' => [
-                'new_field_key' => 'field_rex_notes',
+                'new_field_key' => 'field_whx4_notes',
                 // no meta_key rename
             ],
         ]);
