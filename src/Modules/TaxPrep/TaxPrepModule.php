@@ -14,6 +14,12 @@ final class TaxPrepModule extends BaseModule
     {
         $this->registerDefaultViewRoot();
         parent::boot();
+
+        add_filter( 'whx4_register_subtypes', function( array $providers ): array {
+            $providers[] = new \atc\Bkkp\Modules\TaxPrep\Subtypes\TaxDocumentsSubtype(); // TODO: add use statement above to simplify this line?
+            //$providers[] = new \atc\Bkkp\Modules\TaxPrep\Subtypes\WorkPaymentsSubtype();
+            return $providers;
+        } );
     }
 
     public function getPostTypeHandlerClasses(): array
