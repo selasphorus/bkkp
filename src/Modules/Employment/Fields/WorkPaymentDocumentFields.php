@@ -6,27 +6,27 @@ use atc\WHx4\Core\Contracts\FieldGroupInterface;
 use atc\WHx4\Core\Contracts\SubtypeFieldGroupInterface;
 use atc\WHx4\Core\SubtypeRegistrar;
 
-final class EmployersGroupFields implements FieldGroupInterface, SubtypeFieldGroupInterface
+final class WorkPaymentDocumentFields implements FieldGroupInterface, SubtypeFieldGroupInterface
 {
     public function getPostType(): string
     {
-        return 'group';
+        return 'document';
     }
 
     public function getSubtypeSlug(): string
     {
-        return 'employers';
+        return 'work-payments';
     }
 
     public static function register(): void
     {
-        //error_log( '=== EmployersGroupFields: register()) ===' );
+        //error_log( '=== WorkPaymentDocumentFields: register()) ===' );
         if ( ! function_exists( 'acf_add_local_field_group' ) ) {
             return;
         }
 
         //$tax = SubtypeRegistrar::getTaxonomyForPostType( 'group' ); // rex_group_type
-        $taxonomy = "group_category";
+        $taxonomy = "document_category";
 
         /*acf_add_local_field_group( [
             'key'    => 'field_rex_employment_group_fields',
@@ -441,6 +441,11 @@ final class EmployersGroupFields implements FieldGroupInterface, SubtypeFieldGro
                         'param' => 'post_type',
                         'operator' => '==',
                         'value' => 'document',
+                    ),
+                    array(
+                        'param' => 'post_taxonomy',
+                        'operator' => '==',
+                        'value' => 'document_category:paychecks', // just in case
                     ),
                     array(
                         'param' => 'post_taxonomy',
@@ -920,6 +925,7 @@ final class EmployersGroupFields implements FieldGroupInterface, SubtypeFieldGro
             'show_in_rest' => 0,
         ) );
 
+        // Not in use
         acf_add_local_field_group([
             'key' => 'group_workpayment_details',
             'title' => 'Work Payment Details (WIP)',
