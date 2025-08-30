@@ -11,7 +11,7 @@ class TaxForm extends PostTypeHandler
             'slug'        => 'tax_form',
             'plural_slug' => 'tax_forms',
             //'rewrite' => ['slug' => 'whimsy'],
-            //'menu_icon'   => 'dashicons-media-document',
+            'menu_icon'   => 'dashicons-forms',
             'capability_type' => ['account','accounts'], // ??? separate caps? or fold in to accounts?
             //'hierarchical' => false,
             //'taxonomies' => ['document_category'],//'admin_tag', 'income_category'
