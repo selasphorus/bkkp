@@ -4,6 +4,7 @@ namespace atc\Bkkp\Modules\Employment\PostTypes;
 
 use atc\WHx4\Core\PostTypeHandler;
 
+// TBD: is this actually a post type, or merely a transaction/document category?
 class WorkPayment extends PostTypeHandler
 {
 	public function __construct(WP_Post|null $post = null) {
