@@ -4,7 +4,7 @@ namespace atc\Bkkp\Modules\Employment\Subtypes;
 
 use atc\WHx4\Core\Contracts\SubtypeInterface;
 
-final class WorkpaymentsSubtype implements SubtypeInterface
+final class WorkPaymentsSubtype implements SubtypeInterface
 {
     public function getPostType(): string
     {
@@ -18,7 +18,7 @@ final class WorkpaymentsSubtype implements SubtypeInterface
 
     public function getLabel(): string
     {
-        return 'Workpayments';
+        return 'Work Payments';
     }
 
     public function getTermArgs(): array
