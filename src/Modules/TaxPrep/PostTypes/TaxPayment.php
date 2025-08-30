@@ -12,7 +12,7 @@ class TaxPayment extends PostTypeHandler
             'slug'        => 'tax_payment',
             //'plural_slug' => 'tax_payments',
             //'rewrite' => ['slug' => 'whimsy'],
-            'menu_icon'   => 'dashicons-hourglass',
+            'menu_icon'   => 'dashicons-hourglass', //'dashicons-money-alt'
             'capability_type' => ['account','accounts'], // ??? separate caps? or fold in to accounts?
             //'hierarchical' => false,
             //'taxonomies' => ['document_category'],//'admin_tag', 'income_category'
