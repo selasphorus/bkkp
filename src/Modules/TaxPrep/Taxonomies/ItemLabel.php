@@ -16,4 +16,9 @@ class ItemLabel extends TaxonomyHandler
             'hierarchical' => false,
         ], $term);
     }
+
+    add_filter('whx4_register_shared_taxonomy_handlers', function(array $handlers): array {
+        $handlers[] = ItemLabel::class;
+        return $handlers;
+    });
 }

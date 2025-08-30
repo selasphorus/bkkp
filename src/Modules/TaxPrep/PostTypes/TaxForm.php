@@ -14,7 +14,7 @@ class TaxForm extends PostTypeHandler
             'menu_icon'   => 'dashicons-forms',
             'capability_type' => ['account','accounts'], // ??? separate caps? or fold in to accounts?
             //'hierarchical' => false,
-            //'taxonomies' => ['document_category'],//'admin_tag', 'income_category'
+            'taxonomies' => ['item_label'],//'admin_tag', 'income_category'
         ];
 
         parent::__construct( $config, $post );
