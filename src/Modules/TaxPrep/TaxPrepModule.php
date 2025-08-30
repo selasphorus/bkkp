@@ -21,6 +21,11 @@ final class TaxPrepModule extends BaseModule
             //$providers[] = new \atc\Bkkp\Modules\TaxPrep\Subtypes\WorkPaymentsSubtype();
             return $providers;
         } );
+
+        add_filter('whx4_register_shared_taxonomy_handlers', function(array $handlers): array {
+            $handlers[] = ItemLabel::class;
+            return $handlers;
+        });
     }
 
     public function getPostTypeHandlerClasses(): array
