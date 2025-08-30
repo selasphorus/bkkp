@@ -14,7 +14,7 @@ class Document extends PostTypeHandler
             //'menu_icon'   => 'dashicons-palmtree',
             'capability_type' => ['account','accounts'],
             //'hierarchical' => false,
-            //'taxonomies' => ['admin_tag', 'secret_category'],
+            'taxonomies' => ['document_category'],//'admin_tag',
         ];
 
         parent::__construct( $config, $post );
