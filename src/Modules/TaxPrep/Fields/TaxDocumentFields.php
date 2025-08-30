@@ -2441,7 +2441,7 @@ final class TaxDocumentFields implements FieldGroupInterface, SubtypeFieldGroupI
                         'operator' => '==',
                         'value' => 'tax_payment',
                     ),
-                ),/*
+                ),
                 array(
                     array(
                         'param' => 'post_type',
@@ -2465,7 +2465,7 @@ final class TaxDocumentFields implements FieldGroupInterface, SubtypeFieldGroupI
                         'operator' => '==',
                         'value' => 'transaction_category:taxes',
                     ),
-                ),*/
+                ),
             ),
             'menu_order' => 0,
             'position' => 'acf_after_title',
