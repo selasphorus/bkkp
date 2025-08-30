@@ -15,7 +15,7 @@ class TaxPayment extends PostTypeHandler
             'menu_icon'   => 'dashicons-hourglass', //'dashicons-money-alt'
             'capability_type' => ['account','accounts'], // ??? separate caps? or fold in to accounts?
             //'hierarchical' => false,
-            //'taxonomies' => ['document_category'],//'admin_tag', 'income_category'
+            'taxonomies' => ['income_category'],//'admin_tag', 'document_category'
         ];
 
         parent::__construct( $config, $post );
