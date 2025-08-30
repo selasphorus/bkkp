@@ -122,6 +122,18 @@ final class AccountantsGroupFields implements FieldGroupInterface, SubtypeFieldG
                         'value' => 'person_category:cpas',
                     ),
                 ),
+                array(
+                    array(
+                        'param' => 'post_type',
+                        'operator' => '==',
+                        'value' => 'person',
+                    ),
+                    array(
+                        'param' => 'post_taxonomy',
+                        'operator' => '==',
+                        'value' => 'person_category:accountants',
+                    ),
+                ),
             ),
             'menu_order' => 0,
             'position' => 'normal',
