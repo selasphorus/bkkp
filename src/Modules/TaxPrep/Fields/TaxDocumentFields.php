@@ -3,14 +3,26 @@
 namespace atc\Bkkp\Modules\TaxPrep\Fields;
 
 use atc\WHx4\Core\Contracts\FieldGroupInterface;
+use atc\WHx4\Core\Contracts\SubtypeFieldGroupInterface;
+use atc\WHx4\Core\SubtypeRegistrar;
 
 // TODO: rename all fields (keys/names) according to whx4 naming conventions
-final class TaxDocFields implements FieldGroupInterface
+final class TaxDocumentFields implements FieldGroupInterface, SubtypeFieldGroupInterface
 {
     public static function register(): void
     {
         //error_log( '=== XXXFields: register()) ===' );
         if ( !function_exists('acf_add_local_field_group') ) return;
+
+        public function getPostType(): string
+        {
+            return 'document';
+        }
+
+        public function getSubtypeSlug(): string
+        {
+            return 'taxdocs';
+        }
 
         //use atc\WHx4\Migrations\FieldKeyMigrator;
         /*
