@@ -15,6 +15,12 @@ final class AccountingModule extends BaseModule
     {
         $this->registerDefaultViewRoot();
         parent::boot();
+
+        add_filter( 'whx4_register_subtypes', function( array $providers ): array {
+            $providers[] = new \atc\Bkkp\Modules\Accounting\Subtypes\AccountantsSubtype(); // TODO: add use statement above to simplify this line?
+            //$providers[] = new \atc\Bkkp\Modules\Accounting\Subtypes\WorkPaymentsSubtype();
+            return $providers;
+        } );
     }
 
     public function getPostTypeHandlerClasses(): array
