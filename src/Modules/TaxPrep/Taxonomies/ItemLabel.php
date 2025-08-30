@@ -15,6 +15,7 @@ class ItemLabel extends TaxonomyHandler
             //'plural_slug'  => 'item_labels',
             'object_types' => [ 'document', 'tax_form' ],
             'hierarchical' => false,
+            //'menu_name' => 'Labels',
         ], $term);
     }
 }
