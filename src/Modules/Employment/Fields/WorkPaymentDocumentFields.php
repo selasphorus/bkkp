@@ -446,7 +446,18 @@ final class WorkPaymentDocumentFields implements FieldGroupInterface, SubtypeFie
                         'param'    => 'post_taxonomy',
                         'operator' => '==',
                         'value' => 'document_category:work-payments',
-                        //'value'    => 'document_category:work-payments,document_category:earnings-statements,document_category:paychecks',
+                    ],
+                ],
+                [
+                    [
+                        'param'    => 'post_type',
+                        'operator' => '==',
+                        'value'    => 'document',
+                    ],
+                    [
+                        'param'    => 'post_taxonomy',
+                        'operator' => '==',
+                        'value' => 'document_category:earnings-statements',
                     ],
                 ],
             ],
@@ -896,7 +907,19 @@ final class WorkPaymentDocumentFields implements FieldGroupInterface, SubtypeFie
                     [
                         'param'    => 'post_taxonomy',
                         'operator' => '==',
-                        'value'    => 'document_category:work-payments,document_category:earnings-statements',
+                        'value' => 'document_category:work-payments',
+                    ],
+                ],
+                [
+                    [
+                        'param'    => 'post_type',
+                        'operator' => '==',
+                        'value'    => 'document',
+                    ],
+                    [
+                        'param'    => 'post_taxonomy',
+                        'operator' => '==',
+                        'value' => 'document_category:earnings-statements',
                     ],
                 ],
             ],
