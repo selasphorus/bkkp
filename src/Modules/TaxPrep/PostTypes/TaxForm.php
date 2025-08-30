@@ -1,6 +1,6 @@
 <?php
 
-namespace atc\Bkkp\Modules\Documents\PostTypes;
+namespace atc\Bkkp\Modules\TaxPrep\PostTypes;
 
 use atc\WHx4\Core\PostTypeHandler;
 
