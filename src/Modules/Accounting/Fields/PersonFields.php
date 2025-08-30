@@ -21,7 +21,7 @@ final class PersonFields implements FieldGroupInterface, PostTypeFieldGroupInter
 
         acf_add_local_field_group( array(
             'key' => 'group_624775b57f8df',
-            'title' => 'Person: Additional Fields [bkkp]',
+            'title' => 'BKKP Person Fields',
             'fields' => array(
                 array(
                     'key' => 'field_65e73415b2b38',
