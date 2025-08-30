@@ -11,10 +11,10 @@ class Document extends PostTypeHandler
             'slug'        => 'document',
             //'plural_slug' => 'documents',
             //'rewrite' => ['slug' => 'whimsy'],
-            //'menu_icon'   => 'dashicons-palmtree',
-            'capability_type' => ['account','accounts'],
+            'menu_icon'   => 'dashicons-media-document',
+            'capability_type' => ['document','documents'],
             //'hierarchical' => false,
-            'taxonomies' => ['document_category'],//'admin_tag',
+            'taxonomies' => ['document_category'],//'admin_tag', 'income_category'
         ];
 
         parent::__construct( $config, $post );
