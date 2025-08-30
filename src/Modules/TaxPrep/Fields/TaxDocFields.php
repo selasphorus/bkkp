@@ -294,51 +294,51 @@ final class TaxDocFields implements FieldGroupInterface
                     ),
                 ),
             ),
-            'location' => array(
-                array(
-                    array(
-                        'param' => 'post_type',
+            'location' => [
+                [
+                    [
+                        'param'    => 'post_type',
                         'operator' => '==',
-                        'value' => 'document',
-                    ),
-                    array(
-                        'param' => 'post_taxonomy',
+                        'value'    => 'document',
+                    ],
+                    [
+                        'param'    => 'post_taxonomy',
                         'operator' => '==',
                         'value' => 'document_category:tax-forms',
-                    ),
-                ),
-                array(
-                    array(
-                        'param' => 'post_type',
+                    ],
+                ],
+                [
+                    [
+                        'param'    => 'post_type',
                         'operator' => '==',
-                        'value' => 'document',
-                    ),
-                    array(
-                        'param' => 'post_taxonomy',
+                        'value'    => 'document',
+                    ],
+                    [
+                        'param'    => 'post_taxonomy',
                         'operator' => '==',
                         'value' => 'document_category:tax-returns',
-                    ),
-                ),
-                array(
-                    array(
-                        'param' => 'post_type',
+                    ],
+                ],
+                [
+                    [
+                        'param'    => 'post_type',
                         'operator' => '==',
-                        'value' => 'document',
-                    ),
-                    array(
-                        'param' => 'post_taxonomy',
+                        'value'    => 'document',
+                    ],
+                    [
+                        'param'    => 'post_taxonomy',
                         'operator' => '==',
                         'value' => 'document_category:finances-summary',
-                    ),
-                ),
-                array(
-                    array(
-                        'param' => 'post_type',
+                    ],
+                ],
+                [
+                    [
+                        'param'    => 'post_type',
                         'operator' => '==',
-                        'value' => 'tax_payment',
-                    ),
-                ),
-            ),
+                        'value'    => 'tax_payment',
+                    ],
+                ],
+            ],
             'menu_order' => 0,
             'position' => 'acf_after_title',
             'style' => 'default',
