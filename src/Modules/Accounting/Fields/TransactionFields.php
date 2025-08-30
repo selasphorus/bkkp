@@ -8,7 +8,7 @@ final class TransactionFields implements FieldGroupInterface
 {
     public static function register(): void
     {
-        //error_log( '=== EmployerFields: register()) ===' );
+        //error_log( '=== TransactionFields: register()) ===' );
         if ( !function_exists('acf_add_local_field_group') ) return;
 
         acf_add_local_field_group([
