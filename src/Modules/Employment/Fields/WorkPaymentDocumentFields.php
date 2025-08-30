@@ -435,30 +435,21 @@ final class WorkPaymentDocumentFields implements FieldGroupInterface, SubtypeFie
                     'new_lines' => '',
                 ),
             ),
-            'location' => array(
-                array(
-                    array(
-                        'param' => 'post_type',
+            'location' => [
+                [
+                    [
+                        'param'    => 'post_type',
                         'operator' => '==',
-                        'value' => 'document',
-                    ),
-                    array(
-                        'param' => 'post_taxonomy',
-                        'operator' => '==',
-                        'value' => 'document_category:paychecks', // just in case
-                    ),
-                    array(
-                        'param' => 'post_taxonomy',
+                        'value'    => 'document',
+                    ],
+                    [
+                        'param'    => 'post_taxonomy',
                         'operator' => '==',
                         'value' => 'document_category:work-payments',
-                    ),
-                    array(
-                        'param' => 'post_taxonomy',
-                        'operator' => '==',
-                        'value' => 'document_category:earnings-statements',
-                    ),
-                ),
-            ),
+                        //'value'    => 'document_category:work-payments,document_category:earnings-statements,document_category:paychecks',
+                    ],
+                ],
+            ],
             'menu_order' => 0,
             'position' => 'normal',
             'style' => 'default',
