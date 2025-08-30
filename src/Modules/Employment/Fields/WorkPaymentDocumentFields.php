@@ -15,7 +15,7 @@ final class WorkPaymentDocumentFields implements FieldGroupInterface, SubtypeFie
 
     public function getSubtypeSlug(): string
     {
-        return 'work-payments';
+        return 'workpayments';
     }
 
     public static function register(): void
@@ -895,25 +895,20 @@ final class WorkPaymentDocumentFields implements FieldGroupInterface, SubtypeFie
                     'append' => '',
                 ),
             ),
-            'location' => array(
-                array(
-                    array(
-                        'param' => 'post_type',
+            'location' => [
+                [
+                    [
+                        'param'    => 'post_type',
                         'operator' => '==',
-                        'value' => 'document',
-                    ),
-                    array(
-                        'param' => 'post_taxonomy',
+                        'value'    => 'document',
+                    ],
+                    [
+                        'param'    => 'post_taxonomy',
                         'operator' => '==',
-                        'value' => 'document_category:work-payments',
-                    ),
-                    array(
-                        'param' => 'post_taxonomy',
-                        'operator' => '==',
-                        'value' => 'document_category:earnings-statements',
-                    ),
-                ),
-            ),
+                        'value'    => 'document_category:work-payments,document_category:earnings-statements',
+                    ],
+                ],
+            ],
             'menu_order' => 0,
             'position' => 'normal',
             'style' => 'default',
