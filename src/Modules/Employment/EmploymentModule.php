@@ -5,7 +5,7 @@ namespace atc\Bkkp\Modules\Employment;
 use atc\WHx4\Core\Module as BaseModule;
 
 //use atc\Bkkp\Modules\Employment\PostTypes\Employer;
-use atc\Bkkp\Modules\Employment\PostTypes\WorkPayment;
+//use atc\Bkkp\Modules\Employment\PostTypes\WorkPayment;
 //use atc\Bkkp\Modules\Employment\PostTypes\EarningsStatement;
 
 // Define the module class
@@ -19,6 +19,7 @@ final class EmploymentModule extends BaseModule
 
         add_filter( 'whx4_register_subtypes', function( array $providers ): array {
             $providers[] = new \atc\Bkkp\Modules\Employment\Subtypes\EmployersSubtype(); // TODO: add use statement above to simplify this line?
+            $providers[] = new \atc\Bkkp\Modules\Employment\Subtypes\WorkPaymentsSubtype();
             return $providers;
         } );
 
