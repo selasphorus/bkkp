@@ -56,7 +56,7 @@ final class AccountantsGroupFields implements FieldGroupInterface, SubtypeFieldG
                     'required' => 0,
                     'conditional_logic' => 0,
                     'wrapper' => array(
-                        'width' => '',
+                        'width' => '33',
                         'class' => '',
                         'id' => '',
                     ),
@@ -76,7 +76,7 @@ final class AccountantsGroupFields implements FieldGroupInterface, SubtypeFieldG
                     'required' => 0,
                     'conditional_logic' => 0,
                     'wrapper' => array(
-                        'width' => '',
+                        'width' => '33',
                         'class' => '',
                         'id' => '',
                     ),
@@ -98,7 +98,7 @@ final class AccountantsGroupFields implements FieldGroupInterface, SubtypeFieldG
                     'required' => 0,
                     'conditional_logic' => 0,
                     'wrapper' => array(
-                        'width' => '',
+                        'width' => '33',
                         'class' => '',
                         'id' => '',
                     ),
