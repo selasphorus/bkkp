@@ -4,7 +4,7 @@ namespace atc\Bkkp\Modules\Employment\Subtypes;
 
 use atc\WHx4\Core\Contracts\SubtypeInterface;
 
-final class WorkPaymentsSubtype implements SubtypeInterface
+final class GigsSubtype implements SubtypeInterface
 {
     public function getPostType(): string
     {
