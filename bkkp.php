@@ -29,15 +29,11 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 
 use atc\WHx4\Plugin;
 
-// TBD whether there's a way to streamline the following
-// Add-on Modules
+// WHx4 Add-on Modules
 use atc\Bkkp\Modules\Accounting\AccountingModule as Accounting;
 use atc\Bkkp\Modules\Employment\EmploymentModule as Employment;
-use atc\Bkkp\Modules\Documents\DocumentsModule as Documents;
+use atc\Bkkp\Modules\Documents\DocumentsModule as Documents; // TODO, maybe?: create separate mini-plugin to handle documents
 use atc\Bkkp\Modules\TaxPrep\TaxPrepModule as TaxPrep;
-//
-//use atc\Bkkp\Modules\TaxPrep\TaxPrepModule as TaxPrep;
-//use atc\Bkkp\Modules\Documents\DocumentsModule as Documents; // TODO: create separate mini-plugin to handle documents
 
 // Once plugins are loaded, boot everything up
 add_action( 'whx4_pre_boot', function() {
@@ -49,10 +45,7 @@ add_action( 'whx4_pre_boot', function() {
         // Register the module with WHx4
         add_filter( 'whx4_register_modules', function( array $modules ): array {
             error_log( '$$$ whx4_register_modules hook fired $$$' );
-            /*return array_merge( $modules, [
-                //'paydocs'      => PayDocs::class,
-                //'taxprep'      => TaxPrep::class,
-            ]);*/
+            //
             $modules['accounting'] = Accounting::class;
             $modules['employment'] = Employment::class;
             $modules['documents'] = Documents::class;
