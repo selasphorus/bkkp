@@ -18,8 +18,10 @@ final class EmploymentModule extends BaseModule
         parent::boot();
 
         add_filter( 'whx4_register_subtypes', function( array $providers ): array {
-            $providers[] = new \atc\Bkkp\Modules\Employment\Subtypes\EmployersSubtype(); // TODO: add use statement above to simplify this line?
-            $providers[] = new \atc\Bkkp\Modules\Employment\Subtypes\WorkPaymentsSubtype();
+             // TODO: add use statement above to simplify these lines?
+            $providers[] = new \atc\Bkkp\Modules\Employment\Subtypes\EmployersSubtype(); // Subtype of Group PostType
+            $providers[] = new \atc\Bkkp\Modules\Employment\Subtypes\WorkPaymentsSubtype(); // Subtype of Document PostType
+            $providers[] = new \atc\Bkkp\Modules\Employment\Subtypes\GigsSubtype(); // Subtype of Event PostType
             return $providers;
         } );
 
