@@ -9,6 +9,16 @@ use atc\WHx4\Core\SubtypeRegistrar;
 // TODO: rename all fields (keys/names) according to whx4 naming conventions
 final class CommunicationsPostFields implements FieldGroupInterface, SubtypeFieldGroupInterface
 {
+    public function getPostType(): string
+    {
+        return 'post';
+    }
+
+    public function getSubtypeSlug(): string
+    {
+        return 'communications';
+    }
+
     public static function register(): void
     {
         //error_log( '=== CommunicationsPostFields: register()) ===' );
