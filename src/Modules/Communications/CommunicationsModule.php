@@ -4,9 +4,7 @@ namespace atc\Bkkp\Modules\Communications;
 
 use atc\WHx4\Core\Module as BaseModule;
 
-//use atc\Bkkp\Modules\Communications\PostTypes\Employer;
-//use atc\Bkkp\Modules\Communications\PostTypes\WorkPayment;
-//use atc\Bkkp\Modules\Communications\PostTypes\EarningsStatement;
+//use atc\Bkkp\Modules\Communications\PostTypes\XXX;
 
 // Define the module class
 final class CommunicationsModule extends BaseModule
