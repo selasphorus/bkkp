@@ -21,7 +21,7 @@ final class CommunicationsPostFields implements FieldGroupInterface, SubtypeFiel
 
     public static function register(): void
     {
-        //error_log( '=== CommunicationsPostFields: register()) ===' );
+        error_log( '=== CommunicationsPostFields: register()) ===' );
         if ( !function_exists('acf_add_local_field_group') ) return;
 
         $taxonomy = "category";
