@@ -1,6 +1,6 @@
 <?php
 
-namespace atc\Bkkp\Modules\Employment\Subtypes;
+namespace atc\Bkkp\Modules\Communications\Subtypes;
 
 use atc\WHx4\Core\Contracts\SubtypeInterface;
 
