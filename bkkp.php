@@ -34,6 +34,7 @@ use atc\Bkkp\Modules\Accounting\AccountingModule as Accounting;
 use atc\Bkkp\Modules\Employment\EmploymentModule as Employment;
 use atc\Bkkp\Modules\Documents\DocumentsModule as Documents; // TODO, maybe?: create separate mini-plugin to handle documents
 use atc\Bkkp\Modules\TaxPrep\TaxPrepModule as TaxPrep;
+use atc\Bkkp\Modules\Communications\CommunicationsModule as Communications;
 
 // Once plugins are loaded, boot everything up
 add_action( 'whx4_pre_boot', function() {
@@ -50,6 +51,7 @@ add_action( 'whx4_pre_boot', function() {
             $modules['employment'] = Employment::class;
             $modules['documents'] = Documents::class;
             $modules['taxprep'] = TaxPrep::class;
+            $modules['communications'] = Communications::class;
             return $modules;
         } );
 
