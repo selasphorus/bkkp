@@ -22,7 +22,9 @@ final class CommunicationsPostFields implements FieldGroupInterface, SubtypeFiel
     public static function register(): void
     {
         error_log( '=== CommunicationsPostFields: register()) ===' );
-        if ( !function_exists('acf_add_local_field_group') ) return;
+        if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+            return;
+        }
 
         $taxonomy = "category";
 
@@ -339,7 +341,7 @@ final class CommunicationsPostFields implements FieldGroupInterface, SubtypeFiel
                 ),
             ),
             'menu_order' => 0,
-            'position' => 'normal',
+            'position' => 'acf_after_title',
             'style' => 'default',
             'label_placement' => 'top',
             'instruction_placement' => 'label',

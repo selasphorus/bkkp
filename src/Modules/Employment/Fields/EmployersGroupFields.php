@@ -28,19 +28,21 @@ final class EmployersGroupFields implements FieldGroupInterface, SubtypeFieldGro
         //$tax = SubtypeRegistrar::getTaxonomyForPostType( 'group' ); // rex_group_type
         $taxonomy = "group_category";
 
-        /*acf_add_local_field_group( [
-            'key'    => 'field_rex_employment_group_fields',
-            'title'  => 'Employment (Employer Details)',
-            'fields' => [
-                [
-                    'key'   => 'field_rex_employment_industry',
-                    'name'  => 'rex_employment_industry',
-                    'label' => 'Industry',
-                    'type'  => 'text',
-                ],
-                // …
+        //use atc\WHx4\Migrations\FieldKeyMigrator;
+        /*
+        // Migrate
+        FieldKeyMigrator::migrate([
+            'field_624775f4b6221' => [
+                'new_field_key' => 'field_whx4_modulename_first_name',
+                'old_meta_key'  => 'first_name',
+                'new_meta_key'  => 'whx4_modulename_first_name',
             ],
-        ] );*/
+            'field_abc123xyz456' => [
+                'new_field_key' => 'field_whx4_notes',
+                // no meta_key rename
+            ],
+        ]);
+        */
 
         acf_add_local_field_group( array(
             'key' => 'group_5febac8aa90d9',
