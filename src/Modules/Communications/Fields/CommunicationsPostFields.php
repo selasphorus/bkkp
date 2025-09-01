@@ -3,14 +3,18 @@
 namespace atc\Bkkp\Modules\Communications\Fields;
 
 use atc\WHx4\Core\Contracts\FieldGroupInterface;
+use atc\WHx4\Core\Contracts\SubtypeFieldGroupInterface;
+use atc\WHx4\Core\SubtypeRegistrar;
 
 // TODO: rename all fields (keys/names) according to whx4 naming conventions
-final class CommunicationsPostFields implements FieldGroupInterface
+final class CommunicationsPostFields implements FieldGroupInterface, SubtypeFieldGroupInterface
 {
     public static function register(): void
     {
-        error_log( '=== CommunicationsPostFields: register()) ===' );
+        //error_log( '=== CommunicationsPostFields: register()) ===' );
         if ( !function_exists('acf_add_local_field_group') ) return;
+
+        $taxonomy = "category";
 
         //use atc\WHx4\Migrations\FieldKeyMigrator;
         /*
