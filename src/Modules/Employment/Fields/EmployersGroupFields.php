@@ -20,7 +20,7 @@ final class EmployersGroupFields implements FieldGroupInterface, SubtypeFieldGro
 
     public static function register(): void
     {
-        //error_log( '=== EmployersGroupFields: register()) ===' );
+        error_log( '=== EmployersGroupFields: register()) ===' );
         if ( ! function_exists( 'acf_add_local_field_group' ) ) {
             return;
         }
