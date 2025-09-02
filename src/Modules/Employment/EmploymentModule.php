@@ -4,9 +4,11 @@ namespace atc\Bkkp\Modules\Employment;
 
 use atc\WHx4\Core\Module as BaseModule;
 
+// Post Types
 //use atc\Bkkp\Modules\Employment\PostTypes\Employer;
-//use atc\Bkkp\Modules\Employment\PostTypes\WorkPayment;
-//use atc\Bkkp\Modules\Employment\PostTypes\EarningsStatement;
+
+// Taxonomies
+//use atc\Bkkp\Modules\Accounting\Taxonomies\AccountCategory;
 
 // Define the module class
 final class EmploymentModule extends BaseModule
