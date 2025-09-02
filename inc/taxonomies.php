@@ -10,7 +10,7 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*** Taxonomies for GENERAL & ADMIN USE ***/
 
-// Custom Taxonomy: Language
+// Custom Taxonomy: Language -- TBD if this is needed somewhere
 function bkkp_register_taxonomy_language() {
     //$cap = 'lectionary';
     $labels = array(
@@ -48,7 +48,8 @@ function bkkp_register_taxonomy_language() {
 
 /*** TAXES ***/
 
-// Income Category
+// Income Category -- OOP-ok
+// e.g. "1099", "1099-INT", "1099-MISC", "W2"
 function bkkp_register_taxonomy_income_category() {
     //$cap = 'XXX';
     $labels = array(
@@ -84,7 +85,7 @@ function bkkp_register_taxonomy_income_category() {
 }
 add_action( 'init', 'bkkp_register_taxonomy_income_category' );
 
-// Expense Category
+// Expense Category -- N/A -- redundant with Transaction categories
 function bkkp_register_taxonomy_expense_category() {
     //$cap = 'XXX';
     $labels = array(
@@ -120,7 +121,7 @@ function bkkp_register_taxonomy_expense_category() {
 }
 add_action( 'init', 'bkkp_register_taxonomy_expense_category' );
 
-// Transaction Category
+// Transaction Category -- OOP-ok
 function bkkp_register_taxonomy_transaction_category() {
     //$cap = 'XXX';
     $labels = array(
@@ -156,7 +157,7 @@ function bkkp_register_taxonomy_transaction_category() {
 }
 add_action( 'init', 'bkkp_register_taxonomy_transaction_category' );
 
-// Transaction Tag
+// Transaction Tag -- OOP-ok
 function bkkp_register_taxonomy_transaction_tag() {
     //$cap = 'XXX';
     $labels = array(
@@ -193,7 +194,7 @@ function bkkp_register_taxonomy_transaction_tag() {
 add_action( 'init', 'bkkp_register_taxonomy_transaction_tag' );
 
 
-// Account Category
+// Account Category -- OOP-ok
 function bkkp_register_taxonomy_account_category() {
     //$cap = 'XXX';
     $labels = array(
@@ -229,7 +230,7 @@ function bkkp_register_taxonomy_account_category() {
 }
 add_action( 'init', 'bkkp_register_taxonomy_account_category' );
 
-// Document Category
+// Document Category -- OOP-ok
 function bkkp_register_taxonomy_document_category() {
     //$cap = 'XXX';
     $labels = array(
@@ -265,7 +266,7 @@ function bkkp_register_taxonomy_document_category() {
 }
 add_action( 'init', 'bkkp_register_taxonomy_document_category' );
 
-// Item Label (for Form Fields, &c.)
+// Item Label (for Form Fields, &c.) -- OOP-ok (WIP)
 function bkkp_register_taxonomy_item_label() {
     //$cap = 'XXX';
     $labels = array(
@@ -301,7 +302,8 @@ function bkkp_register_taxonomy_item_label() {
 }
 add_action( 'init', 'bkkp_register_taxonomy_item_label' );
 
-// Tax Category
+// Tax Category -- OOP-ok
+// e.g. "Extension Payment"
 function bkkp_register_taxonomy_tax_category() {
     //$cap = 'XXX';
     $labels = array(

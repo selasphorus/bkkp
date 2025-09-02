@@ -26,14 +26,13 @@ function bkkp_custom_caps() {
 
 // TODO: Phase out Ledger, Documents >> loaded via recordkeeper instead
 
-
 /*** LEDGER ***/
 
-// Accounts -- account
+// Accounts -- account -- OOP-ok
 function bkkp_register_post_type_account() {
 
     $caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
-    
+
     $labels = array(
         'name' => __( 'Accounts', 'bkkp' ),
         'singular_name' => __( 'Account', 'bkkp' ),
@@ -46,7 +45,7 @@ function bkkp_register_post_type_account() {
         'not_found' =>  __( 'No Accounts Found', 'bkkp' ),
         'not_found_in_trash' => __( 'No Accounts found in Trash', 'bkkp' ),
     );
-    
+
     $args = array(
         'labels' => $labels,
          'public' => true,
@@ -62,21 +61,21 @@ function bkkp_register_post_type_account() {
          'menu_icon'          => 'dashicons-bank',
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-        'taxonomies' => array( 'admin_tag', 'account_category' ), 
-        'show_in_rest' => true,    
+        'taxonomies' => array( 'admin_tag', 'account_category' ),
+        'show_in_rest' => true,
     );
 
     register_post_type( 'account', $args );
-    
+
 }
 add_action( 'init', 'bkkp_register_post_type_account' );
 
-// Transactions -- transaction -- WIP -- necessary now that Mint is dead
-// ACF fields: 
+// Transactions -- transaction -- WIP -- necessary now that Mint is dead -- OOP-ok
+// ACF fields:
 function bkkp_register_post_type_transaction() {
 
     $caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
-    
+
     $labels = array(
         'name' => __( 'Transactions', 'bkkp' ),
         'singular_name' => __( 'Transaction', 'bkkp' ),
@@ -89,7 +88,7 @@ function bkkp_register_post_type_transaction() {
         'not_found' =>  __( 'No Transactions Found', 'bkkp' ),
         'not_found_in_trash' => __( 'No Transactions found in Trash', 'bkkp' ),
     );
-    
+
     $args = array(
         'labels' => $labels,
          'public' => true,
@@ -105,22 +104,22 @@ function bkkp_register_post_type_transaction() {
          'menu_icon'          => 'dashicons-yes-alt',
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-        'taxonomies' => array( 'admin_tag', 'ledger_category' ), 
-        'show_in_rest' => false,    
+        'taxonomies' => array( 'admin_tag', 'ledger_category' ),
+        'show_in_rest' => false,
     );
 
     register_post_type( 'transaction', $args );
-    
+
 }
 add_action( 'init', 'bkkp_register_post_type_transaction' );
 
-// Ledger -- ledger_entry
+// Ledger -- ledger_entry -- OOP-ok
 // First draft: Expenses -- expense
 // ACF fields: tax_year (date/num); amount (currency/number); notes
 function bkkp_register_post_type_ledger_entry() {
 
     $caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
-    
+
     $labels = array(
         'name' => __( 'Ledger', 'bkkp' ),
         'singular_name' => __( 'Ledger Entry', 'bkkp' ),
@@ -133,10 +132,10 @@ function bkkp_register_post_type_ledger_entry() {
         'not_found' =>  __( 'No Ledger Entries Found', 'bkkp' ),
         'not_found_in_trash' => __( 'No Ledger Entries found in Trash', 'bkkp' ),
     );
-    
+
     $args = array(
         'labels' => $labels,
-         'public' => true,
+        'public' => true,
         'publicly_queryable' => true,
         'show_ui'            => true,
         'show_in_menu'       => true, //'show_in_menu'       => 'edit.php?post_type=account',
@@ -149,12 +148,12 @@ function bkkp_register_post_type_ledger_entry() {
          //'menu_icon'          => 'dashicons-yes-alt',
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-        'taxonomies' => array( 'admin_tag', 'ledger_category' ), 
-        'show_in_rest' => false,    
+        'taxonomies' => array( 'admin_tag', 'ledger_category' ),
+        'show_in_rest' => false,
     );
 
     register_post_type( 'ledger_entry', $args );
-    
+
 }
 add_action( 'init', 'bkkp_register_post_type_ledger_entry' );
 
@@ -163,7 +162,7 @@ add_action( 'init', 'bkkp_register_post_type_ledger_entry' );
 
 /*** TAXES ***/
 
-// Documents -- document
+// Documents -- document -- OOP-ok
 function bkkp_register_post_type_document() {
 
     $caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
@@ -180,7 +179,7 @@ function bkkp_register_post_type_document() {
         'not_found' =>  __( 'No Documents Found', 'bkkp' ),
         'not_found_in_trash' => __( 'No Documents found in Trash', 'bkkp' ),
     );
-    
+
     $args = array(
         'labels' => $labels,
          'public' => true,
@@ -197,16 +196,16 @@ function bkkp_register_post_type_document() {
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
         'taxonomies' => array( 'admin_tag', 'document_category', 'income_category' ), // WIP re 'income_category'
-        'show_in_rest' => false,    
+        'show_in_rest' => false,
     );
 
     register_post_type( 'document', $args );
-    
+
 }
 add_action( 'init', 'bkkp_register_post_type_document' );
 
 
-// Tax Forms -- tax_form
+// Tax Forms -- tax_form -- OOP-ok
 function bkkp_register_post_type_tax_form() {
 
     $caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
@@ -223,7 +222,7 @@ function bkkp_register_post_type_tax_form() {
         'not_found' =>  __( 'No Tax Forms Found', 'bkkp' ),
         'not_found_in_trash' => __( 'No Tax Forms found in Trash', 'bkkp' ),
     );
-    
+
     $args = array(
         'labels' => $labels,
          'public' => true,
@@ -239,16 +238,16 @@ function bkkp_register_post_type_tax_form() {
          //'menu_icon'          => 'dashicons-playlist-audio',
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-        'taxonomies' => array( 'admin_tag' ), 
-        'show_in_rest' => false,    
+        'taxonomies' => array( 'admin_tag' ),
+        'show_in_rest' => false,
     );
 
     register_post_type( 'tax_form', $args );
-    
+
 }
 add_action( 'init', 'bkkp_register_post_type_tax_form' );
 
-// Tax Payments
+// Tax Payments -- OOP-ok
 function bkkp_register_post_type_tax_payment() {
 
     $caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
@@ -265,10 +264,10 @@ function bkkp_register_post_type_tax_payment() {
         'not_found' =>  __( 'No Tax Payments Found', 'bkkp' ),
         'not_found_in_trash' => __( 'No Tax Payments found in Trash', 'bkkp' ),
     );
-    
+
     $args = array(
         'labels' => $labels,
-         'public' => true,
+        'public' => true,
         'publicly_queryable' => true,
         'show_ui'            => true,
         'show_in_menu'       => true, //'show_in_menu'       => 'edit.php?post_type=account',
@@ -278,20 +277,21 @@ function bkkp_register_post_type_tax_payment() {
         'map_meta_cap'       => true,
         'has_archive'        => true,
         'hierarchical'       => false,
-         'menu_icon'          => 'dashicons-money-alt',
+        'menu_icon'          => 'dashicons-money-alt',
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-        'taxonomies' => array( 'admin_tag', 'tax_category' ), 
-        'show_in_rest' => false,    
+        'taxonomies' => array( 'admin_tag', 'tax_category' ),
+        'show_in_rest' => false,
     );
 
     register_post_type( 'tax_payment', $args );
-    
+
 }
 add_action( 'init', 'bkkp_register_post_type_tax_payment' );
 
 // TODO: create separate CPT as equiv to annual Finances XLSX files?
-// Tax Returns
+// TODO: merge this into TaxForm -- forms, forms received, forms submitted
+// Tax Returns -- OOP-NO
 function bkkp_register_post_type_tax_return() {
 
     $caps = "post"; //if ( custom_caps() ) { $caps = "account"; } else { $caps = "post"; }
@@ -308,7 +308,7 @@ function bkkp_register_post_type_tax_return() {
         'not_found' =>  __( 'No Tax Returns Found', 'bkkp' ),
         'not_found_in_trash' => __( 'No Tax Returns found in Trash', 'bkkp' ),
     );
-    
+
     $args = array(
         'labels' => $labels,
          'public' => true,
@@ -324,12 +324,12 @@ function bkkp_register_post_type_tax_return() {
          //'menu_icon'          => 'dashicons-playlist-audio',
         'menu_position'      => null,
         'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-        'taxonomies' => array( 'admin_tag' ), 
-        'show_in_rest' => false,    
+        'taxonomies' => array( 'admin_tag' ),
+        'show_in_rest' => false,
     );
 
     register_post_type( 'tax_return', $args );
-    
+
 }
 add_action( 'init', 'bkkp_register_post_type_tax_return' );
 
