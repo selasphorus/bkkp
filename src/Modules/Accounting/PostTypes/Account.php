@@ -2,6 +2,7 @@
 
 namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
+use WP_Post;
 use atc\WHx4\Core\PostTypeHandler;
 
 class Account extends PostTypeHandler
@@ -11,6 +12,7 @@ class Account extends PostTypeHandler
 			'slug'        => 'account',
 			'menu_icon'   => 'dashicons-bank',
 			'capability_type' => ['account','accounts'],
+			//'taxonomies'   => [ 'habitat' ],
 		];
 
 		parent::__construct( $config, $post );
@@ -21,6 +23,8 @@ class Account extends PostTypeHandler
 	    parent::boot(); // Optional if you add shared logic later
 	}
 
-    // Other methods related to the Account...
+    public function getStatus() {
+        return isset($this->post) ? get_post_meta($this->post->ID, 'account_status', true) : "Unknown";
+    }
 }
 
