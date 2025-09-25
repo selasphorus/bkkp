@@ -23,8 +23,10 @@ class Account extends PostTypeHandler
 	    parent::boot(); // Optional if you add shared logic later
 	}
 
-    public function getStatus() {
-        return isset($this->post) ? get_post_meta($this->post->ID, 'account_status', true) : "Unknown";
+    public function getStatus(?WP_Post $post = null): string
+    {
+        $p = $post ?? $this->getPost();
+        return $p ? (string)get_post_meta($p->ID, 'account_status', true) : 'Unknown';
     }
 }
 
