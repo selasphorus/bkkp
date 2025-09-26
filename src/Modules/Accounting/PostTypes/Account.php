@@ -4,7 +4,7 @@ namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
 use WP_Post;
 use atc\WHx4\Core\PostTypeHandler;
-use atc\Bkkp\Modules\Accounting\PostTypes\Transaction
+use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 
 class Account extends PostTypeHandler
 {
