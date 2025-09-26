@@ -37,7 +37,7 @@ class Account extends PostTypeHandler
         return $related;
     }
 
-    public function getTransactions( ?WP_Post $post = null, $scope = "this_month"): string
+    public function getTransactions( ?WP_Post $post = null, $scope = "this_month"): array //string
     {
         $p = $post ?? $this->getPost();
         //return $p ? (string)get_post_meta($p->ID, 'account_status', true) : 'Unknown';
