@@ -42,7 +42,7 @@ class Account extends PostTypeHandler
         $p = $post ?? $this->getPost();
         //return $p ? (string)get_post_meta($p->ID, 'account_status', true) : 'Unknown';
 
-        $related = getRelatedPosts( $post_id, 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
+        $related = PostTypeHandler::getRelatedPosts( $post_id, 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
 		/*if ( $arr_obj_transactions ) {
 
 			//$info .= "<h3>Transactions:</h3>";
