@@ -38,13 +38,13 @@ class Account extends PostTypeHandler
 
     public function getStatements( $scope = "this_year" ): string
     {
-        $related = getRelatedPosts( $this->getPostId, 'document', 'account' ); // TODO: add 'scope' parameter
+        $related = getRelatedPosts( $this->getPostId(), 'document', 'account' ); // TODO: add 'scope' parameter
         return $related;
     }
 
     public function getTransactions( $scope = "this_month"): array //string
     {
-        $related = PostTypeHandler::getRelatedPosts( $this->getPostId, 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
+        $related = PostTypeHandler::getRelatedPosts( $this->getPostId(), 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
 		/*if ( $arr_obj_transactions ) {
 
 			//$info .= "<h3>Transactions:</h3>";
