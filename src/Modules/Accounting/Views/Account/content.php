@@ -6,9 +6,14 @@ $handler = PostTypeHandler::getHandlerForPost($post);
 $pID = $handler->getPostID();
 $meta = $handler->getPostMeta();
 
-// Account-specific data
-$status = ($handler && method_exists($handler, 'getStatus')) ? $handler->getStatus($post) : '';
-$transactions = ($handler && method_exists($handler, 'getTransactions')) ? $handler->getTransactions($post) : [];
+$handler = PostTypeHandler::getHandlerForPost($post);
+if ($handler) {
+    $postId = $handler->getPostId();
+    $meta = $handler->getPostMeta();
+    // Account-specific data
+    $status = (string)$handler->getPostMeta('account_status', 'purple');
+    $transactions = (method_exists($handler, 'getTransactions')) ? $handler->getTransactions() : [];
+}
 ?>
 
 <div>

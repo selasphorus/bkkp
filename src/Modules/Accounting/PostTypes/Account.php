@@ -24,25 +24,27 @@ class Account extends PostTypeHandler
 	    parent::boot(); // Optional if you add shared logic later
 	}
 
-    public function getStatus( ?WP_Post $post = null ): string
+    public function getStatus(): string
     {
-        $p = $post ?? $this->getPost();
-        return $p ? (string)get_post_meta($p->ID, 'account_status', true) : 'Unknown';
+        return (string)$this->getPostMeta('account_status', 'Unknown');
     }
 
-    public function getStatements( ?WP_Post $post = null, $scope = "this_year" ): string
+    /*
+    public function getSN(): string
     {
-        $p = $post ?? $this->getPost();
-        $related = getRelatedPosts( $post_id, 'transaction', 'account' ); // TODO: add 'scope' parameter
+        return (string)$this->getPostMeta('secret_name', 'orange');
+    }
+    */
+
+    public function getStatements( $scope = "this_year" ): string
+    {
+        $related = getRelatedPosts( $this->getPostId, 'document', 'account' ); // TODO: add 'scope' parameter
         return $related;
     }
 
-    public function getTransactions( ?WP_Post $post = null, $scope = "this_month"): array //string
+    public function getTransactions( $scope = "this_month"): array //string
     {
-        $p = $post ?? $this->getPost();
-        //return $p ? (string)get_post_meta($p->ID, 'account_status', true) : 'Unknown';
-
-        $related = PostTypeHandler::getRelatedPosts( $p->ID, 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
+        $related = PostTypeHandler::getRelatedPosts( $this->getPostId, 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
 		/*if ( $arr_obj_transactions ) {
 
 			//$info .= "<h3>Transactions:</h3>";
