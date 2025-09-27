@@ -44,7 +44,7 @@ class Account extends PostTypeHandler
 
     public function getTransactions( $scope = "this_month"): array //string
     {
-        $related = PostTypeHandler::getRelatedPosts( $this->getPostId, 'transaction', 'account' ) ? []; // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
+        $related = PostTypeHandler::getRelatedPosts( $this->getPostId, 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
 		/*if ( $arr_obj_transactions ) {
 
 			//$info .= "<h3>Transactions:</h3>";
@@ -57,6 +57,7 @@ class Account extends PostTypeHandler
 				$info .= make_link( get_permalink($transaction->ID), $rep_info, "TEST rep title" )."<br />";
 			}
 		}*/
+		if (empty($related)) { $related = []; } // tmp
 		return $related;
     }
 }
