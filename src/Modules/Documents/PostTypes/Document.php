@@ -6,7 +6,7 @@ use atc\WHx4\Core\PostTypeHandler;
 
 class Document extends PostTypeHandler
 {
-    public function __construct(WP_Post|null $post = null) {
+    public function __construct(?\WP_Post $post = null) {
         $config = [
             'slug'        => 'document',
             //'plural_slug' => 'documents',
@@ -24,6 +24,4 @@ class Document extends PostTypeHandler
     {
         parent::boot(); // Optional if you add shared logic later
     }
-
 }
-

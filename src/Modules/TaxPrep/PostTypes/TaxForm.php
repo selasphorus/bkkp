@@ -6,7 +6,7 @@ use atc\WHx4\Core\PostTypeHandler;
 
 class TaxForm extends PostTypeHandler
 {
-    public function __construct(WP_Post|null $post = null) {
+    public function __construct(?\WP_Post $post = null) {
         $config = [
             'slug'        => 'tax_form',
             'plural_slug' => 'tax_forms',
@@ -24,6 +24,4 @@ class TaxForm extends PostTypeHandler
     {
         parent::boot(); // Optional if you add shared logic later
     }
-
 }
-

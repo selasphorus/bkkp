@@ -7,7 +7,7 @@ use atc\WHx4\Core\PostTypeHandler;
 // DEPRECATED! TODO: convert all TaxPayment posts to Documents in tax-payments category
 class TaxPayment extends PostTypeHandler
 {
-    public function __construct(WP_Post|null $post = null) {
+    public function __construct(?\WP_Post $post = null) {
         $config = [
             'slug'        => 'tax_payment',
             //'plural_slug' => 'tax_payments',
@@ -25,6 +25,4 @@ class TaxPayment extends PostTypeHandler
     {
         parent::boot(); // Optional if you add shared logic later
     }
-
 }
-
