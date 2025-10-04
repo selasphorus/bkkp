@@ -2,13 +2,12 @@
 
 namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
-use WP_Post;
 use atc\WHx4\Core\PostTypeHandler;
 use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 
 class Account extends PostTypeHandler
 {
-	public function __construct(WP_Post|null $post = null) {
+	public function __construct(?\WP_Post $post = null) {
 		$config = [
 			'slug'        => 'account',
 			'menu_icon'   => 'dashicons-bank',
@@ -29,13 +28,6 @@ class Account extends PostTypeHandler
         return (string)$this->getPostMeta('account_status', 'Unknown');
     }
 
-    /*
-    public function getSN(): string
-    {
-        return (string)$this->getPostMeta('secret_name', 'orange');
-    }
-    */
-
     public function getStatements( $scope = "this_year" ): string
     {
         $related = getRelatedPosts( $this->getPostId(), 'document', 'account' ); // TODO: add 'scope' parameter
@@ -44,6 +36,16 @@ class Account extends PostTypeHandler
 
     public function getTransactions( $scope = "this_month"): array //string
     {
+        /*
+        $args = [
+			'post_type' => 'transaction',
+			'account'   => $this->getPostId(),
+			'limit'     => (int)($opts['limit'] ?? 20),
+			'date_meta' => ['key' => Transaction::DATE_META],
+		];
+		return PostQuery::fromRequest(Transaction::class, $args)->getPosts();
+		*/
+
         $related = PostTypeHandler::getRelatedPosts( $this->getPostId(), 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
 		/*if ( $arr_obj_transactions ) {
 
@@ -61,4 +63,3 @@ class Account extends PostTypeHandler
 		return $related;
     }
 }
-
