@@ -8,7 +8,7 @@ class Transaction extends PostTypeHandler
 {
 	public const DATE_META = 'transaction_date';
 	
-	public function __construct(WP_Post|null $post = null) {
+	public function __construct(?\WP_Post|null $post = null) {
 		$config = [
 			'slug'        => 'transaction',
 			'menu_icon'   => 'dashicons-yes-alt',
@@ -94,4 +94,3 @@ class Transaction extends PostTypeHandler
 	}
 
 }
-
