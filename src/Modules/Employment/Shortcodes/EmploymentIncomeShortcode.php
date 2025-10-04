@@ -34,7 +34,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             return '<p>Employment module inactive.</p>';
         }
 
-        /*$stats = $module->getModuleStats();
+        /*$stats = $module->getModuleStats(); // module-level method
         
         // Handler factory so views can call CPT methods safely.
         $handlerFactory = [PostTypeHandler::class, 'getHandlerForPost'];
