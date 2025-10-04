@@ -3,6 +3,7 @@
 namespace atc\Bkkp\Modules\Employment;
 
 use atc\WHx4\Core\Module as BaseModule;
+use atc\WHx4\Core\Shortcodes\ShortcodeManager;
 
 // Post Types
 //use atc\Bkkp\Modules\Employment\PostTypes\Employer;
@@ -26,7 +27,8 @@ final class EmploymentModule extends BaseModule
             $providers[] = new \atc\Bkkp\Modules\Employment\Subtypes\GigsSubtype(); // Subtype of Event PostType
             return $providers;
         } );
-
+        
+        ShortcodeManager::add(\atc\Bkkp\Modules\Employment\Shortcodes\EmploymentIncomeShortcode::class);
     }
 
     public function getPostTypeHandlerClasses(): array

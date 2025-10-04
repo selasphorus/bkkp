@@ -3,12 +3,19 @@
 namespace atc\Bkkp\Modules\Employment\Subtypes;
 
 use atc\WHx4\Core\Contracts\SubtypeInterface;
+//use atc\WHx4\Core\Contracts\QueryContributor;
 
-final class EmployersSubtype implements SubtypeInterface
+use \atc\WHx4\Core\Query\PostQuery;
+
+final class EmployersSubtype implements SubtypeInterface //, QueryContributor
 {
+    public const POST_TYPE = 'group';
+    public const TAXONOMY = 'group_category';
+    public const TERM = 'employer';
+
     public function getPostType(): string
     {
-        return 'group';
+        return self::POST_TYPE;
     }
 
     public function getSlug(): string
@@ -20,9 +27,50 @@ final class EmployersSubtype implements SubtypeInterface
     {
         return 'Employers';
     }
+    
+    public function getTaxonomy(): string
+	{
+		return self::TAXONOMY;
+	}
 
     public function getTermArgs(): array
     {
         return []; // e.g. ['description' => 'Organizations that employ people']
     }
+    
+    // Recommended to keep UI label ("Employers") separate from the actual term slug ("employer")
+	public function getTermSlug(): string
+	{
+		//return 'employer';
+		return self::TERM; // singular term slug (internal taxonomy term)
+	}
+	
+	/**
+	 * Return a PostQuery spec for this subtype.
+	 */
+	public function getQuerySpec(array $overrides = []): array
+	{
+		$spec = [
+			'post_type' => self::POST_TYPE,
+			'tax'       => [
+				self::TAXONOMY => [$this->getTermSlug()],
+			],
+			'per_page'  => 20,
+			'orderby'   => 'title',
+			'order'     => 'ASC',
+		];
+	
+		return array_replace_recursive($spec, $overrides);
+	}
+	
+	/**
+	 * Convenience: run the query and return WP_Post[].
+	 */
+	public function find(array $overrides = []): array
+	{
+		return PostQuery::fetch(
+			$this->getQuerySpec($overrides)
+		);
+	}
+
 }
