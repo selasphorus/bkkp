@@ -37,8 +37,8 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         //$atts['date_meta']['key'] ='whx4_events_start_date'; // tft
 
         // Run the unified query pipeline.
-        //$result = $subType::find($atts);
-        $result = $subType->find($atts);
+        $result = $subType::find($atts);
+        //$result = $subType->find($atts);
         $posts  = $result['posts'] ?? [];
 
         // Pagination info for the view.
