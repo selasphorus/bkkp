@@ -14,11 +14,6 @@ final class AccountantsSubtype implements SubtypeInterface
     public const TAXONOMY = 'people_category';
     public const TERM = 'accountant';
 
-    public function getPostType(): string
-    {
-        return self::POST_TYPE;
-    }
-
     public function getSlug(): string
     {
         return 'accountants';
@@ -28,11 +23,6 @@ final class AccountantsSubtype implements SubtypeInterface
     {
         return 'Accountants';
     }
-    
-    public function getTaxonomy(): string
-	{
-		return self::TAXONOMY;
-	}
 
     public function getTermArgs(): array
     {
@@ -44,33 +34,5 @@ final class AccountantsSubtype implements SubtypeInterface
 	{
 		//return 'employer';
 		return self::TERM; // singular term slug (internal taxonomy term)
-	}
-	
-	/**
-	 * Return a PostQuery spec for this subtype.
-	 */
-	public function getQuerySpec(array $overrides = []): array
-	{
-		$spec = [
-			'post_type' => self::POST_TYPE,
-			'tax'       => [
-				self::TAXONOMY => [$this->getTermSlug()],
-			],
-			'per_page'  => 20,
-			'orderby'   => 'title',
-			'order'     => 'ASC',
-		];
-	
-		return array_replace_recursive($spec, $overrides);
-	}
-	
-	/**
-	 * Convenience: run the query and return WP_Post[].
-	 */
-	public function find(array $overrides = []): array
-	{
-		return PostQuery::fetch(
-			$this->getQuerySpec($overrides)
-		);
 	}
 }

@@ -3,13 +3,16 @@
 namespace atc\Bkkp\Modules\Employment\Subtypes;
 
 use atc\WHx4\Core\Contracts\SubtypeInterface;
+use atc\WHx4\Core\Traits\SubtypeDefaults;
+use atc\WHx4\Core\Traits\SubtypeQueryHelpers;
 
 final class GigsSubtype implements SubtypeInterface
 {
-    public function getPostType(): string
-    {
-        return 'event';
-    }
+    use SubtypeDefaults, SubtypeQueryHelpers;
+    
+    public const POST_TYPE = 'event';
+    public const TAXONOMY = 'event_category';
+    public const TERM = 'gig'; // ???
 
     public function getSlug(): string
     {
