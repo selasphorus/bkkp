@@ -7,7 +7,7 @@ use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 
 class Account extends PostTypeHandler
 {
-	public function __construct(WP_Post|null $post = null) {
+	public function __construct(?\WP_Post $post = null) {
 		$config = [
 			'slug'        => 'account',
 			'menu_icon'   => 'dashicons-bank',
@@ -33,7 +33,7 @@ class Account extends PostTypeHandler
         $related = getRelatedPosts( $this->getPostId(), 'document', 'account' ); // TODO: add 'scope' parameter
         return $related;
     }
-    
+
     public function getTransactions( $scope = "this_month"): array //string
     {
         /*
@@ -45,7 +45,6 @@ class Account extends PostTypeHandler
 		];
 		return PostQuery::fromRequest(Transaction::class, $args)->getPosts();
 		*/
-		
         $related = PostTypeHandler::getRelatedPosts( $this->getPostId(), 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
 		/*if ( $arr_obj_transactions ) {
 

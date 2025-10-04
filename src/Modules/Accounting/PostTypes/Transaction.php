@@ -42,11 +42,11 @@ class Transaction extends PostTypeHandler
 				'override' => true,
 			],
 		];
-	
+
 		// Optional extension point for add-ons/themes.
 		return apply_filters('whx4_allowed_url_params_transaction', $spec);
 	}
-	
+
 	/**
 	 * Accepts named scopes (today,this_week,last_year), bare years (e.g., 2024),
 	 * or other tokens you support. Semantics are enforced by ScopedDateResolver.
@@ -67,7 +67,7 @@ class Transaction extends PostTypeHandler
 		$value = preg_replace('/[^a-z0-9,_-]/', '', $value) ?? '';
 		return $value !== '' ? $value : null;
 	}
-	
+
 	/**
 	 * Normalizes a single slug or CSV into a unique array of slugs.
 	 * Example: "income, expense,transfer" => ['income','expense','transfer']
@@ -80,7 +80,7 @@ class Transaction extends PostTypeHandler
 		} elseif ($value !== null && $value !== '') {
 			$raw = explode(',', (string)$value);
 		}
-	
+
 		$slugs = [];
 		foreach ($raw as $item) {
 			$slug = strtolower(trim((string)$item));
@@ -89,7 +89,7 @@ class Transaction extends PostTypeHandler
 				$slugs[] = $slug;
 			}
 		}
-	
+
 		return array_values(array_unique($slugs));
 	}
 
