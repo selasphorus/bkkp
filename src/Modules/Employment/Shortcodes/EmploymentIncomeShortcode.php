@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atc\Bkkp\Modules\Employment\Shortcodes;
 
 use atc\WHx4\Core\WHx4;
+use atc\WHx4\Utils\ClassInfo;
 use atc\WHx4\Core\PostTypeHandler;
 use atc\WHx4\Core\ViewLoader;
 use atc\WHx4\Core\SubtypeRegistry;
@@ -13,14 +14,60 @@ use atc\WHx4\Core\Contracts\ShortcodeInterface;
 final class EmploymentIncomeShortcode implements ShortcodeInterface
 {
     // Adjust to your actual CPT slug (e.g., 'whx4_event' or 'event').
-    private const CPT = 'group';
+    //private const CPT = 'group';
 
     // This is the tag by which the shortcode will be called
     public static function tag(): string
     {
         return 'employment_income';
     }
+    
+    public function render(array $atts = [], string $content = '', string $tag = ''): string
+    {
+        $info = ""; // tft -- change to use WHX4_DEBUG
+        
+        $ctx = WHx4::ctx();
+        $key = ClassInfo::getModuleKey(self::class); // 'employment'
+        $module = $ctx->getModule($key);
 
+        if (!$module) {
+            return '<p>Employment module inactive.</p>';
+        }
+
+        $stats = $module->getModuleStats();
+        
+        // Handler factory so views can call CPT methods safely.
+        $handlerFactory = [PostTypeHandler::class, 'getHandlerForPost'];
+
+        // Choose a view variant (list|grid|table); fall back to list.
+        $viewVariant = in_array($atts['view'], ['list', 'grid', 'table'], true) ? $atts['view'] : 'list';
+        $view = $viewVariant;
+
+        $vars = [
+            'posts'      => $posts,
+            'handler'    => $handlerFactory,
+            'atts'       => $atts,
+            'pagination' => $pagination,
+            'info' => $info, // for TS -- deprecate in favor of:
+            // Optionally pass debug through when WHX4_DEBUG is on:
+            'debug'      => $result['debug'] ?? null,
+        ];
+
+        return ViewLoader::renderToString(
+            $view,
+            $vars,
+            ['kind' => 'partial', 'module' => 'employment', 'post_type' => self::CPT]
+        );
+
+        ob_start(); ?>
+        <div class="whx4-employment">
+            <p><strong>Monsters:</strong> <?php echo (int)$stats['monsters']; ?></p>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+    /*
+    // V1 -- not functional but keeping as WIP re Subtypes
     public function render(array $atts = [], string $content = '', string $tag = ''): string
     {
         $info = "";
@@ -74,4 +121,5 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             ['kind' => 'partial', 'module' => 'employment', 'post_type' => self::CPT]
         );
     }
+    */
 }
