@@ -6,7 +6,9 @@ use atc\WHx4\Core\PostTypeHandler;
 
 class Transaction extends PostTypeHandler
 {
-	public function __construct(?\WP_Post $post = null) {
+	public const DATE_META = 'transaction_date';
+
+	public function __construct(?\WP_Post|null $post = null) {
 		$config = [
 			'slug'        => 'transaction',
 			'menu_icon'   => 'dashicons-yes-alt',
@@ -21,7 +23,7 @@ class Transaction extends PostTypeHandler
 	    parent::boot(); // Optional if you add shared logic later
 	}
 
-    /**
+	/**
 	 * Canonical allow-list of URL params that can shape Transaction queries.
 	 * Consumers (shortcodes, controllers, handler methods) can pass this to a
 	 * UrlParamBridge to sanitize & map into PostQuery inputs.

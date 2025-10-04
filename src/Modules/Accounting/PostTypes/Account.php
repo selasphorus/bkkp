@@ -45,7 +45,6 @@ class Account extends PostTypeHandler
 		];
 		return PostQuery::fromRequest(Transaction::class, $args)->getPosts();
 		*/
-
         $related = PostTypeHandler::getRelatedPosts( $this->getPostId(), 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
 		/*if ( $arr_obj_transactions ) {
 
