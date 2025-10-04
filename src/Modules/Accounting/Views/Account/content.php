@@ -1,7 +1,7 @@
 <?php
 use atc\WHx4\Core\PostTypeHandler;
 
-/** @var WP_Post $post */
+/** @var \WP_Post $post */
 $handler = PostTypeHandler::getHandlerForPost($post);
 $pID = $handler->getPostID();
 $meta = $handler->getPostMeta();

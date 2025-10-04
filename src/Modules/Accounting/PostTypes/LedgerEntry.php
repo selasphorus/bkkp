@@ -7,7 +7,7 @@ use atc\WHx4\Core\PostTypeHandler;
 // TBD: should this class be related in some way to more general LogEntry class?
 class LedgerEntry extends PostTypeHandler
 {
-	public function __construct(WP_Post|null $post = null) {
+	public function __construct(?\WP_Post $post = null) {
 		$config = [
 			'slug'        => 'ledger_entry',
 			'plural_slug' => 'ledger_entries',
@@ -25,7 +25,5 @@ class LedgerEntry extends PostTypeHandler
 	{
 	    parent::boot(); // Optional if you add shared logic later
 	}
-
-    // Other methods related to the Account...
 }
 
