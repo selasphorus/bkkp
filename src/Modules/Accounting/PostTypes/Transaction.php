@@ -7,7 +7,7 @@ use atc\WHx4\Core\PostTypeHandler;
 class Transaction extends PostTypeHandler
 {
 	public const DATE_META = 'transaction_date';
-
+	
 	public function __construct(?\WP_Post|null $post = null) {
 		$config = [
 			'slug'        => 'transaction',
