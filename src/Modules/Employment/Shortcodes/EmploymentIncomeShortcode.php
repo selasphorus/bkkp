@@ -42,29 +42,6 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         // Choose a view variant (list|grid|table); fall back to list.
         $viewVariant = in_array($atts['view'], ['list', 'grid', 'table'], true) ? $atts['view'] : 'list';
         $view = $viewVariant;
-
-        $vars = [
-            'posts'      => $posts,
-            'handler'    => $handlerFactory,
-            'atts'       => $atts,
-            'pagination' => $pagination,
-            'info' => $info, // for TS -- deprecate in favor of:
-            // Optionally pass debug through when WHX4_DEBUG is on:
-            'debug'      => $result['debug'] ?? null,
-        ];
-
-        return ViewLoader::renderToString(
-            $view,
-            $vars,
-            ['kind' => 'partial', 'module' => 'employment', 'post_type' => self::CPT]
-        );
-
-        ob_start(); ?>
-        <div class="whx4-employment">
-            <p><strong>Monsters:</strong> <?php echo (int)$stats['monsters']; ?></p>
-        </div>
-        <?php
-        return ob_get_clean();
         */
         $view = "module-view-test";
         
@@ -73,7 +50,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             //'handler'    => $handlerFactory,
             //'atts'       => $atts,
             //'pagination' => $pagination,
-            'stats' => $stats,
+            //'stats' => $stats,
             'info' => $info, // for TS -- deprecate in favor of:
             // Optionally pass debug through when WHX4_DEBUG is on:
             'debug'      => $result['debug'] ?? null,
