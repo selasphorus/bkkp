@@ -34,7 +34,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             return '<p>Employment module inactive.</p>';
         }
 
-        $stats = $module->getModuleStats();
+        /*$stats = $module->getModuleStats();
         
         // Handler factory so views can call CPT methods safely.
         $handlerFactory = [PostTypeHandler::class, 'getHandlerForPost'];
@@ -65,6 +65,25 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         </div>
         <?php
         return ob_get_clean();
+        */
+        $view = "module-view-test";
+        
+        $vars = [
+            //'posts'      => $posts,
+            //'handler'    => $handlerFactory,
+            //'atts'       => $atts,
+            //'pagination' => $pagination,
+            'stats' => $stats,
+            'info' => $info, // for TS -- deprecate in favor of:
+            // Optionally pass debug through when WHX4_DEBUG is on:
+            'debug'      => $result['debug'] ?? null,
+        ];
+
+        return ViewLoader::renderToString(
+            $view,
+            $vars,
+            ['kind' => 'partial', 'module' => 'employment'] //, 'post_type' => self::CPT
+        );
     }
     /*
     // V1 -- not functional but keeping as WIP re Subtypes
