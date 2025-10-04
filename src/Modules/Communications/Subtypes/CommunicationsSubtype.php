@@ -31,4 +31,9 @@ final class CommunicationsSubtype implements SubtypeInterface
     {
         return []; // e.g. ['description' => 'Organizations that employ people']
     }
+    
+	public function getTermSlug(): string
+	{
+		return self::TERM; // singular term slug (internal taxonomy term)
+	}
 }
