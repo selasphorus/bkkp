@@ -49,6 +49,7 @@ final class EmploymentModule extends BaseModule
 	{
 		$postType = 'group';
 		
+		// NTS: The array_replace() function replaces the values of the first array with the values from following arrays.
 		$filters = array_replace([
 			'post_type' => $postType,
 			'scope'     => $scope,
@@ -66,7 +67,7 @@ final class EmploymentModule extends BaseModule
 			],
 			//'limit'  => "-1",
 			//'per_page'  => -1,
-			'posts_per_page' => 30,
+			//'posts_per_page' => 30,
 			'orderby'   => 'title',
 			'order'     => 'ASC',
 		], $options);
