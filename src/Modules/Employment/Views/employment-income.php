@@ -1,5 +1,6 @@
 <div class="whx4-employment">
-	<p><strong>Employers: ....</strong> <?php //echo (int)$stats['monsters']; ?></p>
+	<p><strong>Employers:</strong> <?php //echo (int)$stats['monsters']; ?></p>
+	<p><strong>Info:</strong> <?php echo $info; ?></p>
 	<?php 
 	foreach ($posts as $post) {
 	    echo $post->post_title."<br />";
