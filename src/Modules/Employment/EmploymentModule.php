@@ -66,7 +66,7 @@ final class EmploymentModule extends BaseModule
 			],
 			//'limit'  => "-1",
 			//'per_page'  => -1,
-			'posts_per_page' => -1,
+			'posts_per_page' => 30,
 			'orderby'   => 'title',
 			'order'     => 'ASC',
 		], $options);
