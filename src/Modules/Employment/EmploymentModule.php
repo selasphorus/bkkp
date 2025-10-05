@@ -71,4 +71,14 @@ final class EmploymentModule extends BaseModule
 	
 		return $this->findViaHandler($postType, $filters);
 	}
+	
+	// Employment has only Subtypes, no CPTs of its own, but Module requires this method... TODO: improve this setup
+    public function getPostTypeHandlerClasses(): array
+    {
+        return [
+            //Event::class,
+            //RecurringEvent::class,
+            //EventSeries::class,
+        ];
+    }
 }
