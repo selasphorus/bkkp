@@ -44,7 +44,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         $pagination = $employers['pagination'] ?? ['found' => 0, 'max_pages' => 0, 'paged' => 1];
 
         // Troubleshooting info
-        $info .= "[" . $employers['pagination']['found'] . "] posts found<br />";
+        $info .= "[" . $employers['pagination']['found'] . "] posts found for scope: {$scope}<br />";
         if ( $employers['pagination']['found'] == 0 ) {
             //$info .= "findEmployers result: <pre>". print_r($employers, true) . "</pre>";
         }
