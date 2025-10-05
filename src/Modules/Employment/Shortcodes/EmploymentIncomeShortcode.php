@@ -57,7 +57,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             'handler'    => $handlerFactory,
             //'atts'       => $atts,
             //'pagination' => $pagination,
-            'stats' => $stats,
+            //'stats' => $stats,
             //'info' => $info, // for TS -- deprecate in favor of:
             // Optionally pass debug through when WHX4_DEBUG is on:
             'debug'      => $employers['debug'] ?? null,
