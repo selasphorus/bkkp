@@ -64,7 +64,7 @@ final class EmploymentModule extends BaseModule
 				['key' => 'group_category', 'value' => 'employers', 'compare' => '='],
 				//['key' => 'group_category', 'equals' => 'employers'], // TODO: enable this shorthand for tax queries
 			],
-			'limit'  => -1,
+			'limit'  => "-1",
 			//'per_page'  => -1,
 			'orderby'   => 'title',
 			'order'     => 'ASC',
