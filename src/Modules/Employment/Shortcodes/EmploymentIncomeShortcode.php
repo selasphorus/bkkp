@@ -46,7 +46,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         // Troubleshooting info
         $info .= "[" . $employers['pagination']['found'] . "] posts found<br />";
         if ( $employers['pagination']['found'] == 0 ) {
-            $info .= "findEmployers result: <pre>". print_r($employers, true) . "</pre>";
+            //$info .= "findEmployers result: <pre>". print_r($employers, true) . "</pre>";
         }
 
         // Handler factory so views can call CPT methods safely.
