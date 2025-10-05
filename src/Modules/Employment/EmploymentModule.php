@@ -4,6 +4,7 @@ namespace atc\Bkkp\Modules\Employment;
 
 use atc\WHx4\Core\Module as BaseModule;
 use atc\WHx4\Core\Shortcodes\ShortcodeManager;
+use atc\WHx4\Core\PostTypeHandler;
 use atc\WHx4\Core\Query\PostQuery;
 
 // Post Types
@@ -48,6 +49,10 @@ final class EmploymentModule extends BaseModule
     public function findEmployers(string $scope, array $options = []): array
 	{
 		$postType = 'group';
+		
+		$qv = $_GET['scope'] ?? $_GET['whx4_scope'] ?? null;
+		$sc = PostTypeHandler::sanitizeScopeParam($qv);
+		if ($sc !== null) { $scope = $sc; }
 		
 		// NTS: The array_replace() function replaces the values of the first array with the values from following arrays.
 		$filters = array_replace([
