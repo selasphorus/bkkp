@@ -24,36 +24,43 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
     
     public function render(array $atts = [], string $content = '', string $tag = ''): string
     {
-        $info = ""; // tft -- change to use WHX4_DEBUG
+        $info = "";
         
         $ctx = WHx4::ctx();
-        $key = ClassInfo::getModuleKey(self::class); // 'employment'
+        $key = ClassInfo::getModuleKey(self::class);
         $module = $ctx->getModule($key);
-
         if (!$module) {
             return '<p>Employment module inactive.</p>';
         }
 
-        /*$stats = $module->getModuleStats(); // module-level method
-        
+        //$stats = $module->getModuleStats(); // module-level method
+        // WIP 10/04/25 -- allow single year or range; default to current year
+        //if ( isset($atts['year']) ) { $year = $atts['year']; } else { $year = date('Y'); }
+        if ( isset($atts['scope']) ) { $scope = $atts['scope']; } else { $scope = date('Y'); }
+        $employers = $module->findEmployers($scope) ?? [];
+        $employerPosts  = $employers['posts'] ?? [];
+
+        // Pagination info for the view.
+        $pagination = $employers['pagination'] ?? ['found' => 0, 'max_pages' => 0, 'paged' => 1];
+
+        // Troubleshooting info
+        $info .= "[" . $employers['pagination']['found'] . "] posts found<br />";
+
         // Handler factory so views can call CPT methods safely.
         $handlerFactory = [PostTypeHandler::class, 'getHandlerForPost'];
-
-        // Choose a view variant (list|grid|table); fall back to list.
-        $viewVariant = in_array($atts['view'], ['list', 'grid', 'table'], true) ? $atts['view'] : 'list';
-        $view = $viewVariant;
-        */
-        $view = "module-view-test";
+        
+        // Set the view
+        $view = "employment-income"; //$view = "module-view-test";
         
         $vars = [
-            //'posts'      => $posts,
-            //'handler'    => $handlerFactory,
+            'posts'      => $employerPosts,
+            'handler'    => $handlerFactory,
             //'atts'       => $atts,
             //'pagination' => $pagination,
-            //'stats' => $stats,
-            'info' => $info, // for TS -- deprecate in favor of:
+            'stats' => $stats,
+            //'info' => $info, // for TS -- deprecate in favor of:
             // Optionally pass debug through when WHX4_DEBUG is on:
-            'debug'      => $result['debug'] ?? null,
+            'debug'      => $employers['debug'] ?? null,
         ];
 
         return ViewLoader::renderToString(
@@ -62,6 +69,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             ['kind' => 'partial', 'module' => 'employment'] //, 'post_type' => self::CPT
         );
     }
+    
     /*
     // V1 -- not functional but keeping as WIP re Subtypes
     public function render(array $atts = [], string $content = '', string $tag = ''): string

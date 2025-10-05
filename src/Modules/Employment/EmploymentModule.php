@@ -4,6 +4,7 @@ namespace atc\Bkkp\Modules\Employment;
 
 use atc\WHx4\Core\Module as BaseModule;
 use atc\WHx4\Core\Shortcodes\ShortcodeManager;
+use atc\WHx4\Core\Query\PostQuery;
 
 // Post Types
 //use atc\Bkkp\Modules\Employment\PostTypes\Employer;
@@ -31,12 +32,43 @@ final class EmploymentModule extends BaseModule
         ShortcodeManager::add(\atc\Bkkp\Modules\Employment\Shortcodes\EmploymentIncomeShortcode::class);
     }
 
-    public function getPostTypeHandlerClasses(): array
+    public function getModuleStats(): array
     {
         return [
-            //Employer::class, // GroupEntity subtype
-            //WorkPayment::class, // Document subtype
-            //EarningsStatement::class,
+            //'monsters'   => wp_count_posts('monster')->publish ?? 0,
+            //'enchanters' => wp_count_posts('enchanter')->publish ?? 0,
         ];
     }
+    
+    /**
+     * @return \WP_Post[]  All employer-category group posts, optionally limited by scope
+     * This is a sample function to show a module-level find method by meta_key
+     */
+    // TODO: move this to EmployersSubtype, maybe? Eventually...
+    public function findEmployers(string $scope, array $options = []): array
+	{
+		$postType = 'group';
+		
+		$filters = array_replace([
+			'post_type' => $postType,
+			'scope'     => $scope,
+			'date_meta' => [
+			    'meta_type' => 'DATE',
+			    'key'   => 'years_of_employment',
+			    'key_type' => 'serialized', // checkbox field -- multiple values stored
+			],
+			/*'meta'      => [
+				['key' => 'years_of_employment', 'value' => 'employers', 'compare' => '='],
+			],*/
+			'tax'      => [
+				['key' => 'group_category', 'value' => 'employers', 'compare' => '='],
+				//['key' => 'group_category', 'equals' => 'employers'], // TODO: enable this shorthand for tax queries
+			],
+			'per_page'  => -1,
+			'orderby'   => 'title',
+			'order'     => 'ASC',
+		], $options);
+	
+		return $this->findViaHandler($postType, $filters);
+	}
 }
