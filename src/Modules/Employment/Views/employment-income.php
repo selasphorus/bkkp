@@ -22,7 +22,7 @@
 				foreach ( $docs as $doc ) {
 				    ?>
 				    <a href="<?php echo esc_url(get_permalink($doc)); ?>">
-				    <?php echo esc_html(get_the_title($doc)) . " | "; //echo $doc->post_title; ?>
+				    <?php echo esc_html(get_the_title($doc)); // . " | " . echo $doc->post_title; ?>
 				    </a>
 				    <?php
 				}
