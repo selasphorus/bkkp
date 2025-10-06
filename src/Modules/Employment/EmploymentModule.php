@@ -21,6 +21,12 @@ final class EmploymentModule extends BaseModule
         $this->registerDefaultViewRoot();
 
         parent::boot();
+        
+        add_filter('query_vars', function(array $vars): array{
+			$vars[] = 'scope';
+			$vars[] = 'whx4_scope';
+			return $vars;
+		});
 
         add_filter( 'whx4_register_subtypes', function( array $providers ): array {
              // TODO: add use statement above to simplify these lines?
@@ -50,9 +56,10 @@ final class EmploymentModule extends BaseModule
 	{
 		$postType = 'group';
 		
-		$qv = $_GET['scope'] ?? $_GET['whx4_scope'] ?? null;
-		$sc = PostTypeHandler::sanitizeScopeParam($qv);
-		if ($sc !== null) { $scope = $sc; }
+		$qvScope = get_query_var('whx4_scope') ?: get_query_var('scope') ?: ($_GET['whx4_scope'] ?? $_GET['scope'] ?? '');
+		if (($sanitized = PostTypeHandler::sanitizeScopeParam($qvScope)) !== null){ $scope = $sanitized; }
+
+		//error_log('[findEmployers: scope' . $scope);
 		
 		// NTS: The array_replace() function replaces the values of the first array with the values from following arrays.
 		$filters = array_replace([
