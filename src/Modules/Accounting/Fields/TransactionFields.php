@@ -75,7 +75,7 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_659089f410c9f',
                     'label' => 'Amount',
-                    'name' => 'amount',
+                    'name' => 'amount', //rename as transaction_amount?
                     'aria-label' => '',
                     'type' => 'number',
                     'instructions' => '',
@@ -97,7 +97,7 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_65908a842dcab',
                     'label' => 'Date Posted',
-                    'name' => 'transaction_date_copy',
+                    'name' => 'transaction_date_copy', // rename as transaction_date_posted?
                     'aria-label' => '',
                     'type' => 'date_picker',
                     'instructions' => '',
