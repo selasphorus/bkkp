@@ -18,7 +18,7 @@
 				<?php echo esc_html(get_the_title($employer)); ?>
 				</a>
 				<?php
-				//echo " => [".count($docs)."] docs";
+				echo " => [".count($docs)."] tax docs";
 				foreach ( $docs as $doc ) {
 				    $h = $handler($doc);
 				    //$thing = $h->getPostMeta('start_date');
