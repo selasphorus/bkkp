@@ -133,7 +133,7 @@ final class EmploymentModule extends BaseModule
 		
 		// Taxonomies
 		$tax = $filters['tax'] ?? [];
-		$tax['document_category'] = array_unique(array_merge($tax['document_category'] ?? [], ['tax_forms'])); // limit to tax_forms
+		$tax['document_category'] = array_unique(array_merge($tax['document_category'] ?? [], ['tax-forms'])); // limit to tax forms
 	
 		// Base params (all docs by default)
 		$params = [
