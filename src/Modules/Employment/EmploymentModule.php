@@ -56,12 +56,13 @@ final class EmploymentModule extends BaseModule
 	{
 		$postType = 'group';
 		
-		error_log('findEmployers: scope' . $scope);
+		error_log('[findEmployers] scope: ' . $scope);
 		$qvScope = get_query_var('whx4_scope') ?: get_query_var('scope') ?: ($_GET['whx4_scope'] ?? $_GET['scope'] ?? '');
-		error_log('findEmployers: qvScope' . $qvScope);
+		//error_log('[findEmployers] qvScope:' . $qvScope);
 		$sanitized = PostTypeHandler::sanitizeScopeParam($qvScope);
-		error_log('findEmployers: sanitized qvScope' . $sanitized);
+		error_log('[findEmployers] sanitized qvScope: ' . $sanitized);
 		if ($sanitized !== null){ $scope = $sanitized; }
+		error_log('[findEmployers] FINAL scope: ' . $scope);
 		
 		// NTS: The array_replace() function replaces the values of the first array with the values from following arrays.
 		$filters = array_replace([
