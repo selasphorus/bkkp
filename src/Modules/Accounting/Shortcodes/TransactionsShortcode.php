@@ -135,7 +135,6 @@ final class TransactionsShortcode implements ShortcodeInterface
 		
 			// Render grouped
 			$viewVars['info'] = $info;
-			//
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 	
 		} elseif ($groupMode === 'category_years') {
