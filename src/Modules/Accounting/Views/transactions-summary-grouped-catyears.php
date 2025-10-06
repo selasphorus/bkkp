@@ -12,33 +12,22 @@
 	<?php if(!$rows): ?>
         <p>No posts found.</p>
     <?php else: ?>
-    
+        <table>
+        <tr>
+            <th>Term</th>
+            <?php foreach ($years as $year): ?>
+            <th><?php echo $year; ?></th>
+            <?php endforeach; ?>
+        </tr>
         <?php foreach ($rows as $row): ?>
-			<?php //$term = $group['term']; $posts = $group['posts']; $sum = $group['sum']; ?>
-			    <!--<a href="<?php echo esc_url(get_permalink($employer)); ?>">
-				<?php echo esc_html(get_the_title($employer)); ?>
-				</a-->
-				<?php echo $row['term']->name; ?> :: <pre><?php echo print_r($row['cols'], true); ?></pre>
+            <tr>
+				<td><?php echo $row['term']->name; ?></td>
+				<?php foreach ($row['col'] as $col): ?>
+					<td><?php echo $col['sum']; ?> (<?php echo $col['count']; ?>)</td>
+				<?php endforeach; ?>
+				<?php //echo "<pre>".print_r($row['cols'], true)."</pre>"; ?>
 				<?php //echo "=> [".count($result['posts'])."] posts"; ?>
-				<?php
-				//$result['posts']
-				//echo "[".count($posts)."] transactions";
-				//echo " in the ".$term->slug." category, for a total of $".$sum."";
-				/*foreach ( $docs as $doc ) {
-				    $h = $handler($doc);
-				    //$thing = $h->getPostMeta('start_date');
-				    echo " => ";
-				    ?>
-				    <a href="<?php echo esc_url(get_permalink($doc)); ?>">
-				    <?php echo esc_html(get_the_title($doc)); // . " | " . echo $doc->post_title; ?>
-				    </a>
-				    <?php
-				}*/
-				//echo "<pre>" . print_r($docs, true) . "</pre>";
-				echo "<br />";
-				?>
-			
-			<!-- render $docs for that employer -->
+			</tr>
 		<?php endforeach; ?>
 
         <ul class="whx4-events__items items_list">
