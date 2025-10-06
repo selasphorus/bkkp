@@ -45,13 +45,21 @@ final class TransactionsShortcode implements ShortcodeInterface
 				'limit'     => -1,
 				'order'     => 'DESC',
 				'orderby'   => 'date',
-				'group_by'  => 'category', // supports: none | category | category_years
-				'categories' => 'all', // "all" | "active" | CSV slugs | array
-				'include_empty_groups' => '0', // "0"|"1" (only applies when group_by=category)
 			];
+		
+		// Additional controls not standard to Transaction handler
+		// group_by: none|category
+		// categories: "all" | "active" | CSV slugs | array
+		// include_empty_groups: "0"|"1" (only applies when group_by=category)
+		$defaults = array_merge($defaults, [
+			'group_by'  => 'category', // supports: none | category | category_years
+			'categories' => 'all', // "all" | "active" | CSV slugs | array
+			'include_empty_groups' => '0', // "0"|"1" (only applies when group_by=category)
+		]);
 		
 		// Merge shortcode atts with defaults
 		$atts = shortcode_atts($defaults, $atts, $tag);
+		$info .= "atts: {$atts}<br />"; // sanity check!
 		
 		// Resolve category set
 		$categories = $handler->resolveCategories($atts);

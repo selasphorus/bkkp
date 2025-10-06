@@ -53,8 +53,8 @@ class Transaction extends PostTypeHandler
 		return apply_filters('whx4_allowed_url_params_transaction', $spec);
 	}
 
-	public function resolveCategories(array $atts): array
 	//private function resolveCategories(Transaction $handler, array $atts): array
+	public function resolveCategories(array $atts): array
 	{
 		$param = $atts['categories'] ?? 'all';
 	
