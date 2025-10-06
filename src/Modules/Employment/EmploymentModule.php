@@ -115,13 +115,25 @@ final class EmploymentModule extends BaseModule
 		// Require document.employer to match the given employer (group or person) post ID
 		$metaSpec = [
 			'relation' => 'AND',
-			'clauses' => [[
-				'type' => 'equals',
-				'key' => 'employer',
-				'value' => $employerId,
-				'cast' => 'NUMERIC',
-			]],
+			'clauses' => [
+			    [
+					'type' => 'equals',
+					'key' => 'employer',
+					'value' => $employerId,
+					'cast' => 'NUMERIC',
+			    ],
+			    /*[
+					'type' => 'equals',
+					'key' => 'employer',
+					'value' => $employerId,
+					'cast' => 'NUMERIC',
+			    ]*/
+			],
 		];
+		
+		// Taxonomies
+		$tax = $filters['tax'] ?? [];
+		$tax['document_category'] = array_unique(array_merge($tax['document_category'] ?? [], ['tax_forms'])); // limit to tax_forms
 	
 		// Base params (all docs by default)
 		$params = [
@@ -130,6 +142,7 @@ final class EmploymentModule extends BaseModule
 			'order' => $filters['order'] ?? 'DESC',
 			'orderby' => $filters['orderby'] ?? 'date',
 			'meta' => $metaSpec,
+			'tax' => $tax,
 		];
 	
 		// Optional scope limiting: support DATE ('document_date') OR NUMERIC ('tax_year')
