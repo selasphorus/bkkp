@@ -3,6 +3,7 @@
 namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
 use atc\WHx4\Core\PostTypeHandler;
+use atc\WHx4\Core\Query\PostQuery;
 
 class Transaction extends PostTypeHandler
 {
@@ -94,7 +95,7 @@ class Transaction extends PostTypeHandler
 		return array_values($out);
 	}
 
-	
+	//
 	public function getTransactions(array $filters = []): array
 	{
 		// Force CPT + date meta (scope uses this key; DATE mode)
