@@ -3,6 +3,7 @@
 namespace atc\Bkkp\Modules\Accounting;
 
 use atc\WHx4\Core\Module as BaseModule;
+use atc\WHx4\Core\Shortcodes\ShortcodeManager;
 
 // Post Types
 use atc\Bkkp\Modules\Accounting\PostTypes\Account;
