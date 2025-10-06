@@ -158,7 +158,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			}
 		
 			return ViewLoader::renderToString(
-				'transactions-summary',
+				'transactions-summary-grouped',
 				[
 					'grouped'      => 'category_years',
 					'years'        => $years,
@@ -209,7 +209,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		// Optional: if no categories resolved (e.g., none active), return empty view
 		if ($groups === [] && !$includeEmpty) {
 			return ViewLoader::renderToString(
-				'transactions-summary',
+				'transactions-summary-grouped',
 				[
 					'posts'        => [],
 					'total'        => 0.0,
