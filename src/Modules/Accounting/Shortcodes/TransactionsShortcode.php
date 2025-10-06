@@ -59,7 +59,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		
 		// Merge shortcode atts with defaults
 		$atts = shortcode_atts($defaults, $atts, $tag);
-		$info .= "atts: {$atts}<br />"; // sanity check!
+		$info .= "atts: ".print_r($atts,true)."<br />"; // sanity check!
 		
 		// Resolve category set
 		$categories = $handler->resolveCategories($atts);
@@ -77,6 +77,21 @@ final class TransactionsShortcode implements ShortcodeInterface
 		}
 		$info .= "groupMode: {$groupMode}<br />";
 		$atts['group_by'] = $groupMode;
+		
+		// Prepare to render view according to groupMode
+		$viewVars = [];
+		$viewVars['atts'] = $atts;
+		$viewVars['grouped_by'] = $groupMode;
+		//
+		$viewSpecs = [ 'kind' => 'view', 'module' => 'accounting', 'post_type' => 'transaction' ];
+		//
+		if ($groupMode != "none") {
+		    $view = 'transactions-summary-grouped';
+		    $viewVars['grouped'] = true;
+		} else {
+		    $view = 'transactions-summary';
+		    $viewVars['grouped'] = false;
+		}
 		
 		// Branch
 		if ($groupMode === 'category') {
@@ -114,41 +129,22 @@ final class TransactionsShortcode implements ShortcodeInterface
 			// Optional: if no categories resolved (e.g., none active), return empty view
 			if ($groups === [] && !$includeEmpty) {
 			    $info .= "No categories resolved, therefore no posts to display.";
-				return ViewLoader::renderToString(
-					'transactions-summary-grouped',
-					[
-						'posts'        => [],
-						'total'        => 0.0,
-						'grouped'      => true,
-						'groups'       => [],
-						'overallTotal' => 0.0,
-						'atts'         => $atts,
-						'info'         => $info,
-					],
-					[
-						'kind'      => 'view',
-						'module'    => 'accounting',
-						'post_type' => 'transaction',
-					]
-				);
+			    $viewVars['posts'] = [];
+			    $viewVars['groups'] = [];
+			    $viewVars['total'] = 0.0;
+			    $viewVars['overallTotal'] = 0.0;
+			    $viewVars['info'] = $info;			    
+			    return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 			}
 		
 			// Render grouped
-			return ViewLoader::renderToString(
-				'transactions-summary-grouped',
-				[
-					'grouped'      => true,
-					'groups'       => $groups,       // array of [term, posts, sum, result]
-					'overallTotal' => $overallTotal, // sum across all groups
-					'atts'         => $atts,
-					'info'         => $info,
-				],
-				[
-					'kind'      => 'view',
-					'module'    => 'accounting',
-					'post_type' => 'transaction',
-				]
-			);
+			//$viewVars['posts'] = [];
+			$viewVars['groups'] = $groups; // array of [term, posts, sum, result]
+			//$viewVars['total'] = 0.0;
+			$viewVars['overallTotal'] = $overallTotal; // sum across all groups
+			$viewVars['info'] = $info;
+			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
+	
 		} elseif ($groupMode === 'category_years') {
 			// grouped-by-category-years path
 		
@@ -201,22 +197,12 @@ final class TransactionsShortcode implements ShortcodeInterface
 					];
 				}
 			}
-		
-			return ViewLoader::renderToString(
-				'transactions-summary-grouped',
-				[
-					'grouped'      => 'category_years',
-					'years'        => $years,
-					'rows'         => $rows,     // iterate terms; within each, iterate $years for cols
-					'overall'      => $overall,  // grand totals across all years/categories
-					'atts'         => $atts,
-				],
-				[
-					'kind'      => 'view',
-					'module'    => 'accounting',
-					'post_type' => 'transaction',
-				]
-			);
+			
+			$viewVars['years'] = $years;
+			$viewVars['rows'] = $rows; // iterate terms; within each, iterate $years for cols
+			//$viewVars['overallTotal'] = $overallTotal; // sum across all groups -- WIP -- ???
+			$viewVars['overall'] = $overall; // grand totals across all years/categories
+			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 		
 		} else {
 			// Simple (ungrouped) path
@@ -225,22 +211,11 @@ final class TransactionsShortcode implements ShortcodeInterface
 			$total  = method_exists(Transaction::class, 'sumTransactionAmounts')
 				? Transaction::sumTransactionAmounts($posts)
 				: 0.0;
-	
-			return ViewLoader::renderToString(
-				'transactions-summary',
-				[
-					'posts'  => $posts,
-					'total'  => $total,
-					'result' => $result,
-					'atts'   => $atts,
-					'info'   => $info,
-				],
-				[
-					'kind'      => 'view',
-					'module'    => 'accounting',
-					'post_type' => 'transaction',
-				]
-			);
+			$viewVars['posts'] = $posts;
+			$viewVars['total'] = $total;
+			$viewVars['result'] = $result;
+			
+			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 		}
     }
 }
