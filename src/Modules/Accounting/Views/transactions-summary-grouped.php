@@ -1,0 +1,62 @@
+<div class="whx4-employment">
+	<p><strong>Transactions (Grouped by Category):</strong>
+	
+	<p class="troubleshooting">
+        <h3>Info for Troubleshooting</h3>
+        <p><?php //echo $info; ?></p>
+        <!--debug: <pre><?php //print_r($debug, true); ?></pre>-->
+        <hr />
+    </p>
+    
+	<?php if(!$groups): ?>
+        <p>No posts found.</p>
+    <?php else: ?>
+    
+        <?php foreach ($groups as $group): ?>
+			<?php $term = $group['term']; $posts = $group['posts']; $sum = $group['sum']; ?>
+			    <!--<a href="<?php echo esc_url(get_permalink($employer)); ?>">
+				<?php echo esc_html(get_the_title($employer)); ?>
+				</a-->
+				<?php
+				echo "[".count($posts)."] transactions in the {$term} category, for a total of ${$sum}";
+				/*foreach ( $docs as $doc ) {
+				    $h = $handler($doc);
+				    //$thing = $h->getPostMeta('start_date');
+				    echo " => ";
+				    ?>
+				    <a href="<?php echo esc_url(get_permalink($doc)); ?>">
+				    <?php echo esc_html(get_the_title($doc)); // . " | " . echo $doc->post_title; ?>
+				    </a>
+				    <?php
+				}*/
+				//echo "<pre>" . print_r($docs, true) . "</pre>";
+				echo "<br />";
+				?>
+			
+			<!-- render $docs for that employer -->
+		<?php endforeach; ?>
+
+        <ul class="whx4-events__items items_list">
+            <?php /*foreach($posts as $post): ?>
+                <?php $h = $handler($post); ?>
+                <?php
+                //$start = $h && method_exists($h, 'getPostMeta') ? (string)($h->getPostMeta('start_date') ?? '') : (string)get_post_meta($post->ID, 'start_date', true);
+                //$end   = $h && method_exists($h, 'getPostMeta') ? (string)($h->getPostMeta('end_date') ?? '')   : (string)get_post_meta($post->ID, 'end_date', true);
+                ?>
+                <li class="whx4-employers__item list_item">
+                    <a href="<?php echo esc_url(get_permalink($post)); ?>">
+                        <?php echo esc_html(get_the_title($post)); ?>
+                    </a>
+                </li>
+            <?php endforeach;*/ ?>
+        </ul>
+
+        <?php /*if($pagination['max_pages'] > 1): ?>
+            <nav class="whx4-pagination" aria-label="pagination">
+                <span>Page <?php echo (int)$pagination['paged']; ?> of <?php echo (int)$pagination['max_pages']; ?></span>
+            </nav>
+        <?php endif;*/ ?>
+    <?php endif; ?>
+    
+	<p><strong>Debug:</strong> <pre><?php echo //print_r($debug, true); ?></pre></p>
+</div>
