@@ -52,6 +52,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 			'categories'           => 'all',
 			'include_empty_groups' => '0',
 		]);
+		
+		// TODO: set default to group by category?
 	
 		// Merge shortcode atts with defaults
 		$atts = shortcode_atts($defaults, $atts, $tag);
