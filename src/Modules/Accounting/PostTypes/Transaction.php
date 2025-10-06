@@ -129,6 +129,9 @@ class Transaction extends PostTypeHandler
 	//
 	public function getTransactions(array $filters = []): array
 	{
+		error_log( "Transaction::getTransactions" );
+		error_log('[getTransactions] filters: ' . print_r($filters, true));
+		
 		// Force CPT + date meta (scope uses this key; DATE mode)
 		$filters['post_type'] = 'transaction';
 		$filters['date_meta'] = [
