@@ -104,7 +104,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			// Build groups: fetch transactions for each category with remaining filters
 			$groups = [];
 			$overallTotal = 0.0;
-			$includeEmpty = $atts['include_empty_groups'] === '1';
+			$includeEmpty = $atts['include_empty_groups'] === '1'; // ???
 		
 			foreach ($categories as $term) {
 				$filters = $atts;
@@ -130,24 +130,17 @@ final class TransactionsShortcode implements ShortcodeInterface
 					'result' => $result,   // raw query payload (for pagination/debug if needed)
 				];
 			}
+			$viewVars['groups'] = $groups; // array of [term, posts, sum, result]
+			$viewVars['overallTotal'] = $overallTotal; // sum across all groups
 		
 			// Optional: if no categories resolved (e.g., none active), return empty view
 			if ($groups === [] && !$includeEmpty) {
 			    $info .= "No categories resolved, therefore no posts to display.";
-			    $viewVars['posts'] = [];
-			    $viewVars['groups'] = [];
-			    $viewVars['total'] = 0.0;
-			    $viewVars['overallTotal'] = 0.0;
 			    $viewVars['info'] = $info;
-			    //
 			    return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 			}
 		
 			// Render grouped
-			//$viewVars['posts'] = [];
-			$viewVars['groups'] = $groups; // array of [term, posts, sum, result]
-			//$viewVars['total'] = 0.0;
-			$viewVars['overallTotal'] = $overallTotal; // sum across all groups
 			$viewVars['info'] = $info;
 			//
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
