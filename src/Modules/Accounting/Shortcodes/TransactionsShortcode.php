@@ -73,7 +73,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$info .= "groupMode: {$groupMode}<br />";
 		$atts['group_by'] = $groupMode;
 		
-		$info .= "processed atts: <pre>".print_r($atts,true)."</pre>"; // another sanity check!
+		//$info .= "processed atts: <pre>".print_r($atts,true)."</pre>"; // another sanity check!
+		$info .= "processed atts[scope]: ".$atts['scope']."<br />"; // another sanity check!
 		
 		// Prepare to render view according to groupMode
 		$viewVars = [];
@@ -137,18 +138,22 @@ final class TransactionsShortcode implements ShortcodeInterface
 			$view = 'transactions-summary-grouped-catyears';
 		
 			// Resolve year window from scope
+			$startY = $endY = null;
 			$bounds  = ScopedDateResolver::resolve($scope, ['mode' => 'DATE']); // ['start'=>DT,'end'=>DT]
 			$start  = $bounds['start'] ?? null;
 			$end    = $bounds['end'] ?? null;
 			//
-			$startY = $start instanceof \DateTimeInterface
-				? (int)$start->format('Y')
-				: (is_string($start) && $start !== '' ? (int)date('Y', strtotime($start)) : (int)date('Y'));
+			$startY = $startY ?? (
+				$start instanceof \DateTimeInterface ? (int)$start->format('Y') :
+				(is_string($start) && $start !== '' ? (int)date('Y', strtotime($start)) : (int)date('Y'))
+			);
+			$endY = $endY ?? (
+				$end instanceof \DateTimeInterface ? (int)$end->format('Y') :
+				(is_string($end) && $end !== '' ? (int)date('Y', strtotime($end)) : $startY)
+			);
 			
-			$endY = $end instanceof \DateTimeInterface
-				? (int)$end->format('Y')
-				: (is_string($end) && $end !== '' ? (int)date('Y', strtotime($end)) : $startY);
-			
+			// Safety: swap if reversed; clamp to sane range
+			if ($startY > $endY) { [$startY, $endY] = [$endY, $startY]; }
 			$years = range($startY, $endY);
 		
 			// Build table rows: one row per category; columns per year: sum & count
