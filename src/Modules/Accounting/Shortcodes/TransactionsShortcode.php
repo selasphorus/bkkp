@@ -138,7 +138,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 			    $viewVars['groups'] = [];
 			    $viewVars['total'] = 0.0;
 			    $viewVars['overallTotal'] = 0.0;
-			    $viewVars['info'] = $info;			    
+			    $viewVars['info'] = $info;
+			    //
 			    return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 			}
 		
@@ -148,6 +149,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			//$viewVars['total'] = 0.0;
 			$viewVars['overallTotal'] = $overallTotal; // sum across all groups
 			$viewVars['info'] = $info;
+			//
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 	
 		} elseif ($groupMode === 'category_years') {
@@ -216,6 +218,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 			$viewVars['rows'] = $rows; // iterate terms; within each, iterate $years for cols
 			//$viewVars['overallTotal'] = $overallTotal; // sum across all groups -- WIP -- ???
 			$viewVars['overall'] = $overall; // grand totals across all years/categories
+			$viewVars['info'] = $info;
+			//
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 		
 		} else {
@@ -228,7 +232,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 			$viewVars['posts'] = $posts;
 			$viewVars['total'] = $total;
 			$viewVars['result'] = $result;
-			
+			$viewVars['info'] = $info;
+			//
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 		}
     }
