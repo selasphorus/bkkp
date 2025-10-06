@@ -240,6 +240,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 					'total'  => $total,
 					'result' => $result,
 					'atts'   => $atts,
+					'info'   => $info,
 				],
 				[
 					'kind'      => 'view',
