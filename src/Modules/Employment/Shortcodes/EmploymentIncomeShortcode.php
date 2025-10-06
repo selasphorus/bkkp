@@ -41,6 +41,35 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         if ( isset($employers['debug']['scope']) ) { 
             $scope = $employers['debug']['scope'];
         } 
+        
+        // Fetch tax docs per employer (optionally scoped)
+        // Bundle employers with their related tax docs
+		$employerBundles = [];
+		foreach ($employerPosts as $post) {
+			$docFilters = [];
+		
+			// Reuse resolved scope for documents if one has been set
+			if (!empty($scope)) {
+				$docFilters['scope'] = $scope;
+			}
+			/*if (isset($atts['scope'])) {
+				$docFilters['scope'] = $scope;
+			}*/
+		
+			// Optional scoping basis and storage model (overrides via shortcode)
+			if (isset($atts['date_key'])) { $docFilters['date_key'] = $atts['date_key']; }          // 'document_date' | 'tax_year'
+			if (isset($atts['key_type'])) { $docFilters['key_type'] = $atts['key_type']; }          // 'single' | 'rows' | 'serialized' (for tax_year)
+			if (isset($atts['limit']))    { $docFilters['limit']    = (int)$atts['limit']; }
+		
+			$docResult = $module->findEmployerTaxDocs($post, $docFilters);
+		
+			$employerBundles[] = [
+				'post'            => $post,
+				'docs'            => $docResult['posts'] ?? [],
+				//'docs_pagination' => $docResult['pagination'] ?? null,
+				'docs_debug'      => $docResult['debug'] ?? null,
+			];
+		}
 
         // Pagination info for the view.
         $pagination = $employers['pagination'] ?? ['found' => 0, 'max_pages' => 0, 'paged' => 1];
@@ -58,7 +87,9 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         $view = "employment-income"; //$view = "module-view-test";
         
         $vars = [
-            'posts'      => $employerPosts,
+            //'posts'      => $employerPosts,
+            //'employer_docs' => $employerDocs,
+            'employers'  => $employerBundles, // each item: ['post' => WP_Post, 'docs' => WP_Post[], ...]
             'handler'    => $handlerFactory,
             //'atts'       => $atts,
             'pagination' => $pagination,
@@ -66,6 +97,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             'info' => $info, // for TS -- deprecate in favor of:
             // Optionally pass debug through when WHX4_DEBUG is on:
             'debug'      => $employers['debug'] ?? null,
+            'docs_debug'    => $docsDebug,
         ];
 
         return ViewLoader::renderToString(
