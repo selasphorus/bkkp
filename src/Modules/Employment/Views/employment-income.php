@@ -5,6 +5,7 @@
         <h3>Info for Troubleshooting</h3>
         <p><?php echo $info; ?></p>
         <!--debug: <pre><?php print_r($debug, true); ?></pre>-->
+        <hr />
     </p>
     
 	<?php if(!$posts): ?>
