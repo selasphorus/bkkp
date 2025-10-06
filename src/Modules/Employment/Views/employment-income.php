@@ -18,8 +18,11 @@
 				<?php echo esc_html(get_the_title($employer)); ?>
 				</a>
 				<?php
-				echo " => [".count($docs)."] docs => ";
+				//echo " => [".count($docs)."] docs";
 				foreach ( $docs as $doc ) {
+				    $h = $handler($doc);
+				    //$thing = $h->getPostMeta('start_date');
+				    echo " => ";
 				    ?>
 				    <a href="<?php echo esc_url(get_permalink($doc)); ?>">
 				    <?php echo esc_html(get_the_title($doc)); // . " | " . echo $doc->post_title; ?>

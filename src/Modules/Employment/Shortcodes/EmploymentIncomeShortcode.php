@@ -52,22 +52,20 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 			if (!empty($scope)) {
 				$docFilters['scope'] = $scope;
 			}
-			/*if (isset($atts['scope'])) {
-				$docFilters['scope'] = $scope;
-			}*/
+			//if (isset($atts['scope'])) { $docFilters['scope'] = $scope; }
 		
 			// Optional scoping basis and storage model (overrides via shortcode)
 			if (isset($atts['date_key'])) { $docFilters['date_key'] = $atts['date_key']; }          // 'document_date' | 'tax_year'
 			if (isset($atts['key_type'])) { $docFilters['key_type'] = $atts['key_type']; }          // 'single' | 'rows' | 'serialized' (for tax_year)
 			if (isset($atts['limit']))    { $docFilters['limit']    = (int)$atts['limit']; }
 		
-			$docResult = $module->findEmployerTaxDocs($post, $docFilters);
+			$docs = $module->findEmployerTaxDocs($post, $docFilters);
 		
 			$employerBundles[] = [
 				'post'            => $post,
-				'docs'            => $docResult['posts'] ?? [],
-				//'docs_pagination' => $docResult['pagination'] ?? null,
-				'docs_debug'      => $docResult['debug'] ?? null,
+				'docs'            => $docs['posts'] ?? [],
+				//'docs_pagination' => $docs['pagination'] ?? null,
+				//'docs_debug'      => $docs['debug'] ?? null,
 			];
 		}
 
@@ -86,9 +84,8 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         // Set the view
         $view = "employment-income"; //$view = "module-view-test";
         
+        //$debug = $employers['debug'] + $docs['debug']; // WIP
         $vars = [
-            //'posts'      => $employerPosts,
-            //'employer_docs' => $employerDocs,
             'employers'  => $employerBundles, // each item: ['post' => WP_Post, 'docs' => WP_Post[], ...]
             'handler'    => $handlerFactory,
             //'atts'       => $atts,
@@ -96,8 +93,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             //'stats' => $stats,
             'info' => $info, // for TS -- deprecate in favor of:
             // Optionally pass debug through when WHX4_DEBUG is on:
-            'debug'      => $employers['debug'] ?? null,
-            'docs_debug'    => $docsDebug,
+            //'debug'      => $debug ?? null,
         ];
 
         return ViewLoader::renderToString(
