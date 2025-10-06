@@ -12,24 +12,14 @@
 	<?php if(!$posts): ?>
         <p>No posts found.</p>
     <?php else: ?>
-        <?php echo "[".count($posts)."] transactions in the {$term} category, for a total of ${$total}<br />"; ?>
+        <?php 
+        echo "[".count($posts)."] transactions";
+        //echo " in the {$term} category, for a total of ${$total}<br />"; ?>
         <?php foreach ($posts as $post): ?>
 			    <a href="<?php echo esc_url(get_permalink($post)); ?>">
-				<?php echo esc_html(get_the_title($employer)); ?>
+				<?php echo esc_html(get_the_title($post)); ?>
 				</a-->
 				<?php
-				
-				/*foreach ( $docs as $doc ) {
-				    $h = $handler($doc);
-				    //$thing = $h->getPostMeta('start_date');
-				    echo " => ";
-				    ?>
-				    <a href="<?php echo esc_url(get_permalink($doc)); ?>">
-				    <?php echo esc_html(get_the_title($doc)); // . " | " . echo $doc->post_title; ?>
-				    </a>
-				    <?php
-				}*/
-				//echo "<pre>" . print_r($docs, true) . "</pre>";
 				echo "<br />";
 				?>
 			

@@ -67,6 +67,9 @@ final class TransactionsShortcode implements ShortcodeInterface
 		// (works whether param is missing, empty string, CSV, or array)
 		$atts['transaction_category'] = PostTypeHandler::sanitizeTermSlugsParam($atts['transaction_category'] ?? null);
 		if ($atts['transaction_category'] === []) { unset($atts['transaction_category']); }
+		
+		// Resolve category set
+		$categories = $handler->resolveCategories($atts);
 
 		// Check for scope in query_var and override atts/default scope if found
 		$scope = PostTypeHandler::getScopeFromRequest($atts, 'this_year');
@@ -74,23 +77,78 @@ final class TransactionsShortcode implements ShortcodeInterface
 		// Ensure downstream filters/queries see the final scope
 		$atts['scope'] = $scope;
 		
-		$grouped = ($atts['group_by'] === 'category');
-	
-		if (!$grouped){
-			// Simple (existing) path
-			$result = $handler->getTransactions($atts);
-			$posts  = $result['posts'] ?? [];
-			$total  = method_exists(Transaction::class, 'sumTransactionAmounts')
-				? Transaction::sumTransactionAmounts($posts)
-				: 0.0;
-	
+		// Normalize group mode (before branching)
+		$groupMode = strtolower(trim((string)($atts['group_by'] ?? 'none')));
+		if (!in_array($groupMode, ['none', 'category', 'category_years'], true)) {
+			$groupMode = 'none';
+		}
+		$info .= "groupMode: {$groupMode}<br />";
+		$atts['group_by'] = $groupMode;
+		
+		// Branch
+		if ($groupMode === 'category') {
+			// grouped-by-category path
+			// Build groups: fetch transactions for each category with remaining filters
+			$groups = [];
+			$overallTotal = 0.0;
+			$includeEmpty = $atts['include_empty_groups'] === '1';
+		
+			foreach ($categories as $term) {
+				$filters = $atts;
+				$filters['transaction_category'] = [$term->slug];
+		
+				// Fetch results via the CPT helper (handles scope + date_meta wiring)
+				$result = $handler->getTransactions($filters);
+				$posts  = $result['posts'] ?? [];
+				if (!$includeEmpty && $posts === []){
+					continue;
+				}
+		
+				$sum = method_exists(Transaction::class, 'sumTransactionAmounts')
+					? Transaction::sumTransactionAmounts($posts)
+					: 0.0;
+		
+				$overallTotal += $sum;
+		
+				$groups[] = [
+					'term'   => $term,     // \WP_Term
+					'posts'  => $posts,    // \WP_Post[]
+					'sum'    => $sum,      // float
+					'result' => $result,   // raw query payload (for pagination/debug if needed)
+				];
+			}
+		
+			// Optional: if no categories resolved (e.g., none active), return empty view
+			if ($groups === [] && !$includeEmpty) {
+			    $info .= "No categories resolved, therefore no posts to display.";
+				return ViewLoader::renderToString(
+					'transactions-summary-grouped',
+					[
+						'posts'        => [],
+						'total'        => 0.0,
+						'grouped'      => true,
+						'groups'       => [],
+						'overallTotal' => 0.0,
+						'atts'         => $atts,
+						'info'         => $info,
+					],
+					[
+						'kind'      => 'view',
+						'module'    => 'accounting',
+						'post_type' => 'transaction',
+					]
+				);
+			}
+		
+			// Render grouped
 			return ViewLoader::renderToString(
-				'transactions-summary',
+				'transactions-summary-grouped',
 				[
-					'posts'  => $posts,
-					'total'  => $total,
-					'result' => $result,
-					'atts'   => $atts,
+					'grouped'      => true,
+					'groups'       => $groups,       // array of [term, posts, sum, result]
+					'overallTotal' => $overallTotal, // sum across all groups
+					'atts'         => $atts,
+					'info'         => $info,
 				],
 				[
 					'kind'      => 'view',
@@ -98,14 +156,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 					'post_type' => 'transaction',
 				]
 			);
-		}
-		
-		// Grouped view options
-		
-		// Resolve category set
-		$categories = $handler->resolveCategories($atts);
-		
-		if ($atts['group_by'] === 'category_years') {
+		} elseif ($groupMode === 'category_years') {
+			// grouped-by-category-years path
 		
 			// Resolve year window from scope
 			$bounds  = ScopedDateResolver::resolve($scope, ['mode' => 'DATE']); // ['start'=>DT,'end'=>DT]
@@ -172,52 +224,22 @@ final class TransactionsShortcode implements ShortcodeInterface
 					'post_type' => 'transaction',
 				]
 			);
-		}
-
-		// Grouped-by-category path
-	
-		// Build groups: fetch transactions for each category with remaining filters
-		$groups = [];
-		$overallTotal = 0.0;
-		$includeEmpty = $atts['include_empty_groups'] === '1';
-	
-		foreach ($categories as $term) {
-			$filters = $atts;
-			$filters['transaction_category'] = [$term->slug];
-	
-			// Fetch results via the CPT helper (handles scope + date_meta wiring)
-			$result = $handler->getTransactions($filters);
+		
+		} else {
+			// Simple (ungrouped) path
+			$result = $handler->getTransactions($atts);
 			$posts  = $result['posts'] ?? [];
-			if (!$includeEmpty && $posts === []){
-				continue;
-			}
-	
-			$sum = method_exists(Transaction::class, 'sumTransactionAmounts')
+			$total  = method_exists(Transaction::class, 'sumTransactionAmounts')
 				? Transaction::sumTransactionAmounts($posts)
 				: 0.0;
 	
-			$overallTotal += $sum;
-	
-			$groups[] = [
-				'term'   => $term,     // \WP_Term
-				'posts'  => $posts,    // \WP_Post[]
-				'sum'    => $sum,      // float
-				'result' => $result,   // raw query payload (for pagination/debug if needed)
-			];
-		}
-	
-		// Optional: if no categories resolved (e.g., none active), return empty view
-		if ($groups === [] && !$includeEmpty) {
 			return ViewLoader::renderToString(
-				'transactions-summary-grouped',
+				'transactions-summary',
 				[
-					'posts'        => [],
-					'total'        => 0.0,
-					'grouped'      => true,
-					'groups'       => [],
-					'overallTotal' => 0.0,
-					'atts'         => $atts,
-					'info'         => $info,
+					'posts'  => $posts,
+					'total'  => $total,
+					'result' => $result,
+					'atts'   => $atts,
 				],
 				[
 					'kind'      => 'view',
@@ -226,39 +248,5 @@ final class TransactionsShortcode implements ShortcodeInterface
 				]
 			);
 		}
-	
-		// Render grouped
-		return ViewLoader::renderToString(
-			'transactions-summary-grouped',
-			[
-				'grouped'      => true,
-				'groups'       => $groups,       // array of [term, posts, sum, result]
-				'overallTotal' => $overallTotal, // sum across all groups
-				'atts'         => $atts,
-			],
-			[
-				'kind'      => 'view',
-				'module'    => 'accounting',
-				'post_type' => 'transaction',
-			]
-		);
-
-        /*
-        // Pass everything useful for the template.
-        return ViewLoader::renderToString(
-            'transactions-summary',
-            [
-                'posts'      => $posts,
-                'total'      => $total,
-                'result'     => $result, // includes pagination/debug if your PostQuery returns it
-                'atts'       => $atts,
-            ],
-            [
-                'kind'      => 'view',
-                'module'    => 'accounting',
-                'post_type' => 'transaction',
-            ]
-        );
-        */
     }
 }
