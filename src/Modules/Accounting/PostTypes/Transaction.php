@@ -130,7 +130,7 @@ class Transaction extends PostTypeHandler
 		$sum = 0.0;
 	
 		foreach($posts as $post){
-			$raw = get_post_meta($post->ID, 'transaction_amount', true);
+			$raw = get_post_meta($post->ID, 'amount', true); // use getPostMeta instead?
 			if($raw === '' || $raw === null){
 				continue;
 			}
