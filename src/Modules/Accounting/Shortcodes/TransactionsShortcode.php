@@ -10,6 +10,7 @@ use atc\WHx4\Core\PostTypeHandler;
 use atc\WHx4\Core\ViewLoader;
 use atc\WHx4\Core\SubtypeRegistry;
 use atc\WHx4\Core\Contracts\ShortcodeInterface;
+use atc\WHx4\Core\Query\ScopedDateResolver;
 //
 use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 
@@ -43,6 +44,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 				'limit'     => -1,
 				'order'     => 'DESC',
 				'orderby'   => 'date',
+				'group_by' => 'none', // supports: none | category | category_years
 			];
 			
 		// Additional controls:
@@ -50,7 +52,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		// categories: "all" | "active" | CSV slugs | array
 		// include_empty_groups: "0"|"1" (only applies when group_by=category)
 		$defaults = array_merge($defaults, [
-			'group_by'             => 'none',
+			//'group_by'             => 'none',
 			'categories'           => 'all',
 			'include_empty_groups' => '0',
 		]);
@@ -66,9 +68,10 @@ final class TransactionsShortcode implements ShortcodeInterface
 		if ($atts['transaction_category'] === []) { unset($atts['transaction_category']); }
 
 		// Check for scope in query_var and override atts/default scope if found
-        $qvScope = get_query_var('whx4_scope') ?: get_query_var('scope') ?: ($_GET['whx4_scope'] ?? $_GET['scope'] ?? '');
-		$sanitized = PostTypeHandler::sanitizeScopeParam($qvScope);
-		if ($sanitized !== null){ $scope = $sanitized; }
+		$scope = PostTypeHandler::getScopeFromRequest($atts, 'this_year');
+		
+		// Ensure downstream filters/queries see the final scope
+		$atts['scope'] = $scope;
 		
 		$grouped = ($atts['group_by'] === 'category');
 	
@@ -95,42 +98,82 @@ final class TransactionsShortcode implements ShortcodeInterface
 				]
 			);
 		}
-	
-		// Grouped-by-category path
-		// Resolve category set:
-		$catParam = $atts['categories'];
-		$categories = [];
-	
-		if (is_string($catParam)) {
-			$mode = strtolower(trim($catParam));
-			if ($mode === 'all'){
-				$categories = $handler->getTransactionCategories([], false);
-			} elseif($mode === 'active'){
-				// Use scope-aware filter set to find only active categories
-				$categories = $handler->getTransactionCategories($atts, true);
-			} else {
-				// CSV slugs → get_terms by slug
-				$slugs = PostTypeHandler::sanitizeTermSlugsParam($catParam);
-				if ($slugs !== []) {
-					$found = get_terms([
-						'taxonomy'   => 'transaction_category',
-						'slug'       => $slugs,
-						'hide_empty' => false,
-					]);
-					$categories = is_array($found) ? $found : [];
+		
+		// Grouped view options
+		
+		// Resolve category set
+		$categories = $handler->resolveCategories($atts);
+		
+		if ($atts['group_by'] === 'category_years') {
+		
+			// Resolve year window from scope
+			$bounds  = ScopedDateResolver::resolve($scope, ['mode' => 'DATE']); // ['start'=>DT,'end'=>DT]
+			$startY  = (int)$bounds['start']->format('Y');
+			$endY    = (int)$bounds['end']->format('Y');
+			$years   = range($startY, $endY);
+		
+			// Build table rows: one row per category; columns per year: sum & count
+			$rows = [];
+			$overall = ['sum' => 0.0, 'count' => 0];
+		
+			foreach ($categories as $term) {
+				// fetch all transactions in scope for this category (no paging)
+				$filters = $atts;
+				$filters['transaction_category'] = [$term->slug];
+				$filters['limit'] = -1;
+		
+				$result = $handler->getTransactions($filters);
+				$posts  = $result['posts'] ?? [];
+		
+				// initialize columns
+				$cols = [];
+				foreach ($years as $y) {
+					$cols[$y] = ['sum' => 0.0, 'count' => 0];
+				}
+		
+				// bucket by tax_year
+				foreach ($posts as $p) {
+					$ty = (int) get_post_meta($p->ID, 'tax_year', true);
+					if ($ty >= $startY && $ty <= $endY) {
+						$amtRaw = get_post_meta($p->ID, 'transaction_amount', true);
+						$amt    = is_numeric($amtRaw) ? (float)$amtRaw : 0.0;
+						$cols[$ty]['sum']   += $amt;
+						$cols[$ty]['count'] += 1;
+		
+						$overall['sum']   += $amt;
+						$overall['count'] += 1;
+					}
+				}
+		
+				// optionally skip empty rows unless include_empty_groups="1"
+				$hasAny = array_sum(array_column($cols, 'count')) > 0;
+				if ($hasAny || ($atts['include_empty_groups'] ?? '0') === '1') {
+					$rows[] = [
+						'term'   => $term,     // \WP_Term
+						'cols'   => $cols,     // year => ['sum','count']
+						'result' => $result,   // raw payload if needed
+					];
 				}
 			}
-		} elseif (is_array($catParam)){
-			$slugs = PostTypeHandler::sanitizeTermSlugsParam($catParam);
-			if ($slugs !== []) {
-				$found = get_terms([
-					'taxonomy'   => 'transaction_category',
-					'slug'       => $slugs,
-					'hide_empty' => false,
-				]);
-				$categories = (!is_wp_error($found) && is_array($found)) ? $found : []; //$categories = is_array($found) ? $found : [];
-			}
+		
+			return ViewLoader::renderToString(
+				'transactions-summary',
+				[
+					'grouped'      => 'category_years',
+					'years'        => $years,
+					'rows'         => $rows,     // iterate terms; within each, iterate $years for cols
+					'overall'      => $overall,  // grand totals across all years/categories
+					'atts'         => $atts,
+				],
+				[
+					'kind'      => 'view',
+					'module'    => 'accounting',
+					'post_type' => 'transaction',
+				]
+			);
 		}
+
+		// Grouped-by-category path
 	
 		// Build groups: fetch transactions for each category with remaining filters
 		$groups = [];
