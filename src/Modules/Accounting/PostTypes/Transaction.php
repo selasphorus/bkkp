@@ -118,7 +118,7 @@ class Transaction extends PostTypeHandler
 			$filters['limit'] = (int)$filters['per_page'];
 		}
 	
-		return (new \smith\Rex\Core\Query\PostQuery())->find($filters);
+		return (new PostQuery())->find($filters);
 	}
 	
 	/**

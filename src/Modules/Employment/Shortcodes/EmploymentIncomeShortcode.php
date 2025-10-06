@@ -60,6 +60,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 			if (isset($atts['limit']))    { $docFilters['limit']    = (int)$atts['limit']; }
 		
 			$docs = $module->findEmployerTaxDocs($post, $docFilters);
+			//$docs = $module->findEmployerTaxDocs($post, $docFilters); // add another data set to the bundle?
 		
 			$employerBundles[] = [
 				'post'            => $post,
