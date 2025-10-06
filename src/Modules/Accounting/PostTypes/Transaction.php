@@ -51,4 +51,94 @@ class Transaction extends PostTypeHandler
 		// Optional extension point for add-ons/themes.
 		return apply_filters('whx4_allowed_url_params_transaction', $spec);
 	}
+	
+	/**
+	 * Get transaction categories. If $activeInScope is true, restrict to categories
+	 * that actually appear on transactions within the provided scope (and other filters).
+	 *
+	 * $filters may include 'scope' and anything your getTransactions() already supports.
+	 *
+	 * @return \WP_Term[] Indexed by term_id (default WP_Term shape).
+	 */
+	public function getTransactionCategories(array $filters = [], bool $activeInScope = false): array
+	{
+		$taxonomy = 'transaction_category';
+	
+		if(!$activeInScope){
+			$terms = get_terms([
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => true,
+			]);
+			return is_array($terms) ? $terms : [];
+		}
+	
+		// Active-in-scope: fetch posts in scope, collect their categories.
+		$result = $this->getTransactions(array_merge($filters, ['limit' => -1]));
+		$posts  = $result['posts'] ?? [];
+	
+		if($posts === []){
+			return [];
+		}
+	
+		$postIds = array_map(static fn($p) => (int)$p->ID, $posts);
+		$termObjs = wp_get_object_terms($postIds, $taxonomy, ['fields' => 'all']);
+		if(!is_array($termObjs) || $termObjs === []){
+			return [];
+		}
+	
+		// De-dup by term_id
+		$out = [];
+		foreach($termObjs as $t){
+			$out[$t->term_id] = $t;
+		}
+		return array_values($out);
+	}
+
+	
+	public function getTransactions(array $filters = []): array
+	{
+		// Force CPT + date meta (scope uses this key; DATE mode)
+		$filters['post_type'] = 'transaction';
+		$filters['date_meta'] = [
+			'key'       => 'transaction_date',
+			'meta_type' => 'DATE',
+		];
+	
+		// Map transaction_category → tax map
+		if(isset($filters['transaction_category'])){
+			$tc = $filters['transaction_category'];
+			unset($filters['transaction_category']);
+			$filters['tax'] = array_merge($filters['tax'] ?? [], [
+				'transaction_category' => is_array($tc) ? $tc : [$tc],
+			]);
+		}
+	
+		// Normalize per_page alias
+		if(isset($filters['per_page']) && !isset($filters['limit'])){
+			$filters['limit'] = (int)$filters['per_page'];
+		}
+	
+		return (new \smith\Rex\Core\Query\PostQuery())->find($filters);
+	}
+	
+	/**
+	 * @param \WP_Post[] $posts  Array of transaction posts.
+	 */
+	public static function sumTransactionAmounts(array $posts): float
+	{
+		$sum = 0.0;
+	
+		foreach($posts as $post){
+			$raw = get_post_meta($post->ID, 'transaction_amount', true);
+			if($raw === '' || $raw === null){
+				continue;
+			}
+			$num = is_numeric($raw) ? (float)$raw : 0.0;
+			$sum += $num;
+		}
+	
+		return $sum;
+	}
+
+
 }
