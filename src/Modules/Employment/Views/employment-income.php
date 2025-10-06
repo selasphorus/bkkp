@@ -14,17 +14,22 @@
     
         <?php foreach ($employers as $row): ?>
 			<?php $employer = $row['post']; $docs = $row['docs']; ?>
-			<a href="<?php echo esc_url(get_permalink($post)); ?>">
-				<?php 
-				echo esc_html(get_the_title($employer));
-				echo " => [".count($docs)."] docs";
+			    <a href="<?php echo esc_url(get_permalink($employer)); ?>">
+				<?php echo esc_html(get_the_title($employer)); ?>
+				</a>
+				<?php
+				echo " => [".count($docs)."] docs => ";
 				foreach ( $docs as $doc ) {
-				    echo esc_html(get_the_title($doc)); //echo $doc->post_title;
+				    ?>
+				    <a href="<?php echo esc_url(get_permalink($doc)); ?>">
+				    <?php echo esc_html(get_the_title($doc)) . " | "; //echo $doc->post_title; ?>
+				    </a>
+				    <?php
 				}
 				//echo "<pre>" . print_r($docs, true) . "</pre>";
-				//echo "<br />";
+				echo "<br />";
 				?>
-			</a>
+			
 			<!-- render $docs for that employer -->
 		<?php endforeach; ?>
 
