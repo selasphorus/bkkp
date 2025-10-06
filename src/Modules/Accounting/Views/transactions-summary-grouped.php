@@ -19,7 +19,7 @@
 				</a-->
 				<?php
 				echo "[".count($posts)."] transactions";
-				echo " in the ".$term." category, for a total of $".$sum."";
+				echo " in the ".$term->slug." category, for a total of $".$sum."";
 				/*foreach ( $docs as $doc ) {
 				    $h = $handler($doc);
 				    //$thing = $h->getPostMeta('start_date');
