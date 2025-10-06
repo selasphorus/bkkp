@@ -13,7 +13,7 @@
         <p>No posts found.</p>
     <?php else: ?>
         <?php 
-        echo "[".count($posts)."] transactions";
+        echo "[".count($posts)."] transactions found<br />";
         //echo " in the {$term} category, for a total of ${$total}<br />"; ?>
         <?php foreach ($posts as $post): ?>
 			    <a href="<?php echo esc_url(get_permalink($post)); ?>">
