@@ -158,14 +158,18 @@ class Transaction extends PostTypeHandler
 	 */
 	public static function sumTransactionAmounts(array $posts): float
 	{
+		error_log( "Transaction::sumTransactionAmounts" );
 		$sum = 0.0;
 	
-		foreach($posts as $post){
+		foreach ($posts as $post){
 			$raw = get_post_meta($post->ID, 'amount', true); // use getPostMeta instead?
-			if($raw === '' || $raw === null){
+			if ($raw === '' || $raw === null){
+				error_log( "amount is empty for pID: " . $post->ID );
 				continue;
 			}
+			error_log( "raw amount: {$raw} for pID: " . $post->ID );
 			$num = is_numeric($raw) ? (float)$raw : 0.0;
+			error_log( "amount: {$num} for pID: " . $post->ID );
 			$sum += $num;
 		}
 	
