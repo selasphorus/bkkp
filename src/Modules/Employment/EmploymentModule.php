@@ -173,7 +173,7 @@ final class EmploymentModule extends BaseModule
 			$params['meta'] = ['relation' => 'AND', 'clauses' => array_merge($base, $extraClauses)];
 		}
 	
-		$result = (new \smith\Rex\Core\Query\PostQuery())->find($params);
+		$result = (new PostQuery())->find($params);
 	
 		return [
 			'posts' => $result['posts'] ?? [],
