@@ -71,7 +71,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$atts['scope'] = $scope;
 		
 		// Normalize group mode (before branching)
-		$groupMode = strtolower(trim((string)($atts['group_by'] ?? 'none')));
+		$groupMode = strtolower(trim((string)($atts['group_by'] ?? 'category')));
 		if (!in_array($groupMode, ['none', 'category', 'category_years'], true)) {
 			$groupMode = 'none';
 		}
@@ -150,8 +150,12 @@ final class TransactionsShortcode implements ShortcodeInterface
 		
 			// Resolve year window from scope
 			$bounds  = ScopedDateResolver::resolve($scope, ['mode' => 'DATE']); // ['start'=>DT,'end'=>DT]
-			$startY  = (int)$bounds['start']->format('Y');
-			$endY    = (int)$bounds['end']->format('Y');
+			$startStr = $bounds['start'];
+			$endStr = $bounds['end'];
+			if ( $startStr ) { $startY  = (int)strtotime($startStr)->format('Y'); } else { $startY = date('Y'); }
+			if ( $endStr )   { $endY    = (int)strtotime($endStr)->format('Y'); } else { $endY = $startY; }
+			//$startY  = (int)$bounds['start']->format('Y');
+			//$endY    = (int)$bounds['end']->format('Y');
 			$years   = range($startY, $endY);
 		
 			// Build table rows: one row per category; columns per year: sum & count
