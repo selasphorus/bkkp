@@ -79,28 +79,19 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$atts['group_by'] = $groupMode;
 		
 		// Prepare to render view according to groupMode
-		$view = 'transactions-summary-grouped'; // default
 		$viewVars = [];
 		$viewVars['atts'] = $atts;
 		$viewVars['grouped_by'] = $groupMode;
 		//
 		$viewSpecs = [ 'kind' => 'view', 'module' => 'accounting', 'post_type' => 'transaction' ];
 		//
-		if ($groupMode != "none") {
-		    $viewVars['grouped'] = true;
-		    if ($groupMode === 'category') {
-		        $view = 'transactions-summary-grouped';
-		    } elseif ($groupMode === 'category') {
-		        $view = 'transactions-summary-grouped-catyears';
-		    }
-		} else {
-		    $viewVars['grouped'] = false;
-		    $view = 'transactions-summary';
-		}
+		if ($groupMode != "none") { $viewVars['grouped'] = true; } else { $viewVars['grouped'] = false; } // use ternary instead?
 		
 		// Branch
 		if ($groupMode === 'category') {
-			// grouped-by-category path
+			// Grouped by category
+			$view = 'transactions-summary-grouped';
+			
 			// Build groups: fetch transactions for each category with remaining filters
 			$groups = [];
 			$overallTotal = 0.0;
@@ -146,7 +137,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 	
 		} elseif ($groupMode === 'category_years') {
-			// grouped-by-category-years path
+			// Grouped by category per year
+			$view = 'transactions-summary-grouped-catyears';
 		
 			// Resolve year window from scope
 			$bounds  = ScopedDateResolver::resolve($scope, ['mode' => 'DATE']); // ['start'=>DT,'end'=>DT]
@@ -217,6 +209,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 		
 		} else {
 			// Simple (ungrouped) path
+			$view = 'transactions-summary';
+			//
 			$result = $handler->getTransactions($atts);
 			$posts  = $result['posts'] ?? [];
 			$total  = method_exists(Transaction::class, 'sumTransactionAmounts')
