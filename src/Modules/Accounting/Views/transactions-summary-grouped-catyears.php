@@ -3,13 +3,13 @@
 	
 	<div class="troubleshooting">
         <h3>Info for Troubleshooting</h3>
-        <p><?php echo $info; ?></p>
-        <p>atts: <pre><?php print_r($atts, true); ?></pre></p>
-        <!--debug: <pre><?php //print_r($debug, true); ?></pre>-->
+        <p>[info] <?php echo $info; ?></p>
+        <p>[atts] <pre><?php print_r($atts, true); ?></pre></p>
+        <p>[years] <pre><?php print_r($years, true); ?></pre></p>
     </div>
-        <hr />
+    <hr />
     
-	<?php if(!$rows): ?>
+	<?php if (!$rows): ?>
         <p>No posts found.</p>
     <?php else: ?>
         <table>
