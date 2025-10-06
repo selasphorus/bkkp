@@ -15,7 +15,7 @@ use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 
 final class TransactionsShortcode implements ShortcodeInterface
 {
-    // This is the tag by which the shortcode will be called
+    // This is the tag by which the shortcode will be called -- but is this method actually necessary?
     public static function tag(): string
     {
         return 'transactions';
@@ -27,7 +27,7 @@ final class TransactionsShortcode implements ShortcodeInterface
      * transaction_category="rent,utilities" (or array)
      * per_page="25" paged="1" order="DESC" orderby="date"
      */
-    public function render(array $atts = [], ?string $content = null, string $tag = 'rex_transactions'): string
+    public function render(array $atts = [], ?string $content = null, string $tag = 'transactions'): string
     {
         $handler  = new Transaction();
 
