@@ -35,6 +35,8 @@ final class AccountingModule extends BaseModule
             $handlers['transaction_tag'] = TransactionTag::class;
             return $handlers;
         });
+        
+        ShortcodeManager::add(\atc\Bkkp\Modules\Accounting\Shortcodes\TransactionsShortcode::class);
     }
 
     public function getPostTypeHandlerClasses(): array
