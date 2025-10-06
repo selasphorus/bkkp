@@ -29,10 +29,11 @@ final class TransactionsShortcode implements ShortcodeInterface
      * per_page="25" paged="1" order="DESC" orderby="date"
      */
     //public function render(array $atts, string $content, string $tag): string;
-    public function render(array $atts = [], string $content = '', string $tag = ''): string
     //public function render(array $atts = [], ?string $content = null, string $tag = 'transactions'): string
+    public function render(array $atts = [], string $content = '', string $tag = ''): string
     {
         $handler  = new Transaction();
+        $info = "";
 
         // Prefer handler/CPT defaults if available; fall back to sane basics.
         // Defaults (prefer CPT defaults when available)
@@ -216,6 +217,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 					'groups'       => [],
 					'overallTotal' => 0.0,
 					'atts'         => $atts,
+					'info'         => $info,
 				],
 				[
 					'kind'      => 'view',

@@ -4,6 +4,7 @@
 	<p class="troubleshooting">
         <h3>Info for Troubleshooting</h3>
         <p><?php //echo $info; ?></p>
+        atts: <pre><?php print_r($atts, true); ?></pre>
         <!--debug: <pre><?php //print_r($debug, true); ?></pre>-->
         <hr />
     </p>
