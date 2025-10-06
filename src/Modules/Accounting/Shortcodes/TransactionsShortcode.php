@@ -150,13 +150,18 @@ final class TransactionsShortcode implements ShortcodeInterface
 		
 			// Resolve year window from scope
 			$bounds  = ScopedDateResolver::resolve($scope, ['mode' => 'DATE']); // ['start'=>DT,'end'=>DT]
-			$startStr = $bounds['start'];
-			$endStr = $bounds['end'];
-			if ( $startStr ) { $startY  = (int)strtotime($startStr)->format('Y'); } else { $startY = date('Y'); }
-			if ( $endStr )   { $endY    = (int)strtotime($endStr)->format('Y'); } else { $endY = $startY; }
-			//$startY  = (int)$bounds['start']->format('Y');
-			//$endY    = (int)$bounds['end']->format('Y');
-			$years   = range($startY, $endY);
+			$start  = $bounds['start'] ?? null;
+			$end    = $bounds['end'] ?? null;
+			//
+			$startY = $start instanceof \DateTimeInterface
+				? (int)$start->format('Y')
+				: (is_string($start) && $start !== '' ? (int)date('Y', strtotime($start)) : (int)date('Y'));
+			
+			$endY = $end instanceof \DateTimeInterface
+				? (int)$end->format('Y')
+				: (is_string($end) && $end !== '' ? (int)date('Y', strtotime($end)) : $startY);
+			
+			$years = range($startY, $endY);
 		
 			// Build table rows: one row per category; columns per year: sum & count
 			$rows = [];
