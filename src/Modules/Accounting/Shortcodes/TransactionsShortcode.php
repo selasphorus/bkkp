@@ -59,7 +59,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		
 		// Merge shortcode atts with defaults
 		$atts = shortcode_atts($defaults, $atts, $tag);
-		$info .= "atts: ".print_r($atts,true)."<br />"; // sanity check!
+		$info .= "preliminary atts: <pre>".print_r($atts,true)."</pre>"; // sanity check!
 		
 		// Resolve category set
 		$categories = $handler->resolveCategories($atts);
@@ -77,6 +77,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 		}
 		$info .= "groupMode: {$groupMode}<br />";
 		$atts['group_by'] = $groupMode;
+		
+		$info .= "processed atts: <pre>".print_r($atts,true)."</pre>"; // another sanity check!
 		
 		// Prepare to render view according to groupMode
 		$viewVars = [];
