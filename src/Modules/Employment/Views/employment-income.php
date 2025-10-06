@@ -18,7 +18,8 @@
 				<?php 
 				echo esc_html(get_the_title($employer));
 				echo " => [".count($docs)."] docs";
-				echo "<br />";
+				echo "<pre>" . print_r($docs, true) . "</pre>";
+				//echo "<br />";
 				?>
 			</a>
 			<!-- render $docs for that employer -->
