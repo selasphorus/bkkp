@@ -15,6 +15,12 @@ use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 
 final class TransactionsShortcode implements ShortcodeInterface
 {
+    // This is the tag by which the shortcode will be called
+    public static function tag(): string
+    {
+        return 'transactions';
+    }
+    
     /**
      * [rex_transactions] — supports atts like:
      * scope="this_month" | "2025" | "2022-2025"
