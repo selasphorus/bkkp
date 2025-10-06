@@ -52,6 +52,37 @@ class Transaction extends PostTypeHandler
 		// Optional extension point for add-ons/themes.
 		return apply_filters('whx4_allowed_url_params_transaction', $spec);
 	}
+
+	public function resolveCategories(array $atts): array
+	//private function resolveCategories(Transaction $handler, array $atts): array
+	{
+		$param = $atts['categories'] ?? 'all';
+	
+		// String modes
+		if (is_string($param)) {
+			$mode = strtolower(trim($param));
+			if ($mode === 'all') {
+				return $this->getTransactionCategories([], false);
+			}
+			if ($mode === 'active') {
+				// scope-aware: uses $atts (ensure $atts['scope'] already resolved)
+				return $this->getTransactionCategories($atts, true); // scope-aware
+			}
+			// fall through to slug handling
+		}
+	
+		// Slug list (CSV or array)
+		$slugs = PostTypeHandler::sanitizeTermSlugsParam($param);
+		if ($slugs === []) { return []; }
+	
+		$found = get_terms([
+			'taxonomy'   => 'transaction_category',
+			'slug'       => $slugs,
+			'hide_empty' => false,
+		]);
+	
+		return (!is_wp_error($found) && is_array($found)) ? $found : [];
+	}
 	
 	/**
 	 * Get transaction categories. If $activeInScope is true, restrict to categories
