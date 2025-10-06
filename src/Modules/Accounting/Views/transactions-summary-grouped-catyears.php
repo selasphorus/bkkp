@@ -22,7 +22,7 @@
         <?php foreach ($rows as $row): ?>
             <tr>
 				<td><?php echo $row['term']->name; ?></td>
-				<?php foreach ($row['col'] as $col): ?>
+				<?php foreach ($row['cols'] as $col): ?>
 					<td><?php echo $col['sum']; ?> (<?php echo $col['count']; ?>)</td>
 				<?php endforeach; ?>
 				<?php //echo "<pre>".print_r($row['cols'], true)."</pre>"; ?>
