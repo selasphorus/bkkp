@@ -35,7 +35,10 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 
         if ( isset($atts['scope']) ) { $scope = $atts['scope']; } else { $scope = date('Y'); }
         $employers = $module->findEmployers($scope) ?? [];
-        if ( isset($employers['scope']) ) { $scope = $employers['scope']; } // In case scope was revised via findEmployers
+        // Check in case scope was revised via findEmployers
+        if ( isset($employers['scope']) ) { 
+            $scope = $employers['scope'];
+        } 
         $employerPosts  = $employers['posts'] ?? [];
 
         // Pagination info for the view.
