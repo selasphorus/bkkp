@@ -19,15 +19,17 @@
 				</a>
 				<?php
 				echo " => [".count($docs)."] tax docs";
+				if (count($docs) > 0) { echo " => "; }
 				foreach ( $docs as $doc ) {
 				    $h = $handler($doc);
-				    //$thing = $h->getPostMeta('start_date');
-				    echo " => ";
+				    $total_comp = $h->getPostMeta('total_comp');
+				    $total_withheld = $h->getPostMeta('total_withheld');
 				    ?>
 				    <a href="<?php echo esc_url(get_permalink($doc)); ?>">
-				    <?php echo esc_html(get_the_title($doc)); // . " | " . echo $doc->post_title; ?>
+				    <?php echo esc_html(get_the_title($doc)); ?>
 				    </a>
 				    <?php
+				    echo " [".$total_comp."/".$total_withheld."]"
 				}
 				//echo "<pre>" . print_r($docs, true) . "</pre>";
 				echo "<br />";
