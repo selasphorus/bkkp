@@ -134,6 +134,7 @@ final class EmploymentModule extends BaseModule
 		// Taxonomies
 		$tax = $filters['tax'] ?? [];
 		$tax['document_category'] = array_unique(array_merge($tax['document_category'] ?? [], ['tax-forms'])); // limit to tax forms
+		error_log('[findEmployerTaxDocs] tax: ' . print_r($tax,true));
 	
 		// Base params (all docs by default)
 		$params = [
