@@ -33,11 +33,9 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             return '<p>Employment module inactive.</p>';
         }
 
-        //$stats = $module->getModuleStats(); // module-level method
-        // WIP 10/04/25 -- allow single year or range; default to current year
-        //if ( isset($atts['year']) ) { $year = $atts['year']; } else { $year = date('Y'); }
         if ( isset($atts['scope']) ) { $scope = $atts['scope']; } else { $scope = date('Y'); }
         $employers = $module->findEmployers($scope) ?? [];
+        if ( isset($employers['scope']) ) { $scope = $employers['scope']; } // In case scope was revised via findEmployers
         $employerPosts  = $employers['posts'] ?? [];
 
         // Pagination info for the view.
