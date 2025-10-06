@@ -27,7 +27,8 @@ final class TransactionsShortcode implements ShortcodeInterface
      * transaction_category="rent,utilities" (or array)
      * per_page="25" paged="1" order="DESC" orderby="date"
      */
-    public function render(array $atts = [], string $content = '', string $tag = ''): string
+    public function render(array $atts, string $content, string $tag): string;
+    //public function render(array $atts = [], string $content = '', string $tag = ''): string
     //public function render(array $atts = [], ?string $content = null, string $tag = 'transactions'): string
     {
         $handler  = new Transaction();
