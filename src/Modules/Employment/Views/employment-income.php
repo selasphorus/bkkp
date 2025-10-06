@@ -29,7 +29,7 @@
 				    <?php echo esc_html(get_the_title($doc)); ?>
 				    </a>
 				    <?php
-				    echo " [".$total_comp."/".$total_withheld."]"
+				    echo " [".$total_comp."/".$total_withheld."]";
 				}
 				//echo "<pre>" . print_r($docs, true) . "</pre>";
 				echo "<br />";
