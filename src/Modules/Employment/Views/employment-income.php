@@ -3,7 +3,7 @@
 	
 	<p class="troubleshooting">
         <h3>Info for Troubleshooting</h3>
-        info: <p><?php echo $info; ?></p>
+        <p><?php echo $info; ?></p>
         <!--debug: <pre><?php print_r($debug, true); ?></pre>-->
     </p>
     
