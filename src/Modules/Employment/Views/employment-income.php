@@ -18,7 +18,10 @@
 				<?php 
 				echo esc_html(get_the_title($employer));
 				echo " => [".count($docs)."] docs";
-				echo "<pre>" . print_r($docs, true) . "</pre>";
+				foreach ( $docs as $doc ) {
+				    echo esc_html(get_the_title($doc)); //echo $doc->post_title;
+				}
+				//echo "<pre>" . print_r($docs, true) . "</pre>";
 				//echo "<br />";
 				?>
 			</a>
