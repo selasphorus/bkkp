@@ -30,45 +30,40 @@ final class TransactionsShortcode implements ShortcodeInterface
      */
     //public function render(array $atts, string $content, string $tag): string;
     //public function render(array $atts = [], ?string $content = null, string $tag = 'transactions'): string
-    public function render(array $atts = [], string $content = '', string $tag = ''): string
+    //public function render(array $atts = [], string $content = '', string $tag = ''): string
+    public function render(array $atts, ?string $content = null, string $tag = ''): string
     {
-        $handler  = new Transaction();
+        $handler = new Transaction();
         $info = "";
+        
+        // Defaults: start from handler, then ensure 'scope' exists, then add UI extras
+        $defaults = method_exists($handler, 'queryDefaults') ? $handler->queryDefaults() : [];
+        if (!array_key_exists('scope', $defaults)) { $defaults['scope'] = 'this_year'; }
 
-        // Prefer handler/CPT defaults if available; fall back to sane basics.
-        // Defaults (prefer CPT defaults when available)
-		$defaults = method_exists($handler, 'queryDefaults')
-			? $handler->queryDefaults()
-			: [
-				'post_type' => 'transaction',
-				'scope'     => 'this_month',
-				'limit'     => -1,
-				'order'     => 'DESC',
-				'orderby'   => 'date',
-			];
-		
-		// Additional controls not standard to Transaction handler
-		// group_by: none|category
-		// categories: "all" | "active" | CSV slugs | array
-		// include_empty_groups: "0"|"1" (only applies when group_by=category)
 		$defaults = array_merge($defaults, [
-			'group_by'  => 'category', // supports: none | category | category_years
-			'categories' => 'all', // "all" | "active" | CSV slugs | array
-			'include_empty_groups' => '0', // "0"|"1" (only applies when group_by=category)
+			'post_type'            => $defaults['post_type'] ?? 'transaction',
+			'limit'                => $defaults['limit']     ?? -1,
+			'order'                => $defaults['order']     ?? 'DESC',
+			'orderby'              => $defaults['orderby']   ?? 'date',
+			'group_by'             => 'category',        // none|category|category_years
+			'categories'           => 'all',             // all|active|CSV|array
+			'include_empty_groups' => '0',
 		]);
-		
-		// Merge shortcode atts with defaults
-		$atts = shortcode_atts($defaults, $atts, $tag);
-		$info .= "preliminary atts: <pre>".print_r($atts,true)."</pre>"; // sanity check!
-		
-		// Resolve category set
-		$categories = $handler->resolveCategories($atts);
 
-		// Check for scope in query_var and override atts/default scope if found
-		$scope = PostTypeHandler::getScopeFromRequest($atts, 'this_year');
-		
+		// Merge user atts (use known tag to avoid odd filters if $tag is empty)
+		$rawAtts = (array)$atts;
+		$atts = shortcode_atts($defaults, $rawAtts, self::tag());
+
+		// Resolve scope with query-var override, then persist back into $atts
+		$scope = PostTypeHandler::getScopeFromRequest($atts, $atts['scope'] ?? 'this_year');
 		// Ensure downstream filters/queries see the final scope
 		$atts['scope'] = $scope;
+
+		// Now it’s safe to resolve categories; 'active' mode needs $atts['scope']
+		// Resolve category set
+		$categories = $handler->resolveCategories($atts);
+		
+		//$info .= "preliminary atts: <pre>".print_r($atts,true)."</pre>"; // sanity check!
 		
 		// Normalize group mode (before branching)
 		$groupMode = strtolower(trim((string)($atts['group_by'] ?? 'category')));
