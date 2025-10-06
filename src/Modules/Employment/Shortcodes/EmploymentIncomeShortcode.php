@@ -84,7 +84,11 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         // Set the view
         $view = "employment-income"; //$view = "module-view-test";
         
-        //$debug = $employers['debug'] + $docs['debug']; // WIP
+        // WIP
+        $debug = [];
+        $debug['employers'] = $employers['debug'];
+        $debug['docs'] = $docs['debug'];
+        
         $vars = [
             'employers'  => $employerBundles, // each item: ['post' => WP_Post, 'docs' => WP_Post[], ...]
             'handler'    => $handlerFactory,
@@ -93,7 +97,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             //'stats' => $stats,
             'info' => $info, // for TS -- deprecate in favor of:
             // Optionally pass debug through when WHX4_DEBUG is on:
-            //'debug'      => $debug ?? null,
+            'debug'      => $debug ?? null,
         ];
 
         return ViewLoader::renderToString(

@@ -4,7 +4,7 @@
 	<p class="troubleshooting">
         <h3>Info for Troubleshooting</h3>
         <p><?php echo $info; ?></p>
-        <!--debug: <pre><?php print_r($debug, true); ?></pre>-->
+        <!--debug: <pre><?php //print_r($debug, true); ?></pre>-->
         <hr />
     </p>
     
@@ -58,5 +58,5 @@
         <?php endif;*/ ?>
     <?php endif; ?>
     
-	<!--p><strong>Debug:</strong> <pre><?php echo print_r($debug, true); ?></pre></p-->
+	<p><strong>Debug:</strong> <pre><?php echo print_r($debug, true); ?></pre></p>
 </div>
