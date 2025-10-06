@@ -18,7 +18,7 @@
 			    <!--<a href="<?php echo esc_url(get_permalink($employer)); ?>">
 				<?php echo esc_html(get_the_title($employer)); ?>
 				</a-->
-				<?php echo $row['$term']->name; ?> :: <pre><?php echo print_r($row['cols'], true); ?></pre>
+				<?php echo $row['term']->name; ?> :: <pre><?php echo print_r($row['cols'], true); ?></pre>
 				<?php //echo "=> [".count($result['posts'])."] posts"; ?>
 				<?php
 				//$result['posts']
