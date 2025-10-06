@@ -45,28 +45,13 @@ final class TransactionsShortcode implements ShortcodeInterface
 				'limit'     => -1,
 				'order'     => 'DESC',
 				'orderby'   => 'date',
-				'group_by' => 'none', // supports: none | category | category_years
+				'group_by'  => 'category', // supports: none | category | category_years
+				'categories' => 'all', // "all" | "active" | CSV slugs | array
+				'include_empty_groups' => '0', // "0"|"1" (only applies when group_by=category)
 			];
-			
-		// Additional controls:
-		// group_by: none|category
-		// categories: "all" | "active" | CSV slugs | array
-		// include_empty_groups: "0"|"1" (only applies when group_by=category)
-		$defaults = array_merge($defaults, [
-			//'group_by'             => 'none',
-			'categories'           => 'all',
-			'include_empty_groups' => '0',
-		]);
 		
-		// TODO: set default to group by category?
-	
 		// Merge shortcode atts with defaults
 		$atts = shortcode_atts($defaults, $atts, $tag);
-	
-		// Normalize transaction_category if provided (non-grouped path still supported)
-		// (works whether param is missing, empty string, CSV, or array)
-		$atts['transaction_category'] = PostTypeHandler::sanitizeTermSlugsParam($atts['transaction_category'] ?? null);
-		if ($atts['transaction_category'] === []) { unset($atts['transaction_category']); }
 		
 		// Resolve category set
 		$categories = $handler->resolveCategories($atts);
