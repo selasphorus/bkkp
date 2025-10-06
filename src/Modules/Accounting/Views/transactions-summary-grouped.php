@@ -18,7 +18,8 @@
 				<?php echo esc_html(get_the_title($employer)); ?>
 				</a-->
 				<?php
-				//echo "[".count($posts)."] transactions in the {$term} category, for a total of ${$sum}";
+				echo "[".count($posts)."] transactions";
+				echo " in the ".$term." category, for a total of $".$sum."";
 				/*foreach ( $docs as $doc ) {
 				    $h = $handler($doc);
 				    //$thing = $h->getPostMeta('start_date');
