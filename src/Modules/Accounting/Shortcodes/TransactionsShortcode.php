@@ -79,6 +79,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$atts['group_by'] = $groupMode;
 		
 		// Prepare to render view according to groupMode
+		$view = 'transactions-summary-grouped'; // default
 		$viewVars = [];
 		$viewVars['atts'] = $atts;
 		$viewVars['grouped_by'] = $groupMode;
@@ -86,11 +87,15 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$viewSpecs = [ 'kind' => 'view', 'module' => 'accounting', 'post_type' => 'transaction' ];
 		//
 		if ($groupMode != "none") {
-		    $view = 'transactions-summary-grouped';
 		    $viewVars['grouped'] = true;
+		    if ($groupMode === 'category') {
+		        $view = 'transactions-summary-grouped';
+		    } elseif ($groupMode === 'category') {
+		        $view = 'transactions-summary-grouped-catyears';
+		    }
 		} else {
-		    $view = 'transactions-summary';
 		    $viewVars['grouped'] = false;
+		    $view = 'transactions-summary';
 		}
 		
 		// Branch
