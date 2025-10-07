@@ -30,7 +30,7 @@
 				//echo "<pre>".print_r($row['cols'], true)."</pre>";
 				//echo "=> [".count($result['posts'])."] posts";
 				?>
-				<td><?php echo print_r($row['result'], true); ?></td>
+				<td><?php echo print_r($row['result']['query_request'], true); ?></td>
 			</tr>
 		<?php endforeach; ?>
 		</table>
