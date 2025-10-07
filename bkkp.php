@@ -45,8 +45,7 @@ add_action( 'whx4_pre_boot', function() {
 
         // Register the module with WHx4
         add_filter( 'whx4_register_modules', function( array $modules ): array {
-            error_log( '$$$ whx4_register_modules hook fired $$$' );
-            //
+            //error_log( '$$$ whx4_register_modules hook fired $$$' );
             $modules['accounting'] = Accounting::class;
             $modules['employment'] = Employment::class;
             $modules['documents'] = Documents::class;
@@ -56,7 +55,7 @@ add_action( 'whx4_pre_boot', function() {
         } );
 
         add_filter( 'whx4_registered_field_keys', function() {
-            error_log( '$$$ whx4_registered_field_keys hook fired $$$' );
+            //error_log( '$$$ whx4_registered_field_keys hook fired $$$' );
             if ( ! function_exists( 'acf_get_local_fields' ) ) {
                 return [];
             }
@@ -73,6 +72,6 @@ add_action( 'whx4_pre_boot', function() {
             return $keys;
         });
     } else {
-       error_log( '$$$ Plugin class DNE $$$' );
+       //error_log( '$$$ Plugin class DNE $$$' );
     }
 }, 15 ); // Priority < 20 to run before WHx4 boot()
