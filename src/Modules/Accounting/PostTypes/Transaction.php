@@ -136,7 +136,7 @@ class Transaction extends PostTypeHandler
 		$filters['post_type'] = 'transaction';
 		$filters['date_meta'] = [
 			'key'       => 'transaction_date',
-			'meta_type' => 'DATE',
+			'meta_type' => 'NUMERIC', // because ACF stores dates funny yyyymmdd so can't use DATE
 		];
 	
 		// Map transaction_category → tax map
