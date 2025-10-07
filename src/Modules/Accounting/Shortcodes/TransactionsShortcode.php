@@ -210,6 +210,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 			$viewVars['overall'] = $overall; // grand totals across all years/categories
 			$viewVars['info'] = $info;
 			//
+			error_log('[TransactionsShortcode::render] viewVars: ' . print_r($viewVars, true));
+			//
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 		
 		} else {
