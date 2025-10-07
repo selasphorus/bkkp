@@ -158,6 +158,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			// Safety: swap if reversed; clamp to sane range
 			if ($startY > $endY) { [$startY, $endY] = [$endY, $startY]; }
 			$years = range($startY, $endY);
+			error_log('[TransactionsShortcode::render] years: ' . print_r($years, true));
 		
 			// Build table rows: one row per category; columns per year: sum & count
 			$rows = [];
