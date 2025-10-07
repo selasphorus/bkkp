@@ -18,6 +18,7 @@
             <?php foreach ($years as $year): ?>
             <th><?php echo $year; ?></th>
             <?php endforeach; ?>
+            <th>TS</th>
         </tr>
         <?php foreach ($rows as $row): ?>
             <tr>
@@ -25,12 +26,15 @@
 				<?php foreach ($row['cols'] as $col): ?>
 					<td><?php echo $col['sum']; ?> (<?php echo $col['count']; ?>)</td>
 				<?php endforeach; ?>
-				<?php //echo "<pre>".print_r($row['cols'], true)."</pre>"; ?>
-				<?php //echo "=> [".count($result['posts'])."] posts"; ?>
+				<?php 
+				//echo "<pre>".print_r($row['cols'], true)."</pre>";
+				//echo "=> [".count($result['posts'])."] posts";
+				?>
+				<td><?php echo print_r($row['result'], true); ?></td>
 			</tr>
 		<?php endforeach; ?>
 		</table>
     <?php endif; ?>
     
-	<p><strong>Debug:</strong> [result] <pre><?php echo print_r($result, true); //echo print_r($debug, true); ?></pre></p>
+	<p><strong>Debug:</strong><pre><?php //echo print_r($debug, true); ?></pre></p>
 </div>
