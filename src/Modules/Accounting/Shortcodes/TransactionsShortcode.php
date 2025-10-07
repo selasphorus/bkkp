@@ -73,6 +73,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$info .= "groupMode: {$groupMode}<br />";
 		$atts['group_by'] = $groupMode;
 		
+		error_log('[TransactionsShortcode::render] atts: ' . print_r($atts, true));
 		//$info .= "processed atts: <pre>".print_r($atts,true)."</pre>"; // another sanity check!
 		$info .= "processed atts[scope]: ".$atts['scope']."<br />"; // another sanity check!
 		
@@ -140,6 +141,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			// Resolve year window from scope
 			$startY = $endY = null;
 			$bounds  = ScopedDateResolver::resolve($scope, ['mode' => 'DATE']); // ['start'=>DT,'end'=>DT]
+			error_log('[TransactionsShortcode::render] bounds: ' . print_r($bounds, true));
 			$start  = $bounds['start'] ?? null;
 			$end    = $bounds['end'] ?? null;
 			//
@@ -151,6 +153,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 				$end instanceof \DateTimeInterface ? (int)$end->format('Y') :
 				(is_string($end) && $end !== '' ? (int)date('Y', strtotime($end)) : $startY)
 			);
+			error_log('[TransactionsShortcode::render] startY: ' . $startY . '; endY: ' . $endY);
 			
 			// Safety: swap if reversed; clamp to sane range
 			if ($startY > $endY) { [$startY, $endY] = [$endY, $startY]; }
