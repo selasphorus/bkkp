@@ -32,5 +32,5 @@
 		</table>
     <?php endif; ?>
     
-	<!--p><strong>Debug:</strong> <pre><?php //echo print_r($debug, true); ?></pre></p-->
+	<p><strong>Debug:</strong> [result] <pre><?php echo print_r($result, true); //echo print_r($debug, true); ?></pre></p>
 </div>
