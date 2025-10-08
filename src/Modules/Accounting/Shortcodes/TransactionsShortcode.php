@@ -143,7 +143,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			// Resolve year window from scope
 			$startY = $endY = null;
 			$bounds  = ScopedDateResolver::resolve($scope, ['mode' => 'DATE']); // ['start'=>DT,'end'=>DT]
-			error_log('[TransactionsShortcode::render] bounds: ' . print_r($bounds, true));
+			//error_log('[TransactionsShortcode::render] bounds: ' . print_r($bounds, true));
 			$start  = $bounds['start'] ?? null;
 			$end    = $bounds['end'] ?? null;
 			//
@@ -155,12 +155,12 @@ final class TransactionsShortcode implements ShortcodeInterface
 				$end instanceof \DateTimeInterface ? (int)$end->format('Y') :
 				(is_string($end) && $end !== '' ? (int)date('Y', strtotime($end)) : $startY)
 			);
-			error_log('[TransactionsShortcode::render] startY: ' . $startY . '; endY: ' . $endY);
+			//error_log('[TransactionsShortcode::render] startY: ' . $startY . '; endY: ' . $endY);
 			
 			// Safety: swap if reversed; clamp to sane range
 			if ($startY > $endY) { [$startY, $endY] = [$endY, $startY]; }
 			$years = range($startY, $endY);
-			error_log('[TransactionsShortcode::render] years: ' . print_r($years, true));
+			//error_log('[TransactionsShortcode::render] years: ' . print_r($years, true));
 		
 			// Build table rows: one row per category; columns per year: sum & count
 			$rows = [];
@@ -185,12 +185,15 @@ final class TransactionsShortcode implements ShortcodeInterface
 				foreach ($posts as $p) {
 					$ty = (int) get_post_meta($p->ID, 'tax_year', true);
 					if ($ty >= $startY && $ty <= $endY) {
-						$amtRaw = get_post_meta($p->ID, 'transaction_amount', true);
-						$amt    = is_numeric($amtRaw) ? (float)$amtRaw : 0.0;
-						$cols[$ty]['sum']   += $amt;
+						$amountRaw = get_post_meta($p->ID, 'transaction_amount', true);
+						error_log('[TransactionsShortcode::render] amountRaw: ' . $amountRaw);
+						$amount = is_numeric($amountRaw) ? (float)$amountRaw : 0.0;
+						error_log('[TransactionsShortcode::render] $amount: ' . $amount);
+						//
+						$cols[$ty]['sum']   += $amount;
 						$cols[$ty]['count'] += 1;
 		
-						$overall['sum']   += $amt;
+						$overall['sum']   += $amount;
 						$overall['count'] += 1;
 					}
 				}
