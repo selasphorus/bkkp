@@ -18,7 +18,7 @@
             <?php foreach ($years as $year): ?>
             <th><?php echo $year; ?></th>
             <?php endforeach; ?>
-            <th>TS</th>
+            <!--th>TS</th-->
         </tr>
         <?php foreach ($rows as $row): ?>
             <tr>
@@ -34,7 +34,7 @@
 				//echo "<pre>".print_r($row['cols'], true)."</pre>";
 				//echo "=> [".count($result['posts'])."] posts";
 				?>
-				<td><pre><?php //echo print_r($row['result']['query_request'], true); ?></pre></td>
+				<!--td><pre><?php //echo print_r($row['result']['query_request'], true); ?></pre></td-->
 			</tr>
 		<?php endforeach; ?>
 		</table>
