@@ -78,7 +78,7 @@ class Transaction extends PostTypeHandler
 		$found = get_terms([
 			'taxonomy'   => 'transaction_category',
 			'slug'       => $slugs,
-			'hide_empty' => true,
+			'hide_empty' => true, // ??? better to default to false? TBD
 		]);
 	
 		return (!is_wp_error($found) && is_array($found)) ? $found : [];
