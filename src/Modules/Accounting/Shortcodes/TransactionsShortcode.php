@@ -185,7 +185,11 @@ final class TransactionsShortcode implements ShortcodeInterface
 				foreach ($posts as $p) {
 					$ty = (int) get_post_meta($p->ID, 'tax_year', true);
 					if ($ty >= $startY && $ty <= $endY) {
+					    // field name in transition -- for now, check both transaction_amount and amount
 						$amountRaw = get_post_meta($p->ID, 'transaction_amount', true);
+						if ( empty($amountRaw) ) {
+						    $amountRaw = get_post_meta($p->ID, 'amount', true);
+						}						
 						error_log('[TransactionsShortcode::render] amountRaw: ' . $amountRaw);
 						$amount = is_numeric($amountRaw) ? (float)$amountRaw : 0.0;
 						error_log('[TransactionsShortcode::render] $amount: ' . $amount);
