@@ -24,7 +24,10 @@
             <tr>
 				<td><?php echo $row['term']->name; ?></td>
 				<?php foreach ($row['cols'] as $col): ?>
-					<td><?php echo $col['sum']; ?> (<?php echo $col['count']; ?>)</td>
+					<td><?php 
+					if ( $col['sum'] == "0.0" ) echo "--"; } else { echo $col['sum']; }
+					if ( $col['count'] > 0 ) { echo "(" . $col['count'] . ")"; }
+					?></td>
 				<?php endforeach; ?>
 				<?php 
 				//echo "<pre>".print_r($row['cols'], true)."</pre>";
