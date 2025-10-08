@@ -27,7 +27,7 @@
 					<td><?php 
 					if ( $col['sum'] == "0.0" ) { echo "--"; } else { echo $col['sum']; }
 					// Show count if non-zero, even if sum is zero
-					if ( $col['count'] > 0 ) { echo "(" . $col['count'] . ")"; }
+					if ( $col['count'] > 0 ) { echo '<span class="secondary">' . '(' . $col['count'] . ')' . '</span>'; }
 					?></td>
 				<?php endforeach; ?>
 				<?php 
