@@ -83,6 +83,7 @@ final class EmploymentModule extends BaseModule
 			    'meta_type' => 'NUMERIC',
 			    'key'   => 'years_of_employment',
 			    'key_type' => 'serialized', // checkbox field -- multiple values stored
+			    'numeric_years' = true, // route to yearsWindow helper
 			],
 			/*'meta'      => [
 				['key' => 'years_of_employment', 'value' => 'employers', 'compare' => '='],

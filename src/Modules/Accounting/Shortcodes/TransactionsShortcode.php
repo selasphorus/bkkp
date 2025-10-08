@@ -99,6 +99,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 			foreach ($categories as $term) {
 				$filters = $atts;
 				$filters['transaction_category'] = [$term->slug];
+				
+				// TODO: check for start/end date issues
 		
 				// Fetch results via the CPT helper (handles scope + date_meta wiring)
 				$result = $handler->getTransactions($filters);
