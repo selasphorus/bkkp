@@ -25,7 +25,7 @@
 				<td><?php echo $row['term']->name; ?></td>
 				<?php foreach ($row['cols'] as $col): ?>
 					<td><?php 
-					if ( $col['sum'] == "0.0" ) echo "--"; } else { echo $col['sum']; }
+					if ( $col['sum'] == "0.0" ) { echo "--"; } else { echo $col['sum']; }
 					// Show count if non-zero, even if sum is zero
 					if ( $col['count'] > 0 ) { echo "(" . $col['count'] . ")"; }
 					?></td>
