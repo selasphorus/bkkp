@@ -20,6 +20,9 @@
             <?php endforeach; ?>
             <!--th>TS</th-->
         </tr>
+        <?php
+        // TODO: add a row for annual totals (sum of all categories and num transactions)
+        ?>
         <?php foreach ($rows as $row): ?>
             <tr>
 				<td><?php echo $row['term']->name; ?></td>
