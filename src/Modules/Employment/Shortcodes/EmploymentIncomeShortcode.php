@@ -10,6 +10,8 @@ use atc\WHx4\Core\PostTypeHandler;
 use atc\WHx4\Core\ViewLoader;
 use atc\WHx4\Core\SubtypeRegistry;
 use atc\WHx4\Core\Contracts\ShortcodeInterface;
+//
+//use atc\Bkkp\Modules\Employment\EmploymentModule; // ?
 
 final class EmploymentIncomeShortcode implements ShortcodeInterface
 {
@@ -74,9 +76,9 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         $pagination = $employers['pagination'] ?? ['found' => 0, 'max_pages' => 0, 'paged' => 1];
 
         // Troubleshooting info
-        $info .= "[" . $employers['pagination']['found'] . "] posts found for scope: {$scope}<br />";
+        $info .= "[" . $employers['pagination']['found'] . "] employers found for scope: {$scope}<br />";
         if ( $employers['pagination']['found'] == 0 ) {
-            //$info .= "findEmployers result: <pre>". print_r($employers, true) . "</pre>";
+            $info .= "findEmployers result: <pre>". print_r($employers, true) . "</pre>";
         }
 
         // Handler factory so views can call CPT methods safely.

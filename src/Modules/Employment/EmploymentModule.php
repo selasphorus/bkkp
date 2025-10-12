@@ -98,6 +98,13 @@ final class EmploymentModule extends BaseModule
 			'orderby'   => 'title',
 			'order'     => 'ASC',
 		], $options);
+		
+		/*
+		$filters['date_meta'] = [
+			'key'       => 'transaction_date',
+			'meta_type' => 'NUMERIC', // because ACF stores dates funny yyyymmdd so can't use DATE
+		];
+		*/
 	
 		return $this->findViaHandler($postType, $filters);
 	}
@@ -133,9 +140,9 @@ final class EmploymentModule extends BaseModule
 		];
 		
 		// Taxonomies
-		$tax = $filters['tax'] ?? [];
-		$tax['document_category'] = array_unique(array_merge($tax['document_category'] ?? [], ['tax-forms'])); // limit to tax forms
-		error_log('[findEmployerTaxDocs] tax: ' . print_r($tax,true));
+		$taxSpec = $filters['tax'] ?? [];
+		$taxSpec['document_category'] = array_unique(array_merge($taxSpec['document_category'] ?? [], ['tax-forms'])); // limit to tax forms
+		error_log('[findEmployerTaxDocs] taxSpec: ' . print_r($taxSpec,true));
 	
 		// Base params (all docs by default)
 		$params = [
@@ -144,7 +151,7 @@ final class EmploymentModule extends BaseModule
 			'order' => $filters['order'] ?? 'DESC',
 			'orderby' => $filters['orderby'] ?? 'date',
 			'meta' => $metaSpec,
-			'tax' => $tax,
+			'tax' => $taxSpec,
 		];
 	
 		// Optional scope limiting: support DATE ('document_date') OR NUMERIC ('tax_year')
@@ -178,10 +185,10 @@ final class EmploymentModule extends BaseModule
 				?? ['key' => ($filters['date_key'] ?? 'document_date'), 'meta_type' => ($filters['date_meta_type'] ?? 'DATE')];
 		}*/
 	
-		if(isset($filters['paged'])){ $params['paged'] = max(1, (int)$filters['paged']); }
+		if (isset($filters['paged'])){ $params['paged'] = max(1, (int)$filters['paged']); }
 	
 		// Optional extra meta constraints: merge with the employer clause via AND
-		if(isset($filters['meta']) && is_array($filters['meta'])){
+		if (isset($filters['meta']) && is_array($filters['meta'])){
 			$extra = $filters['meta'];
 			$base = $metaSpec['clauses'];
 			$extraClauses = $extra['clauses'] ?? [];
@@ -205,5 +212,4 @@ final class EmploymentModule extends BaseModule
 		];
 	}
 
-	
 }
