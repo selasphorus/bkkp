@@ -12,11 +12,18 @@
 	<?php if (!$rows): ?>
         <p>No posts found.</p>
     <?php else: ?>
-        <table>
+        <table class="bkkp">
         <tr>
             <th>Term</th>
             <?php foreach ($years as $year): ?>
             <th><?php echo $year; ?></th>
+            <?php endforeach; ?>
+            <!--th>TS</th-->
+        </tr>
+        <tr>
+            <th>Total</th>
+            <?php foreach ($years as $year): ?>
+            <th><?php //echo $transactions_total; ?></th>
             <?php endforeach; ?>
             <!--th>TS</th-->
         </tr>
@@ -31,7 +38,7 @@
 					// TODO: style according to whether sum is <> previous year
 					if ( $col['sum'] == "0.0" ) { echo "--"; } else { echo $col['sum']; }
 					// Show count if non-zero, even if sum is zero
-					if ( $col['count'] > 0 ) { echo '<span class="subtle">' . '(' . $col['count'] . ')' . '</span>'; }
+					if ( $col['count'] > 0 ) { echo '&nbsp;<span class="subtle">' . '(' . $col['count'] . ')' . '</span>'; }
 					?></td>
 				<?php endforeach; ?>
 				<?php 
