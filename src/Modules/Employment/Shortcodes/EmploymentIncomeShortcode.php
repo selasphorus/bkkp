@@ -68,7 +68,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 				'post'            => $post,
 				'docs'            => $docs['posts'] ?? [],
 				//'docs_pagination' => $docs['pagination'] ?? null,
-				//'docs_debug'      => $docs['debug'] ?? null,
+				'docs_debug'      => $docs['debug'] ?? null,
 			];
 		}
 
@@ -90,7 +90,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         // WIP
         $debug = [];
         $debug['employers'] = $employers['debug'];
-        $debug['docs'] = $docs['debug'];
+        //$debug['docs'] = $docs['debug'];
         
         $vars = [
             'employers'  => $employerBundles, // each item: ['post' => WP_Post, 'docs' => WP_Post[], ...]
