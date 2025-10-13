@@ -80,9 +80,9 @@ final class EmploymentModule extends BaseModule
 			'post_type' => $postType,
 			'scope'     => $scope,
 			'date_meta' => [
-			    'meta_type' => 'NUMERIC',
 			    'key'   => 'years_of_employment',
 			    'key_type' => 'serialized', // checkbox field -- multiple values stored
+			    'meta_type' => 'NUMERIC',
 			    'numeric_years' => true, // route to yearsWindow helper
 			],
 			/*'meta'      => [
