@@ -166,6 +166,7 @@ final class EmploymentModule extends BaseModule
 					'meta_type'=> 'NUMERIC',
 					// How the year is stored: 'single' (int in a single row), 'rows', or 'serialized'
 					'key_type' => $filters['key_type'] ?? 'single',
+					'numeric_years' => true, // route to yearsWindow helper
 				], $filters['date_meta'] ?? []);
 			} else {
 				// Default DATE-based window (e.g., 'document_date')
@@ -176,7 +177,7 @@ final class EmploymentModule extends BaseModule
 				], $filters['date_meta'] ?? []);
 			}
 		}
-	
+		
 		// v1
 		/*
 		if(isset($filters['scope'])){
