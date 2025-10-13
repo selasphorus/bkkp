@@ -1,0 +1,7 @@
+@charset "UTF-8";
+/* CSS Document */
+
+table.bkkp tr th,
+table.bkkp tr td {
+    border: 1px solid grey;
+}

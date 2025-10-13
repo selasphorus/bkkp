@@ -53,7 +53,8 @@ add_action( 'whx4_pre_boot', function() {
             $modules['communications'] = Communications::class;
             return $modules;
         } );
-
+        
+        // Register Field Keys
         add_filter( 'whx4_registered_field_keys', function() {
             //error_log( '$$$ whx4_registered_field_keys hook fired $$$' );
             if ( ! function_exists( 'acf_get_local_fields' ) ) {
@@ -71,6 +72,27 @@ add_action( 'whx4_pre_boot', function() {
 
             return $keys;
         });
+        
+        // Register Assets
+        add_filter('whx4_assets', static function (array $assets): array {
+			// Compute URLs and paths safely
+			$relCss = 'assets/css/bkkp.css';
+			$src    = plugins_url($relCss, __FILE__);
+			$path   = plugin_dir_path(__FILE__) . $relCss;
+		
+			$assets['styles'][] = [
+				'handle'   => 'bkkp',
+				'src'      => $src,
+				'path'     => $path,      // enables 'ver' => 'auto' filemtime
+				'deps'     => [],         // e.g., ['dashicons']
+				'ver'      => 'auto',     // cache-bust on file change
+				'media'    => 'all',
+				'where'    => 'front',    // 'front' | 'admin' | 'both'
+				'autoload' => false,      // set true to always load where-matched
+			];
+		
+			return $assets;
+		});
     } else {
        //error_log( '$$$ Plugin class DNE $$$' );
     }
