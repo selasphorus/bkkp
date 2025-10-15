@@ -75,7 +75,7 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_659089f410c9f',
                     'label' => 'Amount',
-                    'name' => 'amount', //rename as transaction_amount?
+                    'name' => 'amount', // TODO: rename as transaction_amount(?)
                     'aria-label' => '',
                     'type' => 'number',
                     'instructions' => '',
@@ -97,7 +97,7 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_65908a842dcab',
                     'label' => 'Date Posted',
-                    'name' => 'transaction_date_copy', // rename as transaction_date_posted?
+                    'name' => 'transaction_date_copy', // TODO: rename as transaction_date_posted(?)
                     'aria-label' => '',
                     'type' => 'date_picker',
                     'instructions' => '',
@@ -173,7 +173,7 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_65baa7dd361dc',
                     'label' => 'Account TMP',
-                    'name' => 'account_tmp',
+                    'name' => 'account_tmp', // TODO: rename as account_txt (?)
                     'aria-label' => '',
                     'type' => 'text',
                     'instructions' => '',
@@ -265,6 +265,26 @@ final class TransactionFields implements FieldGroupInterface
                     'append' => '',
                 ),
                 array(
+                    'key' => 'field_bkkp_transactions_original_description',
+                    'label' => 'Original Description',
+                    'name' => 'original_description',
+                    'aria-label' => '',
+                    'type' => 'text',
+                    'instructions' => '',
+                    'required' => 0,
+                    'conditional_logic' => 0,
+                    'wrapper' => array(
+                        'width' => '20',
+                        'class' => '',
+                        'id' => '',
+                    ),
+                    'default_value' => '',
+                    'maxlength' => '',
+                    'placeholder' => '',
+                    'prepend' => '',
+                    'append' => '',
+                ),
+                array(
                     'key' => 'field_65baa64e7817b',
                     'label' => 'Transaction Tags',
                     'name' => 'tags',
@@ -322,7 +342,7 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_65cf9801f8064',
                     'label' => 'Transaction Status TMP',
-                    'name' => 'transaction_status_tmp',
+                    'name' => 'transaction_status_tmp', // TODO: rename as transaction_status_txt (?)
                     'aria-label' => '',
                     'type' => 'text',
                     'instructions' => '',
