@@ -349,7 +349,7 @@ final class TransactionFields implements FieldGroupInterface
                     'required' => 0,
                     'conditional_logic' => 0,
                     'wrapper' => array(
-                        'width' => '30',
+                        'width' => '40',
                         'class' => '',
                         'id' => '',
                     ),
