@@ -2255,6 +2255,7 @@ final class TaxDocumentFields implements FieldGroupInterface, SubtypeFieldGroupI
                         'id' => '',
                     ),
                     'choices' => array(
+                        'unknown' => '---',
                         'check' => 'Check',
                         'ccard' => 'Credit Card',
                         'xfer' => 'Bank Transfer',
