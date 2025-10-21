@@ -2178,6 +2178,7 @@ final class TaxDocumentFields implements FieldGroupInterface, SubtypeFieldGroupI
                         'id' => '',
                     ),
                     'choices' => array(
+                        'return' => 'Return Payment',
                         'ext' => 'Extension Payment',
                         'q1' => 'Q1',
                         'q2' => 'Q2',
