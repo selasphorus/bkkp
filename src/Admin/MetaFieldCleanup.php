@@ -106,29 +106,31 @@ class MetaFieldCleanup {
     }
     
     /**
-     * Convert negative amounts to positive (unsigned)
-     */
-    private static function make_amounts_unsigned(&$results, $dry_run) {
-        global $wpdb;
-        
-        $post_ids = $wpdb->get_col(
-            "SELECT DISTINCT post_id FROM {$wpdb->postmeta} WHERE meta_key = 'amount'"
-        );
-        
-        foreach ($post_ids as $post_id) {
-            $amount = get_post_meta($post_id, 'amount', true);
-            
-            if ($amount !== '' && is_numeric($amount)) {
-                $float_amount = floatval($amount);
-                if ($float_amount < 0) {
-                    if (!$dry_run) {
-                        update_post_meta($post_id, 'amount', abs($float_amount));
-                    }
-                    $results['unsigned']++;
-                }
-            }
-        }
-    }
+	 * Convert negative amounts to positive (unsigned) only for debit transactions
+	 */
+	private static function make_amounts_unsigned(&$results, $dry_run) {
+		global $wpdb;
+		
+		// Get only post_ids with negative amounts AND transaction_type='debit'
+		$post_ids = $wpdb->get_col(
+			"SELECT DISTINCT pm1.post_id 
+			FROM {$wpdb->postmeta} pm1
+			INNER JOIN {$wpdb->postmeta} pm2 ON pm1.post_id = pm2.post_id
+			WHERE pm1.meta_key = 'amount' 
+			AND CAST(pm1.meta_value AS DECIMAL(10,2)) < 0
+			AND pm2.meta_key = 'transaction_type'
+			AND pm2.meta_value = 'debit'"
+		);
+		
+		foreach ($post_ids as $post_id) {
+			$amount = get_post_meta($post_id, 'amount', true);
+			
+			if (!$dry_run) {
+				update_post_meta($post_id, 'amount', abs(floatval($amount)));
+			}
+			$results['unsigned']++;
+		}
+	}
     
     /**
      * Reset the cleanup flag to allow re-running
