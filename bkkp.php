@@ -88,7 +88,7 @@ add_action( 'whx4_pre_boot', function() {
 				'ver'      => 'auto',     // cache-bust on file change
 				'media'    => 'all',
 				'where'    => 'front',    // 'front' | 'admin' | 'both'
-				'autoload' => false,      // set true to always load where-matched
+				'autoload' => true,      // set true to always load where-matched
 			];
 		
 			return $assets;
