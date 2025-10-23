@@ -35,6 +35,8 @@ use atc\Bkkp\Modules\Employment\EmploymentModule as Employment;
 use atc\Bkkp\Modules\Documents\DocumentsModule as Documents; // TODO, maybe?: create separate mini-plugin to handle documents
 use atc\Bkkp\Modules\TaxPrep\TaxPrepModule as TaxPrep;
 use atc\Bkkp\Modules\Communications\CommunicationsModule as Communications;
+//
+use atc\Bkkp\Admin\MetaFieldCleanup;
 
 // Once plugins are loaded, boot everything up
 add_action( 'whx4_pre_boot', function() {
@@ -97,3 +99,51 @@ add_action( 'whx4_pre_boot', function() {
        //error_log( '$$$ Plugin class DNE $$$' );
     }
 }, 15 ); // Priority < 20 to run before WHx4 boot()
+
+
+// Register WP-CLI commands
+if (defined('WP_CLI') && WP_CLI) {
+    require_once plugin_dir_path(__FILE__) . 'src/Admin/MetaFieldCleanup.php';
+    
+    WP_CLI::add_command('bkkp cleanup-meta', function($args, $assoc_args) {
+        $dry_run = isset($assoc_args['dry-run']);
+        
+        if ($dry_run) {
+            WP_CLI::log(WP_CLI::colorize('%Y=== DRY RUN MODE - No changes will be made ===%n'));
+            WP_CLI::log('');
+        }
+        
+        WP_CLI::log('Starting BKKP meta field cleanup...');
+        
+        $results = MetaFieldCleanup::run($dry_run);
+        
+        if ($results['status'] === 'skipped') {
+            WP_CLI::warning($results['message']);
+        } else {
+            WP_CLI::log('');
+            if ($dry_run) {
+                WP_CLI::log(WP_CLI::colorize('%YChanges that WOULD be made:%n'));
+            } else {
+                WP_CLI::success('Cleanup completed!');
+            }
+            
+            WP_CLI::log(sprintf('- Renamed: %d records (import_amount → amount_signed)', $results['renamed']));
+            WP_CLI::log(sprintf('- Copied: %d records (amount → amount_signed)', $results['copied']));
+            WP_CLI::log(sprintf('- Made unsigned: %d records (negative → positive)', $results['unsigned']));
+            
+            if ($dry_run) {
+                WP_CLI::log('');
+                WP_CLI::log(WP_CLI::colorize('%GTo perform these changes, run without --dry-run flag%n'));
+            }
+        }
+    });
+    
+    // Add reset command for testing
+    WP_CLI::add_command('bkkp cleanup-meta-reset', function() {
+        if (\BKKP\Admin\MetaFieldCleanup::reset()) {
+            WP_CLI::success('Cleanup flag reset. You can now re-run the cleanup.');
+        } else {
+            WP_CLI::warning('Flag was not set or could not be reset.');
+        }
+    });
+}

@@ -1,0 +1,139 @@
+<?php
+
+namespace atc\Bkkp\Admin;
+
+/**
+ * One-time utility to clean up meta field issues from initial data import
+ * 
+ * Tasks:
+ * - Rename import_amount → amount_signed
+ * - Copy amount → amount_signed (where missing)
+ * - Convert negative amounts to positive
+ */
+class MetaFieldCleanup {
+    
+    /**
+     * Run the cleanup process
+     * 
+     * @param bool $dry_run If true, don't make changes, just report what would happen
+     * @return array Results summary
+     */
+    public static function run($dry_run = false) {
+        global $wpdb;
+        
+        // Safety check (skip in dry-run mode)
+        if (!$dry_run && get_option('bkkp_meta_cleanup_completed')) {
+            return [
+                'status' => 'skipped',
+                'message' => 'Cleanup already completed. Remove option "bkkp_meta_cleanup_completed" to re-run.'
+            ];
+        }
+        
+        $results = [
+            'dry_run' => $dry_run,
+            'renamed' => 0,
+            'copied' => 0,
+            'unsigned' => 0,
+            'errors' => []
+        ];
+        
+        // Task 1: Rename "import_amount" to "amount_signed"
+        self::rename_meta_key($results, $dry_run);
+        
+        // Task 2: Copy "amount" to "amount_signed" where missing
+        self::copy_amount_to_signed($results, $dry_run);
+        
+        // Task 3: Convert negative amounts to positive
+        self::make_amounts_unsigned($results, $dry_run);
+        
+        // Mark as complete (only if not dry-run)
+        if (!$dry_run) {
+            update_option('bkkp_meta_cleanup_completed', current_time('mysql'));
+        }
+        
+        $results['status'] = 'success';
+        $results['message'] = $dry_run ? 'Dry run completed - no changes made' : 'Cleanup completed successfully';
+        
+        return $results;
+    }
+    
+    /**
+     * Rename import_amount meta_key to amount_signed
+     */
+    private static function rename_meta_key(&$results, $dry_run) {
+        global $wpdb;
+        
+        $post_ids = $wpdb->get_col(
+            "SELECT DISTINCT post_id FROM {$wpdb->postmeta} WHERE meta_key = 'import_amount'"
+        );
+        
+        foreach ($post_ids as $post_id) {
+            $value = get_post_meta($post_id, 'import_amount', true);
+            if ($value !== '') {
+                if (!$dry_run) {
+                    update_post_meta($post_id, 'amount_signed', $value);
+                    delete_post_meta($post_id, 'import_amount');
+                }
+                $results['renamed']++;
+            }
+        }
+    }
+    
+    /**
+     * Copy amount to amount_signed where amount_signed doesn't exist
+     */
+    private static function copy_amount_to_signed(&$results, $dry_run) {
+        global $wpdb;
+        
+        $post_ids = $wpdb->get_col(
+            "SELECT DISTINCT post_id FROM {$wpdb->postmeta} WHERE meta_key = 'amount'"
+        );
+        
+        foreach ($post_ids as $post_id) {
+            $amount_signed = get_post_meta($post_id, 'amount_signed', true);
+            
+            // Only copy if amount_signed doesn't exist or is empty
+            if ($amount_signed === '' || $amount_signed === false) {
+                $amount = get_post_meta($post_id, 'amount', true);
+                if ($amount !== '') {
+                    if (!$dry_run) {
+                        update_post_meta($post_id, 'amount_signed', $amount);
+                    }
+                    $results['copied']++;
+                }
+            }
+        }
+    }
+    
+    /**
+     * Convert negative amounts to positive (unsigned)
+     */
+    private static function make_amounts_unsigned(&$results, $dry_run) {
+        global $wpdb;
+        
+        $post_ids = $wpdb->get_col(
+            "SELECT DISTINCT post_id FROM {$wpdb->postmeta} WHERE meta_key = 'amount'"
+        );
+        
+        foreach ($post_ids as $post_id) {
+            $amount = get_post_meta($post_id, 'amount', true);
+            
+            if ($amount !== '' && is_numeric($amount)) {
+                $float_amount = floatval($amount);
+                if ($float_amount < 0) {
+                    if (!$dry_run) {
+                        update_post_meta($post_id, 'amount', abs($float_amount));
+                    }
+                    $results['unsigned']++;
+                }
+            }
+        }
+    }
+    
+    /**
+     * Reset the cleanup flag to allow re-running
+     */
+    public static function reset() {
+        return delete_option('bkkp_meta_cleanup_completed');
+    }
+}
