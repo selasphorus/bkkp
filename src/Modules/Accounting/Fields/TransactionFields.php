@@ -381,8 +381,8 @@ final class TransactionFields implements FieldGroupInterface
                 ),
                 array(
                     'key' => 'field_65f49e6d68d96',
-                    'label' => 'Amount (as imported)',
-                    'name' => 'import_amount', // TODO: change to "amount_signed" ?
+                    'label' => 'Amount (signed)',
+                    'name' => 'amount_signed', // originally: 'import_amount'
                     'aria-label' => '',
                     'type' => 'number',
                     'instructions' => '',
