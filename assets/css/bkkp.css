@@ -5,3 +5,5 @@ table.bkkp tr th,
 table.bkkp tr td {
     border: 1px solid grey;
 }
+
+table.bkkp tr:nth-child(even) { background: #f7f7f7; }
