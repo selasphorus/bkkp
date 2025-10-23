@@ -1,9 +1,15 @@
 @charset "UTF-8";
 /* CSS Document */
 
+table.bkkp {
+    width: 100%;
+}
+
 table.bkkp tr th,
 table.bkkp tr td {
     border: 1px solid grey;
+    margin: 0;
+    padding: 0 3px;
 }
 
 table.bkkp tr:nth-child(even) { background: #f7f7f7; }
