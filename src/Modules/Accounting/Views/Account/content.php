@@ -7,7 +7,8 @@ $handler = PostTypeHandler::getHandlerForPost($post);
 if ($handler) {
     $accountId = $handler->getPostId();
     $meta = $handler->getPostMeta();
-    $status = $handler->getStatus();
+    //$status = $handler->getStatus();
+    $status = (string)$handler->getPostMeta('account_status', 'Unknown');
    
     // Get all transactions for this account (respects URL params automatically)
     $transactions = $handler->getTransactions();
