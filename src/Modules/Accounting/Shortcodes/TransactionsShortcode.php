@@ -75,8 +75,10 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$atts['group_by'] = $groupMode;
 		
 		error_log('[TransactionsShortcode::render] atts: ' . print_r($atts, true));
-		//$info .= "processed atts: <pre>".print_r($atts,true)."</pre>"; // another sanity check!
-		$info .= "processed atts[scope]: ".$atts['scope']."<br />"; // another sanity check!
+		//$info .= "processed atts: <pre>".print_r($atts,true)."</pre>";
+		$info .= "processed atts:<br />";
+		$info .= "[scope]: ".$atts['scope']."<br />";
+		$info .= "[account]: ".$atts['account']."<br />";
 		
 		// Prepare to render view according to groupMode
 		$viewVars = [];
