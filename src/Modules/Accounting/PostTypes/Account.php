@@ -46,12 +46,12 @@ class Account extends PostTypeHandler
 			'account' => $this->getPostId(),  // Always filter to THIS account
 			'limit'   => -1,  // Get all by default
 		];
-		/*
+		
 		// Collect URL params if available (scope, category, type)
 		$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
 		
 		// Set default scope? TBD
-		
+		/*
 		// Merge: base → URL params → programmatic filters
 		$merged = UrlParamBridge::merge(Transaction::class, $base, $urlArgs);
 		if (!empty($filters)) {
