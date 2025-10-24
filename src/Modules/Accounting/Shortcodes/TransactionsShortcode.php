@@ -217,13 +217,13 @@ final class TransactionsShortcode implements ShortcodeInterface
 		
 				// optionally skip empty rows unless include_empty_groups="1"
 				$hasAny = array_sum(array_column($cols, 'count')) > 0;
-				//if ($hasAny || ($atts['include_empty_groups'] ?? '0') === '1') {
+				if ($hasAny || ($atts['include_empty_groups'] ?? '0') === '1') {
 					$rows[] = [
 						'term'   => $term,     // \WP_Term
 						'cols'   => $cols,     // year => ['sum','count']
 						'result' => $result,   // raw payload if needed
 					];
-				//}
+				}
 			}
 			
 			$viewVars['years'] = $years;
