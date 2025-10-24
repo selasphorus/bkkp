@@ -21,12 +21,20 @@
             <!--th>TS</th-->
         </tr>
         <tr>
-            <th>Total</th>
-            <?php foreach ($years as $year): ?>
-            <th><?php //echo $transactions_total; ?></th>
-            <?php endforeach; ?>
-            <!--th>TS</th-->
-        </tr>
+			<th>Total</th>
+			<?php foreach ($years as $year): ?>
+			<th>
+				<?php 
+				$yearTotal = $yearTotals[$year] ?? ['sum' => 0.0, 'count' => 0];
+				echo number_format($yearTotal['sum'], 2);
+				if ($yearTotal['count'] > 0) {
+					echo '&nbsp;<span class="subtle">(' . $yearTotal['count'] . ')</span>';
+				}
+				?>
+			</th>
+			<?php endforeach; ?>
+		</tr>
+
         <?php
         // TODO: add a row for annual totals (sum of all categories and num transactions)
         ?>

@@ -164,6 +164,12 @@ final class TransactionsShortcode implements ShortcodeInterface
 			if ($startY > $endY) { [$startY, $endY] = [$endY, $startY]; }
 			$years = range($startY, $endY);
 			//error_log('[TransactionsShortcode::render] years: ' . print_r($years, true));
+			
+			// Initialize year totals
+			$yearTotals = [];
+			foreach ($years as $y) {
+				$yearTotals[$y] = ['sum' => 0.0, 'count' => 0];
+			}
 		
 			// Build table rows: one row per category; columns per year: sum & count
 			$rows = [];
@@ -199,6 +205,10 @@ final class TransactionsShortcode implements ShortcodeInterface
 						//
 						$cols[$ty]['sum']   += $amount;
 						$cols[$ty]['count'] += 1;
+						
+						// Accumulate year totals
+						$yearTotals[$ty]['sum']   += $amount;
+						$yearTotals[$ty]['count'] += 1;
 		
 						$overall['sum']   += $amount;
 						$overall['count'] += 1;
@@ -218,9 +228,11 @@ final class TransactionsShortcode implements ShortcodeInterface
 			
 			$viewVars['years'] = $years;
 			$viewVars['rows'] = $rows; // iterate terms; within each, iterate $years for cols
+			$viewVars['yearTotals'] = $yearTotals;
 			//$viewVars['overallTotal'] = $overallTotal; // sum across all groups -- WIP -- ???
 			$viewVars['overall'] = $overall; // grand totals across all years/categories
 			$viewVars['info'] = $info;
+
 			//
 			//error_log('[TransactionsShortcode::render] viewVars: ' . print_r($viewVars, true));
 			//
