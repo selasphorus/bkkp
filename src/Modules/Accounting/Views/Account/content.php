@@ -15,7 +15,7 @@ if ($handler) {
     $status = $handler->getStatus();
    
     // Get all transactions for this account (respects URL params automatically)
-    //$transactions = $handler->getTransactions();
+    $transactions = $handler->getTransactions();
     /*
     // Group transactions by year and count credits/debits
     $yearData = [];
