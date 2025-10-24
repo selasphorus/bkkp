@@ -1,7 +1,7 @@
 <div class="whx4-accounting">
-	<p><strong>Transactions (Grouped by Category/Year):</strong>
 	
 	<div class="troubleshooting">
+	    <p><strong>Transactions (Grouped by Category/Year):</strong></p>
         <!--h3>Info for Troubleshooting</h3-->
         <p>[info] <?php echo $info; ?></p>
         <!--p>[atts] <pre><?php echo print_r($atts, true); ?></pre></p>
@@ -51,5 +51,7 @@
 		</table>
     <?php endif; ?>
     
-	<p><strong>Debug:</strong><pre><?php //echo print_r($debug, true); ?></pre></p>
+    <div class="troubleshooting">
+	    <p><strong>Debug:</strong><pre><?php echo print_r($debug, true); ?></pre></p>
+	</div>
 </div>
