@@ -1,7 +1,7 @@
 <div class="whx4-accounting">
 	<p><strong>Transactions (Grouped by Category/Year):</strong>
 	
-	<div class="troubleshootingg">
+	<div class="troubleshooting">
         <!--h3>Info for Troubleshooting</h3-->
         <p>[info] <?php echo $info; ?></p>
         <!--p>[atts] <pre><?php echo print_r($atts, true); ?></pre></p>
