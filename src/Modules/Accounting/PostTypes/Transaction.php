@@ -147,6 +147,30 @@ class Transaction extends PostTypeHandler
 				'transaction_category' => is_array($tc) ? $tc : [$tc],
 			]);
 		}
+		
+		// Map account (ACF post object field) → meta spec
+		if (isset($filters['account']) && $filters['account'] !== '') {
+			$account = $filters['account'];
+			unset($filters['account']);
+			
+			// Normalize to array of post IDs
+			$accountIds = is_array($account) ? $account : [$account];
+			$accountIds = array_map('intval', array_filter($accountIds));
+			
+			if ($accountIds !== []) {
+				$filters['meta'] = array_merge($filters['meta'] ?? [], [
+					'relation' => 'AND',
+					'clauses' => array_merge(
+						$filters['meta']['clauses'] ?? [],
+						[[
+							'type' => count($accountIds) === 1 ? 'equals' : 'in',
+							'key' => 'account', // ACF field name
+							'value' => count($accountIds) === 1 ? $accountIds[0] : $accountIds,
+						]]
+					),
+				]);
+			}
+		}
 	
 		// Normalize per_page alias
 		if(isset($filters['per_page']) && !isset($filters['limit'])){

@@ -23,7 +23,7 @@ final class TransactionsShortcode implements ShortcodeInterface
     }
     
     /**
-     * [rex_transactions] — supports atts like:
+     * [transactions] — supports atts like:
      * scope="this_month" | "2025" | "2022-2025"
      * transaction_category="rent,utilities" (or array)
      * per_page="25" paged="1" order="DESC" orderby="date"
@@ -48,6 +48,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			'group_by'             => 'category',        // none|category|category_years
 			'categories'           => 'all',             // all|active|CSV|array
 			'include_empty_groups' => '0',
+			'account'              => '',                // account ID or slug to filter by
 		]);
 
 		// Merge user atts (use known tag to avoid odd filters if $tag is empty)
