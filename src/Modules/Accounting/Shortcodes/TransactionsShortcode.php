@@ -97,7 +97,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			// Build groups: fetch transactions for each category with remaining filters
 			$groups = [];
 			$overallTotal = 0.0;
-			$includeEmpty = $atts['include_empty_groups'] === '1'; // ???
+			$includeEmpty = $atts['include_empty_groups'] === '0'; // WIP
 		
 			foreach ($categories as $term) {
 				$filters = $atts;
