@@ -8,10 +8,10 @@ if ($handler) {
     $accountId = $handler->getPostId();
     $meta = $handler->getPostMeta();
     $status = $handler->getStatus();
-    /*
+   
     // Get all transactions for this account (respects URL params automatically)
     $transactions = $handler->getTransactions();
-    
+     /*
     // Group transactions by year and count credits/debits
     $yearData = [];
     foreach ($transactions as $transaction) {
