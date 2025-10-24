@@ -36,37 +36,55 @@ class Account extends PostTypeHandler
         return $related;
     }
     
-    public function getRelatedTransactions(array $options = []): array
+    /**
+	 * Get transactions for this account with optional filters.
+	 * Automatically respects URL parameters (scope, category, type) when present.
+	 */
+	public function getTransactions(array $filters = []): array
 	{
-		$limit = isset($options['limit']) && (int)$options['limit'] > 0 ? (int)$options['limit'] : 20;
-	
+		$transactionHandler = PostTypeHandler::getHandler('transaction');
+		
 		$base = [
-			'post_type' => 'transaction', // adjust if your CPT slug differs
-			//'account'   => $this->getPostId(),
-			'limit'     => $limit,
-			// Forward date scoping to PostQuery → ScopedDateResolver
-			'date_meta' => is_array(Transaction::DATE_META) ? Transaction::DATE_META : ['key' => Transaction::DATE_META],
-			//'date_meta' => ['key' => \smith\Rex\Modules\Moneybags\PostTypes\Transaction::DATE_META],
-	
-			// Ensure results are tied to THIS account. Choose the approach that matches your schema:
-			/*
-			(A) If PostQuery supports a first-class 'account' arg:
-			    'account' => $this->getPostId(),
-	
-			(B) If account is stored in postmeta (adjust key name as needed):
-				'meta' => [
-					 'relation' => 'AND',
-					 'clauses'  => [[
-						 'type'  => 'equals',
-						 'key'   => 'account', // e.g., 'rex_account' or 'account_id'
-						 'value' => $this->getPostId(),
-						 'cast'  => 'NUMERIC',
-					 ]],
-				],
-			*/
+			'account' => $this->getPostId(),  // Always filter to THIS account
+			'limit'   => -1,  // Get all by default
 		];
+		
+		// Collect URL params if available (scope, category, type)
+		$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
+		
+		// Set default scope? TBD
+		
+		// Merge: base → URL params → programmatic filters
+		$merged = UrlParamBridge::merge(Transaction::class, $base, $urlArgs);
+		if (!empty($filters)) {
+			$merged = array_merge($merged, $filters);
+		}
+		
+		$result = $transactionHandler->getTransactions($merged);
+		return $result['posts'] ?? [];
+	}
+
+	/**
+	 * Get credit transactions only
+	 */
+	//public function getCredits( $scope = "this_month"): array //string
+	public function getCredits(array $filters = []): array
+	{
+		$filters['transaction_type'] = 'credit';
+		return $this->getTransactions($filters);
+	}
 	
-		// Collect URL params for Transactions (scope + category). Include both keys for compatibility.
+	/**
+	 * Get debit transactions only
+	 */
+	public function getDebits(array $filters = []): array
+	{
+		$filters['transaction_type'] = 'debit';
+		return $this->getTransactions($filters);
+	}
+    
+    /*
+        // Collect URL params for Transactions (scope + category). Include both keys for compatibility.
 		$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
 	
 		// Merge with override semantics from Transaction::allowedUrlParams()
@@ -80,43 +98,8 @@ class Account extends PostTypeHandler
 		// Run the query; result shape per your PostQuery draft: ['posts','found','max_pages','args','query_request']
 		$result = (new PostQuery())->find($args);
 	
-		return $result['posts'] ?? [];
-		//return PostQuery::fromRequest(\smith\Rex\Modules\Moneybags\PostTypes\Transaction::class, $args)->getPosts();
-	}
+	*/
     
-    public function getTransactions( $scope = "this_month"): array //string
-    {
-        /*
-        $args = [
-			'post_type' => 'transaction',
-			'account'   => $this->getPostId(),
-			'limit'     => (int)($options['limit'] ?? 20),
-			'date_meta' => ['key' => Transaction::DATE_META],
-		];
-		return PostQuery::fromRequest(Transaction::class, $args)->getPosts();
-		*/
-        $related = PostTypeHandler::getRelatedPosts( $this->getPostId(), 'transaction', 'account' ); // getRelatedPosts( $post_id = null, $related_post_type = null, $related_field_name = null, $limit = '1' )
-		/*if ( $arr_obj_transactions ) {
+    
 
-			//$info .= "<h3>Transactions:</h3>";
-
-			//$info .= "<p>arr_obj_transactions (".count($arr_obj_transactions)."): <pre>".print_r($arr_obj_transactions, true)."</pre></p>";
-			foreach ( $arr_obj_transactions as $transaction ) {
-				//$info .= $transaction->post_title."<br />";
-				// TODO: load table view...
-				$rep_info = Transaction::getSummary( $transaction->ID, 'display', false, true );
-				$info .= make_link( get_permalink($transaction->ID), $rep_info, "TEST rep title" )."<br />";
-			}
-		}*/
-		if (empty($related)) { $related = []; } // tmp
-		return $related;
-    }
-    
-    public function getCredits( $scope = "this_month"): array //string
-    {
-    }
-    
-    public function getDebits( $scope = "this_month"): array //string
-    {
-    }
 }
