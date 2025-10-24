@@ -48,21 +48,24 @@ class Account extends PostTypeHandler
 		];
 		
 		// Collect URL params if available (scope, category, type)
-		$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
+		//$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
 		
 		// Set default scope? TBD
-		/*
+		
 		// Merge: base → URL params → programmatic filters
-		$merged = UrlParamBridge::merge(Transaction::class, $base, $urlArgs);
+		//$merged = UrlParamBridge::merge(Transaction::class, $base, $urlArgs);
 		if (!empty($filters)) {
-			$merged = array_merge($merged, $filters);
+			//$merged = array_merge($merged, $filters);
+			$merged = array_merge($base, $filters);
+		} else {
+		    $merged = $base;
 		}
 		
 		$transactionHandler = PostTypeHandler::getHandler('transaction');
 		if ( $transactionHandler ) {
 		    $result = $transactionHandler->getTransactions($merged);
 		    return $result['posts'] ?? [];
-		}*/
+		}
 		
 		return [];		
 	}
@@ -85,21 +88,4 @@ class Account extends PostTypeHandler
 		$filters['transaction_type'] = 'debit';
 		return $this->getTransactions($filters);
 	}
-    
-    /*
-        // Collect URL params for Transactions (scope + category). Include both keys for compatibility.
-		$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
-	
-		// Merge with override semantics from Transaction::allowedUrlParams()
-		$args = UrlParamBridge::merge(Transaction::class, $base, $urlArgs);
-	
-		// Optional programmatic overrides/extensions
-		if(!empty($options)){
-			$args = array_merge($args, $options);
-		}
-	
-		// Run the query; result shape per your PostQuery draft: ['posts','found','max_pages','args','query_request']
-		$result = (new PostQuery())->find($args);
-	
-	*/
 }
