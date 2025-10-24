@@ -46,7 +46,7 @@ class Account extends PostTypeHandler
 			'account' => $this->getPostId(),  // Always filter to THIS account
 			'limit'   => -1,  // Get all by default
 		];
-		
+		/*
 		// Collect URL params if available (scope, category, type)
 		$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
 		
@@ -58,7 +58,7 @@ class Account extends PostTypeHandler
 			$merged = array_merge($merged, $filters);
 		}
 		
-		/*$transactionHandler = PostTypeHandler::getHandler('transaction');
+		$transactionHandler = PostTypeHandler::getHandler('transaction');
 		if ( $transactionHandler ) {
 		    $result = $transactionHandler->getTransactions($merged);
 		    return $result['posts'] ?? [];
