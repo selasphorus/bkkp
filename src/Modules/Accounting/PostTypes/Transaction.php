@@ -153,9 +153,25 @@ class Transaction extends PostTypeHandler
 			$account = $filters['account'];
 			unset($filters['account']);
 			
-			// Normalize to array of post IDs
-			$accountIds = is_array($account) ? $account : [$account];
-			$accountIds = array_map('intval', array_filter($accountIds));
+			// Normalize to array
+			$accountInputs = is_array($account) ? $account : [$account];
+			$accountIds = [];
+			
+			// TODO: generalize slugs translation >> utility function?
+			foreach ($accountInputs as $input) {
+				if (is_numeric($input)) {
+					// Already an ID
+					$accountIds[] = (int)$input;
+				} else {
+					// Resolve slug to ID -- TBD if this is the best way
+					$post = get_page_by_path($input, OBJECT, 'account'); // adjust post type if needed
+					if ($post) {
+						$accountIds[] = $post->ID;
+					}
+				}
+			}
+			
+			$accountIds = array_filter($accountIds);
 			
 			if ($accountIds !== []) {
 				$filters['meta'] = array_merge($filters['meta'] ?? [], [
@@ -164,7 +180,7 @@ class Transaction extends PostTypeHandler
 						$filters['meta']['clauses'] ?? [],
 						[[
 							'type' => count($accountIds) === 1 ? 'equals' : 'in',
-							'key' => 'account', // ACF field name
+							'key' => 'account',
 							'value' => count($accountIds) === 1 ? $accountIds[0] : $accountIds,
 						]]
 					),
