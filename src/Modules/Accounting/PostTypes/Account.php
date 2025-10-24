@@ -58,11 +58,11 @@ class Account extends PostTypeHandler
 			$merged = array_merge($merged, $filters);
 		}
 		
-		$transactionHandler = PostTypeHandler::getHandler('transaction');
+		/*$transactionHandler = PostTypeHandler::getHandler('transaction');
 		if ( $transactionHandler ) {
 		    $result = $transactionHandler->getTransactions($merged);
 		    return $result['posts'] ?? [];
-		}
+		}*/
 		
 		return [];		
 	}
