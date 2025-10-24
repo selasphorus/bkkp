@@ -48,20 +48,18 @@ class Account extends PostTypeHandler
 		];
 		
 		// Collect URL params if available (scope, category, type)
-		//$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
+		$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
 		
 		// Set default scope? TBD
 		
 		// Merge: base → URL params → programmatic filters
-		//$merged = UrlParamBridge::merge(Transaction::class, $base, $urlArgs);
+		$merged = UrlParamBridge::merge(Transaction::class, $base, $urlArgs);
 		if (!empty($filters)) {
-			//$merged = array_merge($merged, $filters);
-			$merged = array_merge($base, $filters);
-		} else {
-		    $merged = $base;
+			$merged = array_merge($merged, $filters);
 		}
 		
-		$transactionHandler = PostTypeHandler::getHandler('transaction');
+		// Instantiate a Transaction handler
+		$transactionHandler = new Transaction();
 		if ( $transactionHandler ) {
 		    $result = $transactionHandler->getTransactions($merged);
 		    return $result['posts'] ?? [];

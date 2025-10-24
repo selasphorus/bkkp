@@ -16,7 +16,7 @@ if ($handler) {
    
     // Get all transactions for this account (respects URL params automatically)
     $transactions = $handler->getTransactions();
-    /*
+    
     // Group transactions by year and count credits/debits
     $yearData = [];
     foreach ($transactions as $transaction) {
@@ -44,7 +44,7 @@ if ($handler) {
     
     // Sort by year descending
     krsort($yearData);
-    */
+    
 } else {
    echo "<h3>No post handler!</h3>";
 }
@@ -54,7 +54,7 @@ if ($handler) {
     <p><strong>Account Status:</strong> <?php echo esc_html($status); ?></p>
     <p><strong>Total Transactions on Record:</strong> <?php echo count($transactions); ?></p>
     
-    <?php /*if (!empty($yearData)): ?>
+    <?php if (!empty($yearData)): ?>
         <h3>Transactions by Year</h3>
         <table class="bkkp">
             <thead>
@@ -84,7 +84,7 @@ if ($handler) {
         </table>
     <?php else: ?>
         <p><em>No transactions found for this account.</em></p>
-    <?php endif;*/ ?>
+    <?php endif; ?>
     
     <hr />
     <details>
