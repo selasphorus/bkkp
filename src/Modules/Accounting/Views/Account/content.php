@@ -4,13 +4,18 @@ use atc\WHx4\Core\PostTypeHandler;
 /** @var \WP_Post $post */
 $handler = PostTypeHandler::getHandlerForPost($post);
 
+// Set up defaults
+$status = "Unknown";  
+$transactions = [];
+$meta = [];
+
 if ($handler) {
     $accountId = $handler->getPostId();
     $meta = $handler->getPostMeta();
     $status = $handler->getStatus();
    
     // Get all transactions for this account (respects URL params automatically)
-    $transactions = $handler->getTransactions();
+    //$transactions = $handler->getTransactions();
     /*
     // Group transactions by year and count credits/debits
     $yearData = [];
@@ -42,9 +47,6 @@ if ($handler) {
     */
 } else {
    echo "<h3>No post handler!</h3>";
-   $status = "Unknown";
-   $transactions = [];
-   $meta = [];
 }
 ?>
 
