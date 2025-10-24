@@ -360,7 +360,7 @@ final class TransactionFields implements FieldGroupInterface
                     'prepend' => '',
                     'append' => '',
                 ),
-                array(
+                [
                     'key' => 'field_bkkp_transactions_reference_num',
                     'label' => 'Reference Number',
                     'name' => 'reference_num',
@@ -379,7 +379,7 @@ final class TransactionFields implements FieldGroupInterface
                     'placeholder' => '',
                     'prepend' => '',
                     'append' => '',
-                ),
+                ],
                 array(
                     'key' => 'field_65ceb5cc9b8d0',
                     'label' => 'Data Source',
