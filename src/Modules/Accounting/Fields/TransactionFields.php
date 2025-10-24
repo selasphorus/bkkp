@@ -593,6 +593,33 @@ final class TransactionFields implements FieldGroupInterface
                     'ui' => 1,
                 ),
                 array(
+                    'key' => 'field_bkkp_transactions_related',
+                    'label' => 'Related Transaction(s)',
+                    'name' => 'related_transactions',
+                    'aria-label' => '',
+                    'type' => 'post_object',
+                    'instructions' => '',
+                    'required' => 0,
+                    'conditional_logic' => 0,
+                    'wrapper' => array(
+                        'width' => '20',
+                        'class' => '',
+                        'id' => '',
+                    ),
+                    'post_type' => array(
+                        0 => 'transaction',
+                    ),
+                    'post_status' => '',
+                    'taxonomy' => '',
+                    'return_format' => 'id',
+                    'multiple' => 0,
+                    'allow_null' => 0,
+                    'bidirectional' => 1,
+                    'bidirectional_target' => array(
+                    ),
+                    'ui' => 1,
+                ),
+                array(
                     'key' => 'field_65e90f1bb1a69',
                     'label' => 'Files',
                     'name' => 'files',
