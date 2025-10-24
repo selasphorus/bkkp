@@ -464,7 +464,7 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_65cbcd6bca53c',
                     'label' => 'Related Content',
-                    'name' => '',
+                    'name' => 'transactions_related_content_tab',
                     'aria-label' => '',
                     'type' => 'tab',
                     'instructions' => '',
@@ -594,7 +594,7 @@ final class TransactionFields implements FieldGroupInterface
                 ),
                 array(
                     'key' => 'field_bkkp_transactions_related',
-                    'label' => 'Related Transaction(s)',
+                    'label' => 'Related Transaction', // (s)?
                     'name' => 'related_transactions',
                     'aria-label' => '',
                     'type' => 'post_object',
