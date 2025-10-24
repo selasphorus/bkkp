@@ -1,6 +1,14 @@
 @charset "UTF-8";
 /* CSS Document */
 
+.troubleshooting {
+    display: none;
+}
+
+.devmode .troubleshooting {
+    display: block;
+}
+
 table.bkkp {
     width: 100%;
 }
