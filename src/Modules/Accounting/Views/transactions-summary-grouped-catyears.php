@@ -2,7 +2,7 @@
 	<p><strong>Transactions (Grouped by Category/Year):</strong>
 	
 	<div class="troubleshootingg">
-        <h3>Info for Troubleshooting</h3>
+        <!--h3>Info for Troubleshooting</h3-->
         <p>[info] <?php echo $info; ?></p>
         <!--p>[atts] <pre><?php echo print_r($atts, true); ?></pre></p>
         <p>[years] <pre><?php echo print_r($years, true); ?></pre></p-->
