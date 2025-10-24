@@ -35,15 +35,13 @@ class Account extends PostTypeHandler
         $related = getRelatedPosts( $this->getPostId(), 'document', 'account' ); // TODO: add 'scope' parameter
         return $related;
     }
-    
+      
     /**
 	 * Get transactions for this account with optional filters.
 	 * Automatically respects URL parameters (scope, category, type) when present.
 	 */
 	public function getTransactions(array $filters = []): array
 	{
-		$transactionHandler = PostTypeHandler::getHandler('transaction');
-		
 		$base = [
 			'account' => $this->getPostId(),  // Always filter to THIS account
 			'limit'   => -1,  // Get all by default
@@ -60,8 +58,13 @@ class Account extends PostTypeHandler
 			$merged = array_merge($merged, $filters);
 		}
 		
-		$result = $transactionHandler->getTransactions($merged);
-		return $result['posts'] ?? [];
+		$transactionHandler = PostTypeHandler::getHandler('transaction');
+		if ( $transactionHandler ) {
+		    $result = $transactionHandler->getTransactions($merged);
+		    return $result['posts'] ?? [];
+		}
+		
+		return [];		
 	}
 
 	/**
@@ -99,7 +102,4 @@ class Account extends PostTypeHandler
 		$result = (new PostQuery())->find($args);
 	
 	*/
-    
-    
-
 }
