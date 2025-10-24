@@ -153,17 +153,17 @@ class Transaction extends PostTypeHandler
 			$account = $filters['account'];
 			unset($filters['account']);
 			
-			// Normalize to array
-			$accountInputs = is_array($account) ? $account : [$account];
+			// Normalize to array - split comma-separated strings
+			$accountInputs = is_array($account) ? $account : explode(',', $account);
+			$accountInputs = array_map('trim', $accountInputs); // trim whitespace
 			$accountIds = [];
 			
-			// TODO: generalize slugs translation >> utility function?
 			foreach ($accountInputs as $input) {
 				if (is_numeric($input)) {
 					// Already an ID
 					$accountIds[] = (int)$input;
 				} else {
-					// Resolve slug to ID -- TBD if this is the best way
+					// Resolve slug to ID -- TBD if this is the best way -- make a utility function instead?
 					$post = get_page_by_path($input, OBJECT, 'account'); // adjust post type if needed
 					if ($post) {
 						$accountIds[] = $post->ID;
@@ -174,17 +174,20 @@ class Transaction extends PostTypeHandler
 			$accountIds = array_filter($accountIds);
 			
 			if ($accountIds !== []) {
-				$filters['meta'] = array_merge($filters['meta'] ?? [], [
-					'relation' => 'AND',
-					'clauses' => array_merge(
-						$filters['meta']['clauses'] ?? [],
-						[[
-							'type' => count($accountIds) === 1 ? 'equals' : 'in',
-							'key' => 'account',
-							'value' => count($accountIds) === 1 ? $accountIds[0] : $accountIds,
-						]]
-					),
-				]);
+				// Ensure meta spec structure exists
+				if (!isset($filters['meta'])) {
+					$filters['meta'] = ['relation' => 'AND', 'clauses' => []];
+				}
+				if (!isset($filters['meta']['clauses'])) {
+					$filters['meta']['clauses'] = [];
+				}
+				
+				// Append account clause
+				$filters['meta']['clauses'][] = [
+					'type' => count($accountIds) === 1 ? 'equals' : 'in',
+					'key' => 'account',
+					'value' => count($accountIds) === 1 ? $accountIds[0] : $accountIds,
+				];
 			}
 		}
 	
