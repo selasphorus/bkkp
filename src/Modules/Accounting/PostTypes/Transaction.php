@@ -140,16 +140,16 @@ class Transaction extends PostTypeHandler
 		];
 		
 		// Map taxonomies to tax queries
-		$this->mapTaxonomyToTaxQuery($filters, 'transaction_category');
-		$this->mapTaxonomyToTaxQuery($filters, 'transaction_type');
+		//$this->mapTaxonomyToTaxQuery($filters, 'transaction_category');
+		//$this->mapTaxonomyToTaxQuery($filters, 'transaction_type');
 		// Map transaction_category → tax map
-		/*if(isset($filters['transaction_category'])){
+		if(isset($filters['transaction_category'])){
 			$tc = $filters['transaction_category'];
 			unset($filters['transaction_category']);
 			$filters['tax'] = array_merge($filters['tax'] ?? [], [
 				'transaction_category' => is_array($tc) ? $tc : [$tc],
 			]);
-		}*/
+		}
 		
 		// Map ACF post object fields to meta queries
 		$this->mapPostObjectFieldToMeta($filters, 'account', 'account');
