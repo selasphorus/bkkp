@@ -64,12 +64,36 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 		
 			$docs = $module->findEmployerTaxDocs($post, $docFilters);
 			//$docs = $module->findEmployerTaxDocs($post, $docFilters); // add another data set to the bundle?
+			
+			// NEW: Get transactions for this employer
+			$transactionFilters = [];
+			if (!empty($scope)) {
+				$transactionFilters['scope'] = $scope;
+			}
+			$transactions = $module->findEmployerTransactions($post, $transactionFilters);
+			
+			// NEW: Aggregate transaction amounts by year
+			$transactionTotalsByYear = [];
+			foreach ($transactions['posts'] ?? [] as $txn) {
+				$txnDate = get_post_meta($txn->ID, 'transaction_date', true);
+				if ($txnDate) {
+					// transaction_date is stored as NUMERIC yyyymmdd
+					$year = (int)substr((string)$txnDate, 0, 4);
+					$amount = (float)get_post_meta($txn->ID, 'amount', true);
+					
+					if (!isset($transactionTotalsByYear[$year])) {
+						$transactionTotalsByYear[$year] = 0;
+					}
+					$transactionTotalsByYear[$year] += $amount;
+				}
+			}
 		
 			$employerBundles[] = [
 				'post'            => $post,
 				'docs'            => $docs['posts'] ?? [],
 				//'docs_pagination' => $docs['pagination'] ?? null,
 				'docs_debug'      => $docs['debug'] ?? null,
+				'transaction_totals' => $transactionTotalsByYear,
 			];
 		}
 
