@@ -503,7 +503,7 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_65cbcd9bca53e',
                     'label' => 'Related Group',
-                    'name' => 'transactions_groups',
+                    'name' => 'related_group', //was 'transactions_groups',
                     'aria-label' => '',
                     'type' => 'post_object',
                     'instructions' => '',
@@ -520,7 +520,7 @@ final class TransactionFields implements FieldGroupInterface
                     'post_status' => '',
                     'taxonomy' => '',
                     'return_format' => 'id',
-                    'multiple' => 1,
+                    'multiple' => 0,
                     'allow_null' => 0,
                     'allow_in_bindings' => 1,
                     'bidirectional' => 1,
