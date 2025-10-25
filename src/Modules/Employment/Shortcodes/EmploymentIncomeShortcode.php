@@ -10,6 +10,7 @@ use atc\WHx4\Core\PostTypeHandler;
 use atc\WHx4\Core\ViewLoader;
 use atc\WHx4\Core\SubtypeRegistry;
 use atc\WHx4\Core\Contracts\ShortcodeInterface;
+use atc\WHx4\Core\Query\ScopedDateResolver;
 //
 //use atc\Bkkp\Modules\Employment\EmploymentModule; // ?
 
@@ -97,6 +98,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             'handler'    => $handlerFactory,
             //'atts'       => $atts,
             'pagination' => $pagination,
+            'years'      => ScopedDateResolver::extractYears($scope),
             //'stats' => $stats,
             'info' => $info, // for TS -- deprecate in favor of:
             // Optionally pass debug through when WHX4_DEBUG is on:

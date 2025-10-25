@@ -5,37 +5,62 @@
         <p>No events found.</p>
     <?php else: ?>
         <table class="bkkp">
-        <tr><th>Employer</th><th>Category</th><th>Tax Docs</th></tr>
+        <tr>
+            <th>Employer</th>
+            <th>Category</th>
+            <?php foreach ($years as $year): ?>
+                <th><?php echo $year; ?></th>
+            <?php endforeach; ?>
+        </tr>
+        
         <?php foreach ($employers as $row): ?>
             <?php
             $employer = $row['post']; 
 			$docs = $row['docs'];
+			
+			// Organize docs by tax_year
+			$docs_by_year = [];
+			foreach ($docs as $doc) {
+			    $tax_year = get_post_meta($doc->ID, 'tax_year', true);
+			    if ($tax_year) {
+			        if (!isset($docs_by_year[$tax_year])) {
+			            $docs_by_year[$tax_year] = [];
+			        }
+			        $docs_by_year[$tax_year][] = $doc;
+			    }
+			}
 			?>
             <tr>
 			    <td>
-			    <a href="<?php echo esc_url(get_permalink($employer)); ?>">
-				<?php echo esc_html(get_the_title($employer)); ?>
-				</a>
-				</td>
-				<td>
-				<?php echo get_post_meta($employer->ID,'work_category_tmp', true); ?>
-				</td>
-				<td>
-				<?php echo "[".count($docs)."] "; ?>
-				<?php
-				foreach ( $docs as $doc ) {
-				    $h = $handler($doc);
-				    $total_comp = $h->getPostMeta('total_comp');
-				    $total_withheld = $h->getPostMeta('total_withheld');
-				    ?>
-				    <a href="<?php echo esc_url(get_permalink($doc)); ?>">
-				    <?php echo esc_html(get_the_title($doc)); ?>
+			        <a href="<?php echo esc_url(get_permalink($employer)); ?>">
+				        <?php echo esc_html(get_the_title($employer)); ?>
 				    </a>
-				    <?php
-				    echo " [".$total_comp."/".$total_withheld."]";
-				}
-				?>
 				</td>
+				<td>
+				    <?php echo esc_html(get_post_meta($employer->ID, 'work_category_tmp', true)); ?>
+				</td>
+				
+				<?php foreach ($years as $year): ?>
+				    <td>
+				    <?php if (isset($docs_by_year[$year])): ?>
+				        <?php foreach ($docs_by_year[$year] as $doc): ?>
+				            <?php
+				            $h = $handler($doc);
+				            $total_comp = $h->getPostMeta('total_comp');
+				            $total_withheld = $h->getPostMeta('total_withheld');
+				            ?>
+				            <div class="tax-doc">
+				                <a href="<?php echo esc_url(get_permalink($doc)); ?>">
+				                    <?php echo esc_html(get_the_title($doc)); ?>
+				                </a>
+				                <span class="amounts">[<?php echo esc_html($total_comp); ?>/<?php echo esc_html($total_withheld); ?>]</span>
+				            </div>
+				        <?php endforeach; ?>
+				    <?php else: ?>
+				        <span class="no-data">—</span>
+				    <?php endif; ?>
+				    </td>
+				<?php endforeach; ?>
 			</tr>
 		<?php endforeach; ?>
 		</table>
