@@ -132,6 +132,55 @@ class MetaFieldCleanup {
 		}
 	}
     
+    // Add to your MetaFieldCleanup class or create a new command
+
+	/**
+	 * Convert related_group from single value to serialized array format.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--dry-run]
+	 * : Preview changes without updating
+	 *
+	 * @when after_wp_load
+	 */
+	public function convert_related_group_format($args, $assoc_args) {
+		global $wpdb;
+		
+		$dry_run = isset($assoc_args['dry-run']);
+		
+		// Find all transaction posts with related_group that isn't already serialized
+		$results = $wpdb->get_results("
+			SELECT post_id, meta_value 
+			FROM {$wpdb->postmeta} pm
+			INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+			WHERE p.post_type = 'transaction'
+			AND pm.meta_key = 'related_group'
+			AND pm.meta_value NOT LIKE 'a:%'
+			AND pm.meta_value != ''
+		");
+		
+		WP_CLI::log(sprintf('Found %d records to convert', count($results)));
+		
+		foreach ($results as $row) {
+			$old_value = $row->meta_value;
+			$new_value = serialize([$old_value]); // Convert to array format
+			
+			WP_CLI::log(sprintf(
+				'Post %d: %s → %s',
+				$row->post_id,
+				$old_value,
+				$new_value
+			));
+			
+			if (!$dry_run) {
+				update_post_meta($row->post_id, 'related_group', [$old_value]);
+			}
+		}
+		
+		WP_CLI::success($dry_run ? 'Dry run complete' : 'Conversion complete');
+	}
+
     /**
      * Reset the cleanup flag to allow re-running
      */
