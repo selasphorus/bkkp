@@ -18,7 +18,7 @@
 				</a>
 				</td>
 				<td>
-				<?php echo get_post_meta($employer->ID,'work_category_tmp'); ?>
+				<?php echo get_post_meta($employer->ID,'work_category_tmp', true); ?>
 				</td>
 				<td>
 				<?php echo "[".count($docs)."] "; ?>
