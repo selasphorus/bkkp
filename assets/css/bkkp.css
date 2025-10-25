@@ -21,3 +21,143 @@ table.bkkp tr td {
 }
 
 table.bkkp tr:nth-child(even) { background: #f7f7f7; }
+
+/* Account view container */
+.account-view {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.account-summary {
+    margin-bottom: 2em;
+}
+
+/* Year sections */
+.transaction-year {
+    margin-bottom: 1.5em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.year-summary {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 1em;
+    background: #f9f9f9;
+    border-radius: 4px;
+    user-select: none;
+}
+
+.year-summary:hover {
+    background: #f0f0f0;
+}
+
+.year-label {
+    font-size: 1.2em;
+}
+
+.year-count {
+    color: #666;
+    font-weight: normal;
+    margin-left: 0.5em;
+}
+
+/* Year details section */
+.year-details {
+    padding: 1em;
+}
+
+.year-totals {
+    background: #f5f5f5;
+    padding: 1em;
+    margin-bottom: 1.5em;
+    border-radius: 4px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25em 0;
+}
+
+.stat-label {
+    font-weight: 500;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Monthly table */
+.monthly-heading {
+    margin: 1em 0 0.5em;
+    font-size: 1em;
+    color: #666;
+}
+
+.monthly-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5em;
+}
+
+.monthly-table thead {
+    background: #f0f0f0;
+}
+
+.monthly-table th,
+.monthly-table td {
+    padding: 0.75em;
+    border: 1px solid #ddd;
+}
+
+.monthly-table th {
+    font-weight: 600;
+    text-align: left;
+}
+
+.col-month {
+    width: 40%;
+}
+
+.col-total,
+.col-credits,
+.col-debits {
+    width: 20%;
+    text-align: right;
+}
+
+.monthly-table tbody tr:hover {
+    background: #fafafa;
+}
+
+/* States */
+.no-transactions {
+    color: #666;
+    font-style: italic;
+}
+
+/* Debug section */
+.debug-divider {
+    margin: 2em 0 1em;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+.debug-info {
+    margin-top: 1em;
+}
+
+.debug-info summary {
+    cursor: pointer;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.debug-info pre {
+    background: #f5f5f5;
+    padding: 1em;
+    overflow-x: auto;
+    font-size: 0.85em;
+}
