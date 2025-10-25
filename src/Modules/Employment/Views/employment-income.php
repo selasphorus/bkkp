@@ -41,34 +41,66 @@
 				</td>
 				
 				<?php foreach ($years as $year): ?>
-				    <td class="tax-year-cell">
-				    <?php if (isset($docs_by_year[$year])): ?>
-				        <?php foreach ($docs_by_year[$year] as $doc): ?>
-				            <?php
-				            $h = $handler($doc);
-				            $total_comp = $h->getPostMeta('total_comp');
-				            $total_withheld = $h->getPostMeta('total_withheld');
-				            $comp_formatted = $total_comp ? '$' . number_format((float)$total_comp, 0) : '—';
-				            ?>
-				            <div class="tax-amount">
-				                <a href="<?php echo esc_url(get_permalink($doc)); ?>" 
-				                   title="<?php echo esc_attr(get_the_title($doc)); ?>" 
-				                   class="comp-amount"
-				                   target="new">
-				                    <?php echo esc_html($comp_formatted); ?>
-				                </a>
-				                <?php if (!empty($total_withheld)): ?>
-				                    <span class="withheld-amount">
-				                        ($<?php echo esc_html(number_format((float)$total_withheld, 0)); ?> withheld)
-				                    </span>
-				                <?php endif; ?>
-				            </div>
-				        <?php endforeach; ?>
-				    <?php else: ?>
-				        <span class="no-data">—</span>
-				    <?php endif; ?>
-				    </td>
+					<td class="tax-year-cell">
+					<?php if (isset($docs_by_year[$year])): ?>
+						<?php 
+						// Calculate total comp from docs for this year
+						$doc_total = 0;
+						foreach ($docs_by_year[$year] as $doc) {
+							$h = $handler($doc);
+							$total_comp = (float)$h->getPostMeta('total_comp');
+							$doc_total += $total_comp;
+						}
+						
+						// Get transaction total for this year
+						$txn_total = $row['transaction_totals'][$year] ?? 0;
+						
+						// Check if they match
+						$mismatch = (abs($doc_total - $txn_total) > 0.01); // Allow for floating point rounding
+						?>
+						
+						<?php foreach ($docs_by_year[$year] as $doc): ?>
+							<?php
+							$h = $handler($doc);
+							$total_comp = $h->getPostMeta('total_comp');
+							$total_withheld = $h->getPostMeta('total_withheld');
+							$comp_formatted = $total_comp ? '$' . number_format((float)$total_comp, 0) : '—';
+							?>
+							<div class="tax-amount">
+								<a href="<?php echo esc_url(get_permalink($doc)); ?>" 
+								   title="<?php echo esc_attr(get_the_title($doc)); ?>" 
+								   class="comp-amount">
+									<?php echo esc_html($comp_formatted); ?>
+								</a>
+								<?php if (!empty($total_withheld)): ?>
+									<span class="withheld-amount">
+										($<?php echo esc_html(number_format((float)$total_withheld, 0)); ?> withheld)
+									</span>
+								<?php endif; ?>
+							</div>
+						<?php endforeach; ?>
+						
+						<!-- Transaction total comparison -->
+						<div class="txn-total <?php echo $mismatch ? 'mismatch' : 'match'; ?>">
+							Txns: $<?php echo number_format($txn_total, 0); ?>
+						</div>
+						
+					<?php else: ?>
+						<?php 
+						// No docs, but check if there are transactions
+						$txn_total = $row['transaction_totals'][$year] ?? 0;
+						if ($txn_total > 0): 
+						?>
+							<div class="txn-total mismatch">
+								Txns: $<?php echo number_format($txn_total, 0); ?>
+							</div>
+						<?php else: ?>
+							<span class="no-data">—</span>
+						<?php endif; ?>
+					<?php endif; ?>
+					</td>
 				<?php endforeach; ?>
+				
 			</tr>
 		<?php endforeach; ?>
 		</table>
