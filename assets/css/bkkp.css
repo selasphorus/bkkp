@@ -42,7 +42,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 .year-summary {
     cursor: pointer;
     font-weight: bold;
-    padding: 1em;
+    padding: 1rem;
     background: #f9f9f9;
     border-radius: 4px;
     user-select: none;
@@ -64,13 +64,13 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 
 /* Year details section */
 .year-details {
-    padding: 1em;
+    padding: 1rem;
 }
 
 .year-totals {
     background: #f5f5f5;
-    padding: 1em;
-    margin-bottom: 1.5em;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
     border-radius: 4px;
 }
 
@@ -99,7 +99,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 .monthly-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 0.5em;
+    margin-top: 0.5rem;
 }
 
 .monthly-table thead {
@@ -108,7 +108,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 
 .monthly-table th,
 .monthly-table td {
-    padding: 0.75em;
+    padding: 0.5rem;
     border: 1px solid #ddd;
 }
 
