@@ -47,6 +47,11 @@ class Transaction extends PostTypeHandler
 				'map_to'   => ['tax' => 'transaction_category', 'field' => 'slug'], // TaxQueryBuilder input
 				'override' => true,
 			],
+			'related_group' => [
+			    'sanitize' => [PostTypeHandler::class, 'sanitizePostIdOrSlugParam'],
+			    'map_to'   => ['arg' => 'related_group'],
+			    'override' => true,
+			],
 		];
 
 		// Optional extension point for add-ons/themes.

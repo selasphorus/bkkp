@@ -84,8 +84,16 @@
 						<?php endforeach; ?>
 						
 						<!-- Transaction total comparison -->
+						<?php 
+						$txn_url = add_query_arg([
+							'scope' => $year,
+							'related_group' => $employer->ID,
+							], home_url('/accounts-overview/transactions/'));
+						?>
 						<div class="txn-total <?php echo $mismatch ? 'mismatch' : 'match'; ?>">
+							<a href="<?php echo esc_url($txn_url); ?>" target="_blank">
 							Txns: $<?php echo number_format($txn_total, 0); ?>
+							</a>
 							<?php if ($mismatch): ?>
 							    <span class="difference">(<?php echo $difference > 0 ? '+' : ''; ?><?php echo number_format($difference, 0); ?>)</span>
 							<?php endif; ?>
