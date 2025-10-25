@@ -503,9 +503,11 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_65cbcd9bca53e',
                     'label' => 'Related Group',
-                    'name' => 'related_group', //was 'transactions_groups',
-                    'aria-label' => '',
-                    'type' => 'post_object',
+                    'name' => 'related_group', //'transactions_groups',
+                    'type' => 'relationship', // Changed from 'post_object'
+					'post_type' => array(
+						0 => 'group',
+					),
                     'instructions' => '',
                     'required' => 0,
                     'conditional_logic' => 0,
@@ -514,20 +516,18 @@ final class TransactionFields implements FieldGroupInterface
                         'class' => '',
                         'id' => '',
                     ),
-                    'post_type' => array(
-                        0 => 'group',
-                    ),
                     'post_status' => '',
                     'taxonomy' => '',
-                    'return_format' => 'id',
+					'return_format' => 'id',
+					'min' => '',
+					'max' => 1,  // Enforce single selection
+					'bidirectional' => 1,
+					'bidirectional_target' => array(
+						0 => 'field_6759eb2826ee6',
+					),
                     'multiple' => 0,
                     'allow_null' => 0,
                     'allow_in_bindings' => 1,
-                    // WIP 10/25 -- fix this! changes to employer record wipe out field value for transaction
-                    /*'bidirectional' => 1,
-                    'bidirectional_target' => array(
-                        0 => 'field_6759eb2826ee6',
-                    ),*/
                     'ui' => 1,
                 ),
                 array(
