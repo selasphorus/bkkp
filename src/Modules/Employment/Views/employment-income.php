@@ -1,25 +1,23 @@
 <div class="whx4-employment">
-	<p><strong>Employers:</strong> <?php //echo (int)$stats['monsters']; ?></p>
-	
-	<p class="troubleshooting">
-        <h3>Info for Troubleshooting</h3>
-        <p><?php echo $info; ?></p>
-        <!--debug: <pre><?php //print_r($debug, true); ?></pre>-->
-        <hr />
-    </p>
+	<p><strong>Employers:</strong></p>
     
 	<?php if(!$employers): ?>
         <p>No events found.</p>
     <?php else: ?>
-    
+        <table>
         <?php foreach ($employers as $row): ?>
+            <tr>
 			<?php $employer = $row['post']; $docs = $row['docs']; ?>
+			    <td>
 			    <a href="<?php echo esc_url(get_permalink($employer)); ?>">
 				<?php echo esc_html(get_the_title($employer)); ?>
 				</a>
+				</td>
+				<td>
+				<?php echo " => [".count($docs)."] tax docs"; ?>
+				</td>
+				<td>
 				<?php
-				echo " => [".count($docs)."] tax docs";
-				if (count($docs) > 0) { echo " => "; }
 				foreach ( $docs as $doc ) {
 				    $h = $handler($doc);
 				    $total_comp = $h->getPostMeta('total_comp');
@@ -30,35 +28,21 @@
 				    </a>
 				    <?php
 				    echo " [".$total_comp."/".$total_withheld."]";
+				    echo "<br />";
 				}
-				//echo "<pre>" . print_r($docs, true) . "</pre>";
-				echo "<br />";
 				?>
-			
+				</td>			
 			<!-- render $docs for that employer -->
+			</tr>
 		<?php endforeach; ?>
-
-        <ul class="whx4-events__items items_list">
-            <?php /*foreach($posts as $post): ?>
-                <?php $h = $handler($post); ?>
-                <?php
-                //$start = $h && method_exists($h, 'getPostMeta') ? (string)($h->getPostMeta('start_date') ?? '') : (string)get_post_meta($post->ID, 'start_date', true);
-                //$end   = $h && method_exists($h, 'getPostMeta') ? (string)($h->getPostMeta('end_date') ?? '')   : (string)get_post_meta($post->ID, 'end_date', true);
-                ?>
-                <li class="whx4-employers__item list_item">
-                    <a href="<?php echo esc_url(get_permalink($post)); ?>">
-                        <?php echo esc_html(get_the_title($post)); ?>
-                    </a>
-                </li>
-            <?php endforeach;*/ ?>
-        </ul>
-
-        <?php /*if($pagination['max_pages'] > 1): ?>
-            <nav class="whx4-pagination" aria-label="Employers pagination">
-                <span>Page <?php echo (int)$pagination['paged']; ?> of <?php echo (int)$pagination['max_pages']; ?></span>
-            </nav>
-        <?php endif;*/ ?>
+		</table>
     <?php endif; ?>
     
-	<p><strong>Debug:</strong> <pre><?php //echo print_r($debug, true); ?></pre></p>
+    <hr class="debug-divider" />
+    <details class="debug-info">
+        <summary>Post Meta</summary>
+        <pre><?php print_r($handler->getPostMeta()); ?></pre>
+        <summary>Debug</summary>
+        <pre><?php print_r($debug); ?></pre>
+    </details>
 </div>
