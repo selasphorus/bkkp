@@ -5,9 +5,12 @@
         <p>No events found.</p>
     <?php else: ?>
         <table>
-        <?php foreach ($employers as $row): ?>
+        <?php /*foreach ($employers as $row): ?>
+            <?php
+            $employer = $row['post']; 
+			$docs = $row['docs'];
+			?>
             <tr>
-			<?php $employer = $row['post']; $docs = $row['docs']; ?>
 			    <td>
 			    <a href="<?php echo esc_url(get_permalink($employer)); ?>">
 				<?php echo esc_html(get_the_title($employer)); ?>
@@ -34,15 +37,16 @@
 				</td>			
 			<!-- render $docs for that employer -->
 			</tr>
-		<?php endforeach; ?>
+		<?php endforeach;*/ ?>
 		</table>
     <?php endif; ?>
     
     <hr class="debug-divider" />
     <details class="debug-info">
         <summary>Post Meta</summary>
-        <pre><?php print_r($handler->getPostMeta()); ?></pre>
+        <pre><?php //print_r($handler->getPostMeta()); ?></pre>
         <summary>Debug</summary>
-        <pre><?php print_r($debug); ?></pre>
+        <pre><?php //print_r($debug); ?></pre>
     </details>
+    
 </div>
