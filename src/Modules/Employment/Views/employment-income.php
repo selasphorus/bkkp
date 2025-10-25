@@ -4,7 +4,7 @@
 	<?php if(!$employers): ?>
         <p>No events found.</p>
     <?php else: ?>
-        <table>
+        <table class="bkkp">
         <?php foreach ($employers as $row): ?>
             <?php
             $employer = $row['post']; 
@@ -30,7 +30,7 @@
 				    <?php echo esc_html(get_the_title($doc)); ?>
 				    </a>
 				    <?php
-				    //echo " [".$total_comp."/".$total_withheld."]";
+				    echo " [".$total_comp."/".$total_withheld."]";
 				    //echo "<br />";
 				}
 				?>
