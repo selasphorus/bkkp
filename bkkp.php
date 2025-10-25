@@ -146,4 +146,6 @@ if (defined('WP_CLI') && \WP_CLI) {
             \WP_CLI::warning('Flag was not set or could not be reset.');
         }
     });
+    
+    WP_CLI::add_command('bkkp meta-cleanup', 'atc\Bkkp\Admin\MetaFieldCleanup');
 }
