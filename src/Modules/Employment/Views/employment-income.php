@@ -116,7 +116,7 @@
 								Txns: $<?php echo number_format($txn_total, 0); ?>
 							</a>
 							<?php if ($mismatch): ?>
-								<span class="difference">(<?php echo $difference > 0 ? '+' : ''; ?><?php echo number_format($difference, 0); ?>)</span>
+								<span class="difference <?php echo $difference > 0 ? 'over' : 'under'; ?>">(<?php echo $difference > 0 ? 'tx+' : 'tx-'; ?><?php echo number_format($difference, 0); ?>)</span>
 							<?php endif; ?>
 						</div>
 					<?php else: ?>
