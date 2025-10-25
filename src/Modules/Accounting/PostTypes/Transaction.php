@@ -152,9 +152,8 @@ class Transaction extends PostTypeHandler
 		}
 		
 		// Map ACF post object fields to meta queries
-		$this->mapPostObjectFieldToMeta($filters, 'account', 'account');
-		$this->mapPostObjectFieldToMeta($filters, 'related_group', 'group');
-		
+		$this->mapPostObjectFieldToMeta($filters, 'account', 'account', null, false);  // post_object
+		$this->mapPostObjectFieldToMeta($filters, 'related_group', 'group', null, true);  // relationship
 		// Normalize per_page alias
 		if(isset($filters['per_page']) && !isset($filters['limit'])){
 			$filters['limit'] = (int)$filters['per_page'];
@@ -232,16 +231,17 @@ class Transaction extends PostTypeHandler
 		];
 	}
 
-	/**
-	 * Map an ACF post object field to a meta query spec.
+    /**
+	 * Map an ACF post object or relationship field to a meta query spec.
 	 * Supports both post IDs and slugs, with comma-separated input.
 	 *
 	 * @param array $filters The filters array (passed by reference)
 	 * @param string $filterKey The filter key to map (e.g., 'account', 'related_group')
 	 * @param string $postType The post type for slug resolution
 	 * @param string $metaKey The ACF field name (defaults to same as $filterKey)
+	 * @param bool $isRelationship Whether this is a relationship field (vs post_object)
 	 */
-	private function mapPostObjectFieldToMeta(array &$filters, string $filterKey, string $postType, string $metaKey = null): void
+	private function mapPostObjectFieldToMeta(array &$filters, string $filterKey, string $postType, string $metaKey = null, bool $isRelationship = false): void
 	{
 		if (!isset($filters[$filterKey]) || $filters[$filterKey] === '') {
 			return;
@@ -283,13 +283,40 @@ class Transaction extends PostTypeHandler
 			$filters['meta']['clauses'] = [];
 		}
 		
-		// Append clause
-		$filters['meta']['clauses'][] = [
-			'type' => count($postIds) === 1 ? 'equals' : 'in',
-			'key' => $metaKey,
-			'value' => count($postIds) === 1 ? $postIds[0] : $postIds,
-		];
+		// Build clause based on field type
+		if ($isRelationship) {
+			// Relationship fields store serialized arrays - use LIKE queries
+			if (count($postIds) === 1) {
+				// Single value: match serialized format
+				$filters['meta']['clauses'][] = [
+					'key' => $metaKey,
+					'value' => serialize([(string)$postIds[0]]),
+					'compare' => 'LIKE',
+				];
+			} else {
+				// Multiple values: use OR relation for LIKE queries
+				$subclauses = [];
+				foreach ($postIds as $id) {
+					$subclauses[] = [
+						'key' => $metaKey,
+						'value' => serialize([(string)$id]),
+						'compare' => 'LIKE',
+					];
+				}
+				$filters['meta']['clauses'][] = [
+					'relation' => 'OR',
+					'clauses' => $subclauses,
+				];
+			}
+		} else {
+			// Post object fields store simple values
+			$filters['meta']['clauses'][] = [
+				'type' => count($postIds) === 1 ? 'equals' : 'in',
+				'key' => $metaKey,
+				'value' => count($postIds) === 1 ? $postIds[0] : $postIds,
+			];
+		}
 	}
-
+	
 
 }
