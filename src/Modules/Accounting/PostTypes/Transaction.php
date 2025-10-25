@@ -140,16 +140,16 @@ class Transaction extends PostTypeHandler
 		];
 		
 		// Map taxonomies to tax queries
-		//$this->mapTaxonomyToTaxQuery($filters, 'transaction_category');
-		//$this->mapTaxonomyToTaxQuery($filters, 'transaction_type');
+		$this->mapTaxonomyToTaxQuery($filters, 'transaction_category');
+		$this->mapTaxonomyToTaxQuery($filters, 'transaction_type');
 		// Map transaction_category → tax map
-		if(isset($filters['transaction_category'])){
+		/*if(isset($filters['transaction_category'])){
 			$tc = $filters['transaction_category'];
 			unset($filters['transaction_category']);
 			$filters['tax'] = array_merge($filters['tax'] ?? [], [
 				'transaction_category' => is_array($tc) ? $tc : [$tc],
 			]);
-		}
+		}*/
 		
 		// Map ACF post object fields to meta queries
 		$this->mapPostObjectFieldToMeta($filters, 'account', 'account');
@@ -190,7 +190,7 @@ class Transaction extends PostTypeHandler
 	
 	/**
 	 * Map a taxonomy filter to a tax query spec.
-	 * Supports both term slugs and IDs, with comma-separated input.
+	 * Supports comma-separated input.
 	 *
 	 * @param array $filters The filters array (passed by reference)
 	 * @param string $filterKey The filter key to map (e.g., 'transaction_category', 'transaction_type')
@@ -215,14 +215,6 @@ class Transaction extends PostTypeHandler
 			return;
 		}
 		
-		// Detect if we're using IDs or slugs (check if first input is numeric)
-		$field = is_numeric($inputs[0]) ? 'term_id' : 'slug';
-		
-		// Convert to appropriate type
-		$terms = $field === 'term_id' 
-			? array_map('intval', $inputs) 
-			: $inputs;
-		
 		// Ensure tax spec structure exists
 		if (!isset($filters['tax'])) {
 			$filters['tax'] = ['relation' => 'AND', 'clauses' => []];
@@ -234,8 +226,8 @@ class Transaction extends PostTypeHandler
 		// Append clause
 		$filters['tax']['clauses'][] = [
 			'taxonomy' => $taxonomy,
-			'field' => $field,
-			'terms' => $terms,
+			'field' => 'slug',  // Always use slug
+			'terms' => $inputs,
 		];
 	}
 
