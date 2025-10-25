@@ -8,6 +8,7 @@
         <tr>
             <th>Employer</th>
             <th>Category</th>
+            <th>W2/1099</th>
             <?php foreach ($years as $year): ?>
                 <th><?php echo $year; ?></th>
             <?php endforeach; ?>
@@ -38,6 +39,9 @@
 				</td>
 				<td>
 				    <?php echo esc_html(get_post_meta($employer->ID, 'work_category_tmp', true)); ?>
+				</td>
+				<td>
+				    <?php echo esc_html(get_post_meta($employer->ID, 'employment_classification', true)); ?>
 				</td>
 				
 				<?php foreach ($years as $year): ?>
