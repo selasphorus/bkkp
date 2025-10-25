@@ -102,7 +102,7 @@ final class EmployersGroupFields implements FieldGroupInterface, SubtypeFieldGro
                     ),
                     'default_value' => '',
                     'maxlength' => '',
-                    'placeholder' => '1099-NEC',
+                    'placeholder' => '1099-NEC', // TODO: change to select? W2, 1099-NEC...
                     'prepend' => '',
                     'append' => '',
                 ),

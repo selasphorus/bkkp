@@ -573,12 +573,14 @@ final class TaxDocumentFields implements FieldGroupInterface, SubtypeFieldGroupI
                     'name' => 'total_withheld',
                     'aria-label' => '',
                     'type' => 'number',
+                    'readonly' => 1,
+                    'disabled' => 0,  // Keep enabled so value is submitted
                     'instructions' => '',
                     'required' => 0,
                     'conditional_logic' => 0,
                     'wrapper' => array(
                         'width' => '15',
-                        'class' => '',
+                        'class' => 'calculated-field',
                         'id' => '',
                     ),
                     'default_value' => '',
@@ -2410,7 +2412,7 @@ final class TaxDocumentFields implements FieldGroupInterface, SubtypeFieldGroupI
                 array(
                     'key' => 'field_67fe5ee4a273e',
                     'label' => 'Related Transaction(s)',
-                    'name' => 'related_transactions',
+                    'name' => 'related_transactions', // TODO: rename to disambiguate from TransactionFields field(?)
                     'aria-label' => '',
                     'type' => 'post_object',
                     'instructions' => '',
