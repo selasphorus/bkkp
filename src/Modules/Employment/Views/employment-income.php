@@ -59,6 +59,7 @@
 						
 						// Check if they match
 						$mismatch = (abs($doc_total - $txn_total) > 0.01); // Allow for floating point rounding
+						$difference = $doc_total - $txn_total;
 						?>
 						
 						<?php foreach ($docs_by_year[$year] as $doc): ?>
@@ -85,6 +86,9 @@
 						<!-- Transaction total comparison -->
 						<div class="txn-total <?php echo $mismatch ? 'mismatch' : 'match'; ?>">
 							Txns: $<?php echo number_format($txn_total, 0); ?>
+							<?php if ($mismatch): ?>
+							    <span class="difference">(<?php echo $difference > 0 ? '+' : ''; ?><?php echo number_format($difference, 0); ?>)</span>
+							<?php endif; ?>
 						</div>
 						
 					<?php else: ?>
