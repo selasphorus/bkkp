@@ -59,6 +59,7 @@
 					
 					$txn_total = $row['transaction_totals'][$year] ?? 0;
 					$mismatch = (abs($doc_total - $txn_total) > 0.01);
+					if (!isset($docs_by_year[$year])) { $mismatch = false; } // match N/A if no docs
 					$difference = $doc_total - $txn_total;
 					
 					$txn_url = add_query_arg([
