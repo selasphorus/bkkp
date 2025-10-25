@@ -190,6 +190,30 @@ class Transaction extends PostTypeHandler
 				];
 			}
 		}
+		
+		// Map related_group (ACF post object field) → meta spec
+		if (isset($filters['related_group']) && $filters['related_group'] !== '') {
+			$relatedGroup = $filters['related_group'];
+			unset($filters['related_group']);
+			
+			// Normalize to array of post IDs
+			$groupIds = is_array($relatedGroup) ? $relatedGroup : [$relatedGroup];
+			$groupIds = array_map('intval', array_filter($groupIds));
+			
+			if ($groupIds !== []) {
+				$filters['meta'] = array_merge($filters['meta'] ?? [], [
+					'relation' => 'AND',
+					'clauses' => array_merge(
+						$filters['meta']['clauses'] ?? [],
+						[[
+							'type' => count($groupIds) === 1 ? 'equals' : 'in',
+							'key' => 'related_group',
+							'value' => count($groupIds) === 1 ? $groupIds[0] : $groupIds,
+						]]
+					),
+				]);
+			}
+		}
 	
 		// Normalize per_page alias
 		if(isset($filters['per_page']) && !isset($filters['limit'])){
