@@ -835,7 +835,7 @@ final class GroupFields implements FieldGroupInterface, PostTypeFieldGroupInterf
                 array(
                     'key' => 'field_6759eb2826ee6',
                     'label' => 'Related Transactions',
-                    'name' => 'transactions_events',
+                    'name' => 'related_transactions', // was transactions_events
                     'aria-label' => '',
                     'type' => 'relationship',
                     'instructions' => '',
