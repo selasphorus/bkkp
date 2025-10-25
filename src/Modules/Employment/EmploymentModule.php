@@ -212,5 +212,33 @@ final class EmploymentModule extends BaseModule
 			],
 		];
 	}
+	
+	/**
+	 * Get transactions for a given employer/group with optional filters.
+	 *
+	 * @param \WP_Post $employer The employer post
+	 * @param array $filters Optional filters (scope, limit, etc.)
+	 * @return array Transaction posts
+	 */
+	public function findEmployerTransactions(\WP_Post $employer, array $filters = []): array
+	{
+		// Instantiate a Transaction handler
+		$transactionHandler = new \atc\Bkkp\Modules\Accounting\PostTypes\Transaction();
+		
+		$base = [
+			'related_group' => $employer->ID,  // Filter to this employer
+			'limit'         => -1,             // Get all by default
+		];
+		
+		// Merge with any programmatic filters
+		$merged = array_merge($base, $filters);
+		
+		$result = $transactionHandler->getTransactions($merged);
+		
+		return [
+			'posts' => $result['posts'] ?? [],
+			'debug' => $result['debug'] ?? null,
+		];
+	}
 
 }
