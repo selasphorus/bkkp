@@ -22,6 +22,9 @@ table.bkkp tr td {
 
 table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 
+
+/***** Accounts ***/
+
 /* Account view container */
 .account-view {
     max-width: 1200px;
@@ -139,6 +142,45 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
     color: #666;
     font-style: italic;
 }
+
+/*** EMPLOYERS ***/
+.whx4-employment .tax-year-cell {
+    text-align: right;
+    vertical-align: top;
+}
+
+.whx4-employment .tax-amount {
+    margin-bottom: 0.5rem;
+}
+
+.whx4-employment .tax-amount:last-child {
+    margin-bottom: 0;
+}
+
+.whx4-employment .comp-amount {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.whx4-employment .comp-amount:hover {
+    text-decoration: underline;
+}
+
+.whx4-employment .withheld-amount {
+    display: block;
+    font-size: 0.85em;
+    color: #6b7280;
+    margin-top: 0.15rem;
+}
+
+.whx4-employment .no-data {
+    color: #9ca3af;
+}
+
+
+/*** MISC ***/
 
 /* Debug section */
 .debug-divider {

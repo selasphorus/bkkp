@@ -41,19 +41,26 @@
 				</td>
 				
 				<?php foreach ($years as $year): ?>
-				    <td>
+				    <td class="tax-year-cell">
 				    <?php if (isset($docs_by_year[$year])): ?>
 				        <?php foreach ($docs_by_year[$year] as $doc): ?>
 				            <?php
 				            $h = $handler($doc);
 				            $total_comp = $h->getPostMeta('total_comp');
 				            $total_withheld = $h->getPostMeta('total_withheld');
+				            $comp_formatted = $total_comp ? '$' . number_format((float)$total_comp, 0) : '—';
 				            ?>
-				            <div class="tax-doc">
-				                <a href="<?php echo esc_url(get_permalink($doc)); ?>">
-				                    <?php echo esc_html(get_the_title($doc)); ?>
+				            <div class="tax-amount">
+				                <a href="<?php echo esc_url(get_permalink($doc)); ?>" 
+				                   title="<?php echo esc_attr(get_the_title($doc)); ?>" 
+				                   class="comp-amount">
+				                    <?php echo esc_html($comp_formatted); ?>
 				                </a>
-				                <span class="amounts">[<?php echo esc_html($total_comp); ?>/<?php echo esc_html($total_withheld); ?>]</span>
+				                <?php if (!empty($total_withheld)): ?>
+				                    <span class="withheld-amount">
+				                        ($<?php echo esc_html(number_format((float)$total_withheld, 0)); ?> withheld)
+				                    </span>
+				                <?php endif; ?>
 				            </div>
 				        <?php endforeach; ?>
 				    <?php else: ?>
