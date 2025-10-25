@@ -150,7 +150,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 }
 
 .whx4-employment .tax-amount {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0rem;
 }
 
 .whx4-employment .tax-amount:last-child {
@@ -181,9 +181,8 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 
 .whx4-employment .txn-total {
     font-size: 0.9em;
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid #e5e7eb;
+    margin-top: 0rem;
+    padding: 0.25rem 0;
     font-weight: 500;
 }
 
