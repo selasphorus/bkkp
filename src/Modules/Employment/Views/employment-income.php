@@ -21,18 +21,19 @@
 				</td>
 				<td>
 				<?php
-				/*foreach ( $docs as $doc ) {
+				foreach ( $docs as $doc ) {
 				    $h = $handler($doc);
 				    $total_comp = $h->getPostMeta('total_comp');
 				    $total_withheld = $h->getPostMeta('total_withheld');
+				    /*
 				    ?>
 				    <a href="<?php echo esc_url(get_permalink($doc)); ?>">
 				    <?php echo esc_html(get_the_title($doc)); ?>
 				    </a>
 				    <?php
 				    echo " [".$total_comp."/".$total_withheld."]";
-				    echo "<br />";
-				}*/
+				    echo "<br />";*/
+				}
 				?>
 				</td>			
 			<!-- render $docs for that employer -->
