@@ -79,7 +79,7 @@
 							$comp_formatted = $total_comp ? '$' . number_format((float)$total_comp, 0) : '—';
 							?>
 							<div class="tax-amount">
-								<a href="<?php echo esc_url(get_permalink($doc)); ?>" 
+								<a href="<?php echo esc_url(get_edit_post_link($doc)); // get_permalink ?>" 
 								   title="<?php echo esc_attr(get_the_title($doc)); ?>" 
 								   class="comp-amount">
 									<?php echo esc_html($comp_formatted); ?>
