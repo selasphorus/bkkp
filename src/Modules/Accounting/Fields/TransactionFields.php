@@ -523,10 +523,11 @@ final class TransactionFields implements FieldGroupInterface
                     'multiple' => 0,
                     'allow_null' => 0,
                     'allow_in_bindings' => 1,
-                    'bidirectional' => 1,
+                    // WIP 10/25 -- fix this! changes to employer record wipe out field value for transaction
+                    /*'bidirectional' => 1,
                     'bidirectional_target' => array(
                         0 => 'field_6759eb2826ee6',
-                    ),
+                    ),*/
                     'ui' => 1,
                 ),
                 array(
