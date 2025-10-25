@@ -300,6 +300,5 @@ class Transaction extends PostTypeHandler
 			];
 		}
 	}
-	
 
 }
