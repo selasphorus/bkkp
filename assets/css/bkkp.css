@@ -179,6 +179,23 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
     color: #9ca3af;
 }
 
+.whx4-employment .txn-total {
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e5e7eb;
+    font-weight: 500;
+}
+
+.whx4-employment .txn-total.match {
+    color: #059669;  /* Green */
+}
+
+.whx4-employment .txn-total.mismatch {
+    color: #dc2626;  /* Red */
+    font-weight: 600;
+}
+
 
 /*** MISC ***/
 
