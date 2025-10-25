@@ -53,7 +53,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 }
 
 .year-label {
-    font-size: 1.2em;
+    font-size: 1.2rem;
 }
 
 .year-count {
@@ -92,14 +92,15 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 /* Monthly table */
 .monthly-heading {
     margin: 1em 0 0.5em;
-    font-size: 1em;
+    font-size: 1rem;
     color: #666;
 }
 
 .monthly-table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
     margin-top: 0.5rem;
+    font-size: 1.1rem;
 }
 
 .monthly-table thead {
@@ -119,6 +120,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 
 .col-month {
     width: 40%;
+    text-align: right;
 }
 
 .col-total,
