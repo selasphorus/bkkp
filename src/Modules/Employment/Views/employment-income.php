@@ -5,6 +5,7 @@
         <p>No events found.</p>
     <?php else: ?>
         <table class="bkkp">
+        <tr><th>Employer</th><th>Category</th><th>Tax Docs</th></tr>
         <?php foreach ($employers as $row): ?>
             <?php
             $employer = $row['post']; 
@@ -17,9 +18,10 @@
 				</a>
 				</td>
 				<td>
-				<?php echo " => [".count($docs)."] tax docs"; ?>
+				<?php echo get_post_meta($employer,'work_category_tmp'); ?>
 				</td>
 				<td>
+				<?php echo "[".count($docs)."] "; ?>
 				<?php
 				foreach ( $docs as $doc ) {
 				    $h = $handler($doc);
