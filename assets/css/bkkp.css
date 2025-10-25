@@ -144,6 +144,10 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 }
 
 /*** EMPLOYERS ***/
+.whx4-employment th.year {
+    min-width: 180px;
+}
+
 .whx4-employment .tax-year-cell {
     text-align: right;
     vertical-align: top;
