@@ -44,12 +44,14 @@
 					<td class="tax-year-cell">
 					<?php if (isset($docs_by_year[$year])): ?>
 						<?php 
-						// Calculate total comp from docs for this year
+						// Calculate net comp (total - withheld) from docs for this year
 						$doc_total = 0;
 						foreach ($docs_by_year[$year] as $doc) {
 							$h = $handler($doc);
 							$total_comp = (float)$h->getPostMeta('total_comp');
-							$doc_total += $total_comp;
+							#$doc_total += $total_comp;
+							$total_withheld = (float)$h->getPostMeta('total_withheld');
+							$doc_total += ($total_comp - $total_withheld);
 						}
 						
 						// Get transaction total for this year
