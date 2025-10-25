@@ -81,7 +81,8 @@
 							<div class="tax-amount">
 								<a href="<?php echo esc_url(get_edit_post_link($doc)); // get_permalink ?>" 
 								   title="<?php echo esc_attr(get_the_title($doc)); ?>" 
-								   class="comp-amount">
+								   class="comp-amount"
+								   target="_blank">
 									<?php echo esc_html($comp_formatted); ?>
 								</a>
 								<?php if (!empty($total_withheld)): ?>
