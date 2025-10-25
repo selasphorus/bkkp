@@ -159,8 +159,8 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 
 .whx4-employment .comp-amount {
     font-weight: 600;
-    font-size: 1.1em;
-    color: #2563eb;
+    font-size: 1.1rem;
+    /*color: #2563eb;*/
     text-decoration: none;
 }
 
@@ -170,7 +170,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 
 .whx4-employment .withheld-amount {
     display: block;
-    font-size: 0.85em;
+    font-size: 0.9rem;
     color: #6b7280;
     margin-top: 0.15rem;
 }
