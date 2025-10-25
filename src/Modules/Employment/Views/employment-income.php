@@ -10,7 +10,7 @@
             <th>Category</th>
             <th>W2/1099</th>
             <?php foreach ($years as $year): ?>
-                <th><?php echo $year; ?></th>
+                <th class="year"><?php echo $year; ?></th>
             <?php endforeach; ?>
         </tr>
         
