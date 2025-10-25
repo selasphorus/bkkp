@@ -40,8 +40,8 @@ final class TaxPrepModule extends BaseModule
             return $handlers;
         });
         
-        add_action('acf/save_post', 'calculate_total_withheld', 20);
-        add_action('acf/input/admin_enqueue_scripts', 'enqueue_acf_calculation_script'); // TBC whether this should be handled differently
+        add_action('acf/save_post', array($this, 'calculate_total_withheld'), 20);
+        add_action('acf/input/admin_enqueue_scripts',  array($this, 'enqueue_acf_calculation_script')); // TBC whether this should be handled differently
     }
 
     public function getPostTypeHandlerClasses(): array
