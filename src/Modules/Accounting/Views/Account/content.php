@@ -29,28 +29,28 @@ if ($handler) {
     
     <?php if (!empty($yearData)): ?>
         <h3>Transactions by Year</h3>
-        <table style="border-collapse: collapse; width: 100%; margin-bottom: 30px;">
+        <table class="bkkp" style="border-collapse: collapse;">
             <thead>
-                <tr style="background: #f0f0f0;">
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Year</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Metric</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Count</th>
+                <tr>
+                    <th style="text-align: left;">Year</th>
+                    <th>Metric</th>
+                    <th>Count</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($yearData as $year => $data): ?>
                     <tr>
-                        <td rowspan="3" style="border: 1px solid #ddd; padding: 8px; font-weight: bold;"><?php echo esc_html($year); ?></td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;">Total Transactions</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['total']; ?></td>
+                        <td rowspan="3" style="font-weight: bold;"><?php echo esc_html($year); ?></td>
+                        <td>Total Transactions</td>
+                        <td><?php echo $data['total']; ?></td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;">Credits</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['credits']; ?></td>
+                        <td>Credits</td>
+                        <td><?php echo $data['credits']; ?></td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;">Debits</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['debits']; ?></td>
+                        <td>Debits</td>
+                        <td><?php echo $data['debits']; ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -62,22 +62,22 @@ if ($handler) {
                 <summary style="cursor: pointer; font-weight: bold; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
                     <?php echo esc_html($year); ?> (<?php echo $yearData[$year]['total']; ?> transactions)
                 </summary>
-                <table style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+                <table style="border-collapse: collapse;">
                     <thead>
-                        <tr style="background: #f0f0f0;">
-                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Month</th>
-                            <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Total</th>
-                            <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Credits</th>
-                            <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Debits</th>
+                        <tr>
+                            <th style="text-align: left;">Month</th>
+                            <th>Total</th>
+                            <th>Credits</th>
+                            <th>Debits</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($months as $month => $data): ?>
                             <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;"><?php echo $monthNames[$month]; ?></td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['total']; ?></td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['credits']; ?></td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['debits']; ?></td>
+                                <td><?php echo $monthNames[$month]; ?></td>
+                                <td><?php echo $data['total']; ?></td>
+                                <td><?php echo $data['credits']; ?></td>
+                                <td><?php echo $data['debits']; ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
