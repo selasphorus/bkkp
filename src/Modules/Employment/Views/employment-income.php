@@ -64,6 +64,7 @@
 					
 					$txn_url = add_query_arg([
 						'scope' => $year,
+						'transaction_category' => 'income',
 						'related_group' => $employer->ID,
 					], home_url('/accounts-overview/transactions/'));
 					?>
