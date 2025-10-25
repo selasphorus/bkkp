@@ -18,7 +18,7 @@
 				</a>
 				</td>
 				<td>
-				<?php echo get_post_meta($employer,'work_category_tmp'); ?>
+				<?php echo get_post_meta($employer->ID,'work_category_tmp'); ?>
 				</td>
 				<td>
 				<?php echo "[".count($docs)."] "; ?>
@@ -33,11 +33,9 @@
 				    </a>
 				    <?php
 				    echo " [".$total_comp."/".$total_withheld."]";
-				    //echo "<br />";
 				}
 				?>
-				</td>			
-			<!-- render $docs for that employer -->
+				</td>
 			</tr>
 		<?php endforeach; ?>
 		</table>
