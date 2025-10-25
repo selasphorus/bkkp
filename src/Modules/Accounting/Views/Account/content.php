@@ -44,12 +44,8 @@ if ($handler) {
                         <div class="stat-row">
                             <span class="stat-label">Total Transactions:</span>
                             <span class="stat-value"><?php echo $yearStats['total']; ?></span>
-                        </div>
-                        <div class="stat-row">
                             <span class="stat-label">Credits:</span>
                             <span class="stat-value"><?php echo $yearStats['credits']; ?></span>
-                        </div>
-                        <div class="stat-row">
                             <span class="stat-label">Debits:</span>
                             <span class="stat-value"><?php echo $yearStats['debits']; ?></span>
                         </div>
