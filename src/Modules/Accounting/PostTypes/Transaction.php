@@ -285,29 +285,23 @@ class Transaction extends PostTypeHandler
 		
 		// Build clause based on field type
 		if ($isRelationship) {
-			// Relationship fields store serialized arrays
-			// Search for the ID within the serialized data
+			// Relationship fields store serialized arrays like: a:1:{i:0;s:3:"326";}
+			// Search for the ID within the serialized string
 			if (count($postIds) === 1) {
-				// Match pattern like: s:3:"390" or i:390;
 				$filters['meta']['clauses'][] = [
+					'type' => 'like',
 					'key' => $metaKey,
-					'value' => '"' . $postIds[0] . '"',  // Matches: "390" within serialized string
-					'compare' => 'LIKE',
+					'value' => '"' . $postIds[0] . '"',
 				];
 			} else {
-				// Multiple values: use OR relation
-				$subclauses = [];
+				// Multiple values: each needs its own LIKE
 				foreach ($postIds as $id) {
-					$subclauses[] = [
+					$filters['meta']['clauses'][] = [
+						'type' => 'like',
 						'key' => $metaKey,
 						'value' => '"' . $id . '"',
-						'compare' => 'LIKE',
 					];
 				}
-				$filters['meta']['clauses'][] = [
-					'relation' => 'OR',
-					'clauses' => $subclauses,
-				];
 			}
 		} else {
 			// Post object fields store simple values
