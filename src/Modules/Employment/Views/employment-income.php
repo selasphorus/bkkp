@@ -62,11 +62,27 @@
 					if (!isset($docs_by_year[$year])) { $mismatch = false; } // match N/A if no docs
 					$difference = $doc_total - $txn_total;
 					
+					// These hash IDs are specific to a particular ACP setup 
+					// ... so this url creation will need to change if the plugin is to work for other users on other sites
+					// Find by manually filtering and copying from the URL
+					// e.g. acp_filter[21fe4931b33334][0]=2024&acp_filter[21fe4931b33334][1]=2024 - This appears to be the tax_year filter (range: 2024 to 2024)
+					$acp_tax_year_hash = '21fe4931b33334';  // Your tax_year column hash
+					$acp_related_group_hash = '683bc82d0624dc';  // Your related_group column hash
+					$acp_layout_id = '68b645905c8d6';  // Your saved layout ID (optional)
+					
 					$txn_url = add_query_arg([
+						'post_type' => 'transaction',
+						'layout' => $acp_layout_id,  // Optional: use a saved ACP layout
+						"acp_filter[{$acp_related_group_hash}]" => $employer->ID,
+						"acp_filter[{$acp_tax_year_hash}][0]" => $year,  // Range start
+						"acp_filter[{$acp_tax_year_hash}][1]" => $year,  // Range end
+						'filter_action' => 'Filter',
+					], admin_url('edit.php'));
+					/*$txn_url = add_query_arg([
 						'scope' => $year,
 						'transaction_category' => 'income',
 						'related_group' => $employer->ID,
-					], home_url('/accounts-overview/transactions/'));
+					], home_url('/accounts-overview/transactions/'));*/
 					?>
 					<td class="tax-year-cell">
 					<!-- Show docs if they exist -->
