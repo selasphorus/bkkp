@@ -5,7 +5,7 @@
         <p>No events found.</p>
     <?php else: ?>
         <table>
-        <?php /*foreach ($employers as $row): ?>
+        <?php foreach ($employers as $row): ?>
             <?php
             $employer = $row['post']; 
 			$docs = $row['docs'];
@@ -21,7 +21,7 @@
 				</td>
 				<td>
 				<?php
-				foreach ( $docs as $doc ) {
+				/*foreach ( $docs as $doc ) {
 				    $h = $handler($doc);
 				    $total_comp = $h->getPostMeta('total_comp');
 				    $total_withheld = $h->getPostMeta('total_withheld');
@@ -32,12 +32,12 @@
 				    <?php
 				    echo " [".$total_comp."/".$total_withheld."]";
 				    echo "<br />";
-				}
+				}*/
 				?>
 				</td>			
 			<!-- render $docs for that employer -->
 			</tr>
-		<?php endforeach;*/ ?>
+		<?php endforeach; ?>
 		</table>
     <?php endif; ?>
     
