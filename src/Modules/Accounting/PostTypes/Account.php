@@ -9,7 +9,8 @@ use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 
 class Account extends PostTypeHandler
 {
-	public function __construct(?\WP_Post $post = null) {
+	public function __construct(?\WP_Post $post = null) 
+	{
 		$config = [
 			'slug'        => 'account',
 			'menu_icon'   => 'dashicons-bank',
@@ -66,6 +67,69 @@ class Account extends PostTypeHandler
 		}
 		
 		return [];		
+	}
+	
+	/**
+	 * Get transaction statistics grouped by year and month
+	 * 
+	 * @param array $filters Optional filters to pass to getTransactions()
+	 * @return array ['yearly' => [...], 'monthly' => [...]]
+	 */
+	public function getTransactionStats(array $filters = []): array
+	{
+		$transactions = $this->getTransactions($filters);
+		
+		$yearData = [];
+		$monthData = [];
+		
+		foreach ($transactions as $transaction) {
+			$dateValue = get_post_meta($transaction->ID, 'transaction_date', true);
+			$type = get_post_meta($transaction->ID, 'transaction_type', true);
+			
+			// Extract year and month from yyyymmdd format
+			$year = substr($dateValue, 0, 4);
+			$month = substr($dateValue, 4, 2);
+			
+			// Initialize year data if needed
+			if (!isset($yearData[$year])) {
+				$yearData[$year] = ['total' => 0, 'credits' => 0, 'debits' => 0];
+			}
+			
+			// Initialize month data if needed
+			if (!isset($monthData[$year])) {
+				$monthData[$year] = [];
+			}
+			if (!isset($monthData[$year][$month])) {
+				$monthData[$year][$month] = ['total' => 0, 'credits' => 0, 'debits' => 0];
+			}
+			
+			// Increment counters
+			$yearData[$year]['total']++;
+			$monthData[$year][$month]['total']++;
+			
+			if ($type === 'credit') {
+				$yearData[$year]['credits']++;
+				$monthData[$year][$month]['credits']++;
+			} elseif ($type === 'debit') {
+				$yearData[$year]['debits']++;
+				$monthData[$year][$month]['debits']++;
+			}
+		}
+		
+		// Sort by year descending
+		krsort($yearData);
+		krsort($monthData);
+		
+		// Sort months within each year descending
+		foreach ($monthData as &$months) {
+			krsort($months);
+		}
+		
+		return [
+			'yearly' => $yearData,
+			'monthly' => $monthData,
+			'total_count' => count($transactions)
+		];
 	}
 
 	/**

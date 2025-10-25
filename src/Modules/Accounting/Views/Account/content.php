@@ -4,84 +4,87 @@ use atc\WHx4\Core\PostTypeHandler;
 /** @var \WP_Post $post */
 $handler = PostTypeHandler::getHandlerForPost($post);
 
-// Set up defaults
-$status = "Unknown";  
-$transactions = [];
-$meta = [];
-
 if ($handler) {
-    $accountId = $handler->getPostId();
-    $meta = $handler->getPostMeta();
     $status = $handler->getStatus();
-   
-    // Get all transactions for this account (respects URL params automatically)
-    $transactions = $handler->getTransactions();
+    $stats = $handler->getTransactionStats();
     
-    // Group transactions by year and count credits/debits
-    $yearData = [];
-    foreach ($transactions as $transaction) {
-        $dateValue = get_post_meta($transaction->ID, 'transaction_date', true);
-        $type = get_post_meta($transaction->ID, 'transaction_type', true);
-        
-        // Extract year from yyyymmdd format
-        $year = substr($dateValue, 0, 4);
-        
-        if (!isset($yearData[$year])) {
-            $yearData[$year] = [
-                'total' => 0,
-                'credits' => 0,
-                'debits' => 0
-            ];
-        }
-        
-        $yearData[$year]['total']++;
-        if ($type === 'credit') {
-            $yearData[$year]['credits']++;
-        } elseif ($type === 'debit') {
-            $yearData[$year]['debits']++;
-        }
-    }
+    $yearData = $stats['yearly'];
+    $monthData = $stats['monthly'];
+    $totalCount = $stats['total_count'];
     
-    // Sort by year descending
-    krsort($yearData);
-    
-} else {
-   echo "<h3>No post handler!</h3>";
+    // Month names for display
+    $monthNames = [
+        '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr',
+        '05' => 'May', '06' => 'Jun', '07' => 'Jul', '08' => 'Aug',
+        '09' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec'
+    ];
+    // TO be replaced with:
+    //$monthNames = DateHelper::getMonthNames();
 }
 ?>
 
 <div>
     <p><strong>Account Status:</strong> <?php echo esc_html($status); ?></p>
-    <p><strong>Total Transactions on Record:</strong> <?php echo count($transactions); ?></p>
+    <p><strong>Total Transactions on Record:</strong> <?php echo $totalCount; ?></p>
     
     <?php if (!empty($yearData)): ?>
         <h3>Transactions by Year</h3>
-        <table class="bkkp">
+        <table style="border-collapse: collapse; width: 100%; margin-bottom: 30px;">
             <thead>
-                <tr>
-                    <th>Year</th>
-                    <th>Metric</th>
-                    <th>Count</th>
+                <tr style="background: #f0f0f0;">
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Year</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Metric</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Count</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($yearData as $year => $data): ?>
                     <tr>
-                        <td rowspan="3"><?php echo esc_html($year); ?></td>
-                        <td>Total Transactions</td>
-                        <td><?php echo $data['total']; ?></td>
+                        <td rowspan="3" style="border: 1px solid #ddd; padding: 8px; font-weight: bold;"><?php echo esc_html($year); ?></td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;">Total Transactions</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['total']; ?></td>
                     </tr>
                     <tr>
-                        <td>Credits</td>
-                        <td><?php echo $data['credits']; ?></td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;">Credits</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['credits']; ?></td>
                     </tr>
                     <tr>
-                        <td>Debits</td>
-                        <td><?php echo $data['debits']; ?></td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;">Debits</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['debits']; ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+        
+        <h3>Transactions by Month</h3>
+        <?php foreach ($monthData as $year => $months): ?>
+            <details style="margin-bottom: 20px;">
+                <summary style="cursor: pointer; font-weight: bold; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
+                    <?php echo esc_html($year); ?> (<?php echo $yearData[$year]['total']; ?> transactions)
+                </summary>
+                <table style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+                    <thead>
+                        <tr style="background: #f0f0f0;">
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Month</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Total</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Credits</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: right;">Debits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($months as $month => $data): ?>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;"><?php echo $monthNames[$month]; ?></td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['total']; ?></td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['credits']; ?></td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: right;"><?php echo $data['debits']; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </details>
+        <?php endforeach; ?>
+        
     <?php else: ?>
         <p><em>No transactions found for this account.</em></p>
     <?php endif; ?>
@@ -89,6 +92,6 @@ if ($handler) {
     <hr />
     <details>
         <summary>Post Meta (debug)</summary>
-        <pre><?php print_r($meta); ?></pre>
+        <pre><?php print_r($handler->getPostMeta()); ?></pre>
     </details>
 </div>
