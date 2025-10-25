@@ -148,73 +148,10 @@ class Transaction extends PostTypeHandler
 			]);
 		}
 		
-		// Map account (ACF post object field) → meta spec
-		if (isset($filters['account']) && $filters['account'] !== '') {
-			$account = $filters['account'];
-			unset($filters['account']);
-			
-			// Normalize to array - split comma-separated strings
-			$accountInputs = is_array($account) ? $account : explode(',', $account);
-			$accountInputs = array_map('trim', $accountInputs); // trim whitespace
-			$accountIds = [];
-			
-			foreach ($accountInputs as $input) {
-				if (is_numeric($input)) {
-					// Already an ID
-					$accountIds[] = (int)$input;
-				} else {
-					// Resolve slug to ID -- TBD if this is the best way -- make a utility function instead?
-					$post = get_page_by_path($input, OBJECT, 'account'); // adjust post type if needed
-					if ($post) {
-						$accountIds[] = $post->ID;
-					}
-				}
-			}
-			
-			$accountIds = array_filter($accountIds);
-			
-			if ($accountIds !== []) {
-				// Ensure meta spec structure exists
-				if (!isset($filters['meta'])) {
-					$filters['meta'] = ['relation' => 'AND', 'clauses' => []];
-				}
-				if (!isset($filters['meta']['clauses'])) {
-					$filters['meta']['clauses'] = [];
-				}
-				
-				// Append account clause
-				$filters['meta']['clauses'][] = [
-					'type' => count($accountIds) === 1 ? 'equals' : 'in',
-					'key' => 'account',
-					'value' => count($accountIds) === 1 ? $accountIds[0] : $accountIds,
-				];
-			}
-		}
+		// Map ACF post object fields to meta queries
+		$this->mapPostObjectFieldToMeta($filters, 'account', 'account');
+		$this->mapPostObjectFieldToMeta($filters, 'related_group', 'group');
 		
-		// Map related_group (ACF post object field) → meta spec
-		if (isset($filters['related_group']) && $filters['related_group'] !== '') {
-			$relatedGroup = $filters['related_group'];
-			unset($filters['related_group']);
-			
-			// Normalize to array of post IDs
-			$groupIds = is_array($relatedGroup) ? $relatedGroup : [$relatedGroup];
-			$groupIds = array_map('intval', array_filter($groupIds));
-			
-			if ($groupIds !== []) {
-				$filters['meta'] = array_merge($filters['meta'] ?? [], [
-					'relation' => 'AND',
-					'clauses' => array_merge(
-						$filters['meta']['clauses'] ?? [],
-						[[
-							'type' => count($groupIds) === 1 ? 'equals' : 'in',
-							'key' => 'related_group',
-							'value' => count($groupIds) === 1 ? $groupIds[0] : $groupIds,
-						]]
-					),
-				]);
-			}
-		}
-	
 		// Normalize per_page alias
 		if(isset($filters['per_page']) && !isset($filters['limit'])){
 			$filters['limit'] = (int)$filters['per_page'];
@@ -244,6 +181,67 @@ class Transaction extends PostTypeHandler
 		}
 	
 		return $sum;
+	}
+	
+	//====== INTERNALS =======/
+	
+	/**
+	 * Map an ACF post object field to a meta query spec.
+	 * Supports both post IDs and slugs, with comma-separated input.
+	 *
+	 * @param array $filters The filters array (passed by reference)
+	 * @param string $filterKey The filter key to map (e.g., 'account', 'related_group')
+	 * @param string $postType The post type for slug resolution
+	 * @param string $metaKey The ACF field name (defaults to same as $filterKey)
+	 */
+	private function mapPostObjectFieldToMeta(array &$filters, string $filterKey, string $postType, string $metaKey = null): void
+	{
+		if (!isset($filters[$filterKey]) || $filters[$filterKey] === '') {
+			return;
+		}
+		
+		$metaKey = $metaKey ?? $filterKey;
+		$value = $filters[$filterKey];
+		unset($filters[$filterKey]);
+		
+		// Normalize to array - split comma-separated strings
+		$inputs = is_array($value) ? $value : explode(',', $value);
+		$inputs = array_map('trim', $inputs);
+		$postIds = [];
+		
+		foreach ($inputs as $input) {
+			if (is_numeric($input)) {
+				// Already an ID
+				$postIds[] = (int)$input;
+			} else {
+				// Resolve slug to ID
+				$post = get_page_by_path($input, OBJECT, $postType);
+				if ($post) {
+					$postIds[] = $post->ID;
+				}
+			}
+		}
+		
+		$postIds = array_filter($postIds);
+		
+		if ($postIds === []) {
+			return;
+		}
+		
+		// Ensure meta spec structure exists
+		if (!isset($filters['meta'])) {
+			$filters['meta'] = ['relation' => 'AND', 'clauses' => []];
+		}
+		if (!isset($filters['meta']['clauses'])) {
+			$filters['meta']['clauses'] = [];
+		}
+		
+		// Append clause
+		$filters['meta']['clauses'][] = [
+			'type' => count($postIds) === 1 ? 'equals' : 'in',
+			'key' => $metaKey,
+			'value' => count($postIds) === 1 ? $postIds[0] : $postIds,
+		];
 	}
 
 
