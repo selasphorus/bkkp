@@ -1,3 +1,6 @@
+<?php
+use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
+?>
 <div class="whx4 accounting">
 	
 	<!-- Print-only header -->
@@ -51,12 +54,23 @@
             <tr>
 				<td><?php echo $row['term']->name; ?></td>
 				<?php foreach ($row['cols'] as $col): ?>
-					<td><?php
+					<td>
+					<?php
+					// Build transaction URL
+					$txnUrl = Transaction::getFilteredAdminUrl([
+						'tax_year' => $year,
+						'transaction_category' => $row['term']->name,
+					]);
 					// TODO: style according to whether sum is <> previous year
+					?>
+					<a href="<?php echo esc_url($txnUrl); ?>" target="_blank">
+					<?php
 					if ( $col['sum'] == "0.0" ) { echo "--"; } else { echo "$".$col['sum']; }
 					// Show count if non-zero, even if sum is zero
 					if ( $col['count'] > 0 ) { echo '<span class="subtle txn-count">&nbsp;' . '(' . $col['count'] . ')' . '</span>'; }
-					?></td>
+					?>
+					</a>
+					</td>
 				<?php endforeach; ?>
 				<?php 
 				//echo "<pre>".print_r($row['cols'], true)."</pre>";
