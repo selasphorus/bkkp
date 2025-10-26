@@ -120,7 +120,7 @@
 									<?php echo esc_html($comp_formatted); ?>
 								</a>
 								<?php if (!empty($total_withheld)): ?>
-									<span class="withheld-amount">
+									<span class="withheld-amount sceren-only">
 										($<?php echo esc_html(number_format((float)$total_withheld, 0)); ?> withheld)
 									</span>
 								<?php endif; ?>
