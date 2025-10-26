@@ -1,8 +1,6 @@
 <div class="whx4-employment">
-	<p><strong>Employers:</strong></p>
-    
 	<?php if(!$employers): ?>
-        <p>No events found.</p>
+        <p>No employers found.</p>
     <?php else: ?>
         <table class="bkkp">
         <tr>
