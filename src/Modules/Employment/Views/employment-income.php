@@ -1,14 +1,21 @@
 <div class="whx4 employment">
     <!-- Print-only header -->
     <div class="print-header">
-    <h1>Employment Income for <?php
-    if (count($years) === 1) {
-        echo $years[0];
-    } else {
-        echo min($years) . '–' . max($years);
-    }
-    ?></h1>
-    </div>
+		<h1><?php 
+			if (!empty($print_header)) {
+				echo esc_html($print_header);
+			} else {
+				// Default header
+				echo 'Employment Income for ';
+				if (count($years) === 1) {
+					echo $years[0];
+				} else {
+					echo min($years) . '–' . max($years);
+				}
+			}
+		?></h1>
+	</div>
+	
 	<?php if(!$employers): ?>
         <p>No employers found.</p>
     <?php else: ?>

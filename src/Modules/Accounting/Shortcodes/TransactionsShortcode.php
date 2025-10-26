@@ -84,6 +84,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$viewVars = [];
 		$viewVars['atts'] = $atts;
 		$viewVars['grouped_by'] = $groupMode;
+		$viewVars['print_header'] = $atts['print_header'] ?? null,
 		//
 		$viewSpecs = [ 'kind' => 'view', 'module' => 'accounting', 'post_type' => 'transaction' ];
 		//

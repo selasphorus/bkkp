@@ -2,15 +2,21 @@
 	
 	<!-- Print-only header -->
     <div class="print-header">
-    <h1>Transactions for <?php
-    if (count($years) === 1) {
-        echo $years[0];
-    } else {
-        echo min($years) . '–' . max($years);
-    }
-    //echo " &mdash; Categories:"; // wip
-    ?></h1>
-    </div>
+		<h1><?php 
+			if (!empty($print_header)) {
+				echo esc_html($print_header);
+			} else {
+				// Default header
+				echo 'Transactions for ';
+				if (count($years) === 1) {
+					echo $years[0];
+				} else {
+					echo min($years) . '–' . max($years);
+				}
+				//echo " &mdash; Categories:"; // wip
+			}
+		?></h1>
+	</div>
     
 	<?php if (!$rows): ?>
         <p>No posts found.</p>
