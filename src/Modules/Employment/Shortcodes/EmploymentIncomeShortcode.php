@@ -45,50 +45,224 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         if (isset($employers['debug']['scope'])) { 
             $scope = $employers['debug']['scope'];
         }
-        
         // Extract years for columns
         $years = ScopedDateResolver::extractYears($scope);
         
-        // Prepare all employer data
-        $employerData = $this->prepareEmployerData($module, $employerPosts, $years, $scope, $atts);
-        
-        // Calculate aggregated totals
-        $totals = $this->calculateAggregatedTotals($employerData, $years);
-        
+        // v1
+        // Fetch tax docs per employer (optionally scoped)
+        // Bundle employers with their related tax docs
+		//$employerBundles = [];
+		/*foreach ($employerPosts as $post) {
+			$docFilters = [];
+		
+			// Reuse resolved scope for documents if one has been set
+			if (!empty($scope)) {
+				$docFilters['scope'] = $scope;
+			}
+			//if (isset($atts['scope'])) { $docFilters['scope'] = $scope; }
+		
+			// Optional scoping basis and storage model (overrides via shortcode)
+			if (isset($atts['date_key'])) { $docFilters['date_key'] = $atts['date_key']; }          // 'document_date' | 'tax_year'
+			if (isset($atts['key_type'])) { $docFilters['key_type'] = $atts['key_type']; }          // 'single' | 'rows' | 'serialized' (for tax_year)
+			if (isset($atts['limit']))    { $docFilters['limit']    = (int)$atts['limit']; }
+		
+			$docs = $module->findEmployerTaxDocs($post, $docFilters);
+			//$docs = $module->findEmployerTaxDocs($post, $docFilters); // add another data set to the bundle?
+			
+			// NEW: Get transactions for this employer
+			$transactionFilters = [];
+			if (!empty($scope)) {
+				$transactionFilters['scope'] = $scope;
+			}
+			$transactions = $module->findEmployerTransactions($post, $transactionFilters);
+			
+			// NEW: Aggregate transaction amounts by year
+			$transactionTotalsByYear = [];
+			foreach ($transactions['posts'] ?? [] as $txn) {
+				$txnDate = get_post_meta($txn->ID, 'transaction_date', true);
+				if ($txnDate) {
+					// transaction_date is stored as NUMERIC yyyymmdd
+					$year = (int)substr((string)$txnDate, 0, 4);
+					$amount = (float)get_post_meta($txn->ID, 'amount', true);
+					
+					if (!isset($transactionTotalsByYear[$year])) {
+						$transactionTotalsByYear[$year] = 0;
+					}
+					$transactionTotalsByYear[$year] += $amount;
+				}
+			}
+		
+			$employerBundles[] = [
+				'post'            => $post,
+				'docs'            => $docs['posts'] ?? [],
+				//'docs_pagination' => $docs['pagination'] ?? null,
+				'docs_debug'      => $docs['debug'] ?? null,
+				'transaction_totals' => $transactionTotalsByYear,
+			];
+		}*/
+		
+		// WIP v2
+		// Prepare all employer data with calculations done here
+		$employerBundles = [];
+		foreach ($employerPosts as $employer) {
+			// Get docs
+			$docFilters = ['scope' => $scope];
+			if (isset($atts['date_key'])) $docFilters['date_key'] = $atts['date_key'];
+			if (isset($atts['key_type'])) $docFilters['key_type'] = $atts['key_type'];
+			if (isset($atts['limit'])) $docFilters['limit'] = (int)$atts['limit'];
+			
+			$docsResult = $module->findEmployerTaxDocs($employer, $docFilters);
+			$docs = $docsResult['posts'] ?? [];
+			
+			// Get transactions
+			$txnsResult = $module->findEmployerTransactions($employer, ['scope' => $scope]);
+			$transactionTotalsByYear = [];
+			foreach ($txnsResult['posts'] ?? [] as $txn) {
+				$txnDate = get_post_meta($txn->ID, 'transaction_date', true);
+				if ($txnDate) {
+					$year = (int)substr((string)$txnDate, 0, 4);
+					$amount = (float)get_post_meta($txn->ID, 'amount', true);
+					if (!isset($transactionTotalsByYear[$year])) {
+						$transactionTotalsByYear[$year] = 0;
+					}
+					$transactionTotalsByYear[$year] += $amount;
+				}
+			}
+			
+			// Organize docs by year WITH calculations
+			$docsByYear = [];
+			foreach ($docs as $doc) {
+				$taxYear = get_post_meta($doc->ID, 'tax_year', true);
+				if ($taxYear) {
+					if (!isset($docsByYear[$taxYear])) {
+						$docsByYear[$taxYear] = [];
+					}
+					
+					// PRE-CALCULATE everything the view needs
+					$totalComp = (float)get_post_meta($doc->ID, 'total_comp', true);
+					$totalWithheld = (float)get_post_meta($doc->ID, 'total_withheld', true);
+					
+					$docsByYear[$taxYear][] = [
+						'post' => $doc,
+						'total_comp' => $totalComp,
+						'total_withheld' => $totalWithheld,
+						'net' => $totalComp - $totalWithheld,
+						'comp_formatted' => $totalComp ? '$' . number_format($totalComp, 0) : '—',
+						'withheld_formatted' => $totalWithheld ? '$' . number_format($totalWithheld, 0) : null,
+					];
+				}
+			}
+			
+			// PRE-CALCULATE year data
+			$yearlyData = [];
+			foreach ($years as $year) {
+				$docTotal = 0;
+				$hasDocs = isset($docsByYear[$year]);
+				
+				if ($hasDocs) {
+					foreach ($docsByYear[$year] as $doc) {
+						$docTotal += $doc['net'];
+					}
+				}
+				
+				$txnTotal = $transactionTotalsByYear[$year] ?? 0;
+				$mismatch = $hasDocs && (abs($docTotal - $txnTotal) > 0.01);
+				$difference = $docTotal - $txnTotal;
+				
+				// Build transaction URL
+				$txnUrl = Transaction::getFilteredAdminUrl([
+					'tax_year' => $year,
+					'related_group' => $employer->ID,
+				]);
+				
+				$yearlyData[$year] = [
+					'has_docs' => $hasDocs,
+					'docs' => $docsByYear[$year] ?? [],
+					'doc_total' => $docTotal,
+					'txn_total' => $txnTotal,
+					'txn_url' => $txnUrl,
+					'mismatch' => $mismatch,
+					'difference' => $difference,
+					'has_activity' => $hasDocs || $txnTotal > 0,
+				];
+			}
+			
+			$employerBundles[] = [
+				'post' => $employer,
+				'work_category' => get_post_meta($employer->ID, 'work_category_tmp', true),
+				'employment_classification' => get_post_meta($employer->ID, 'employment_classification', true),
+				'yearly_data' => $yearlyData,
+			];
+		}
+		
+		// Calculate totals across all employers
+		$totalsByYear = [];
+		foreach ($years as $year) {
+			$employerCount = 0;
+			$grossTotal = 0;
+			$netTotal = 0;
+			
+			foreach ($employerBundles as $bundle) {
+				$yearData = $bundle['yearly_data'][$year];
+				if ($yearData['has_activity']) {
+					$employerCount++;
+					if ($yearData['has_docs']) {
+						foreach ($yearData['docs'] as $doc) {
+							$grossTotal += $doc['total_comp'];
+							$netTotal += $doc['net'];
+						}
+					} else {
+						$grossTotal += $yearData['txn_total'];
+						$netTotal += $yearData['txn_total'];
+					}
+				}
+			}
+			
+			$totalsByYear[$year] = [
+				'employer_count' => $employerCount,
+				'gross' => $grossTotal,
+				'net' => $netTotal,
+			];
+		}
+
         // Pagination info
         $pagination = $employers['pagination'] ?? ['found' => 0, 'max_pages' => 0, 'paged' => 1];
-        
+
         // Troubleshooting info
         $info .= "[" . $employers['pagination']['found'] . "] employers found for scope: {$scope}<br />";
         if ($employers['pagination']['found'] == 0) {
             $info .= "findEmployers result: <pre>". print_r($employers, true) . "</pre>";
         }
+
+        // Handler factory so views can call CPT methods safely.
+        $handlerFactory = [PostTypeHandler::class, 'getHandlerForPost'];
         
-        // Debug info
-        $debug = [
-            'employers' => $employers['debug'] ?? null,
-        ];
+        // Set the view
+        $view = "employment-income"; //$view = "module-view-test";
         
-        // Pass clean data to view
+        // WIP
+        $debug = [];
+        $debug['employers'] = $employers['debug'];
+        //$debug['docs'] = $docs['debug'];
+        
         $vars = [
-            'employer_data'  => $employerData,
-            'years'          => $years,
-            'totals'         => $totals,
-            'print_header'   => $atts['print_header'] ?? true,
-            'print_footer'   => $atts['print_footer'] ?? true,
-            'pagination'     => $pagination,
-            'troubleshooting' => $info,
-            'debug'          => $debug,
-        ];
+			'employers'  => $employerBundles, // each item: ['post' => WP_Post, 'docs' => WP_Post[], ...]
+			//'handler'    => $handlerFactory,
+			'totals' => $totalsByYear,
+			'pagination' => $pagination,
+			//'years'      => ScopedDateResolver::extractYears($scope),
+			'years' => $years,
+			'print_header' => $atts['print_header'] ?? true,
+			'print_footer' => $atts['print_footer'] ?? true,
+			'info' => $info,
+			'debug'      => $debug ?? null,
+		];
 
         return ViewLoader::renderToString(
-            'employment-income',
+            $view,
             $vars,
             ['kind' => 'partial', 'module' => 'employment'] //, 'post_type' => self::CPT
         );
-        
-        //$view = ViewLoader::load('employment-income', $vars, $module);
-        return $view;
     }
     
     /*
@@ -149,207 +323,43 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
     */
     
     /**
-     * Prepare all data for each employer across all years
-     * 
-     * @param object $module EmploymentModule instance
-     * @param array $employers Array of employer WP_Post objects
-     * @param array $years Array of years to process
-     * @param string $scope Original scope string
-     * @param array $atts Shortcode attributes
-     * @return array Prepared employer data
-     */
-    private function prepareEmployerData($module, array $employers, array $years, string $scope, array $atts): array
-    {
-        $employerData = [];
-        
-        foreach ($employers as $employer) {
-            // Get all docs for this employer (scoped)
-            $taxDocs = $module->findEmployerTaxDocs($employer, ['scope' => $scope]);
-            $docsByYear = $this->organizeDocsByYear($taxDocs, $years);
-            
-            // Get all transactions for this employer (scoped)
-            $transactions = $module->findEmployerTransactions($employer, ['scope' => $scope]);
-            $transactionsByYear = $this->organizeTransactionsByYear($transactions['posts'] ?? [], $years);
-            
-            // Calculate yearly data for this employer
-            $yearlyData = $this->calculateEmployerYearlyData(
-                $employer,
-                $docsByYear,
-                $transactionsByYear,
-                $years
-            );
-            
-            $employerData[] = [
-                'employer'     => $employer,
-                'yearly_data'  => $yearlyData,
-            ];
-        }
-        
-        return $employerData;
-    }
-    
-    /**
-     * Organize tax documents by year
-     * 
-     * @param array $docs Array of tax document posts
-     * @param array $years Years to organize into
-     * @return array Docs indexed by year
-     */
-    private function organizeDocsByYear(array $docs, array $years): array
-    {
-        $docsByYear = array_fill_keys($years, []);
-        
-        foreach ($docs as $doc) {
-            $taxYear = get_post_meta($doc->ID, 'tax_year', true);
-            if ($taxYear && isset($docsByYear[$taxYear])) {
-                $docsByYear[$taxYear][] = $doc;
-            }
-        }
-        
-        return $docsByYear;
-    }
-    
-    /**
-     * Organize transactions by year and calculate totals
-     * 
-     * @param array $transactions Array of transaction posts
-     * @param array $years Years to organize into
-     * @return array Transaction totals indexed by year
-     */
-    private function organizeTransactionsByYear(array $transactions, array $years): array
-    {
-        $txnsByYear = array_fill_keys($years, 0);
-        
-        foreach ($transactions as $txn) {
-            $txnDate = get_post_meta($txn->ID, 'transaction_date', true);
-            if ($txnDate) {
-                $txnYear = date('Y', strtotime($txnDate));
-                if (isset($txnsByYear[$txnYear])) {
-                    $amount = (float) get_post_meta($txn->ID, 'amount', true);
-                    $txnsByYear[$txnYear] += $amount;
-                }
-            }
-        }
-        
-        return $txnsByYear;
-    }
-    
-    /**
-     * Calculate all data for an employer across all years
-     * 
-     * @param \WP_Post $employer The employer post
-     * @param array $docsByYear Docs organized by year
-     * @param array $transactionTotalsByYear Transaction totals by year
-     * @param array $years Years to calculate
-     * @return array Yearly data for this employer
-     */
-    private function calculateEmployerYearlyData(
-        \WP_Post $employer,
-        array $docsByYear,
-        array $transactionTotalsByYear,
-        array $years
-    ): array {
-        $yearlyData = [];
-        
-        foreach ($years as $year) {
-            $docs = $docsByYear[$year] ?? [];
-            $hasDocs = !empty($docs);
-            
-            // Prepare doc data with metadata
-            $preparedDocs = [];
-            $docTotal = 0;
-            $grossTotal = 0;
-            $netTotal = 0;
-            
-            if ($hasDocs) {
-                foreach ($docs as $doc) {
-                    $gross = (float) get_post_meta($doc->ID, 'gross_income', true);
-                    $netComp = (float) get_post_meta($doc->ID, 'net_compensation', true);
-                    $totalComp = (float) get_post_meta($doc->ID, 'total_compensation', true);
-                    
-                    $docTotal += $totalComp;
-                    $grossTotal += $gross;
-                    $netTotal += $netComp;
-                    
-                    $preparedDocs[] = [
-                        'post'       => $doc,
-                        'gross'      => $gross > 0 ? '$' . number_format($gross, 0) : '—',
-                        'net'        => $netComp > 0 ? '$' . number_format($netComp, 0) : '—',
-                        'total'      => $totalComp > 0 ? '$' . number_format($totalComp, 0) : '—',
-                    ];
-                }
-            }
-            
-            // Transaction data
-            $txnTotal = $transactionTotalsByYear[$year] ?? 0;
-            
-            // Mismatch detection (only if we have docs to compare)
-            $mismatch = $hasDocs && (abs($docTotal - $txnTotal) > 0.01);
-            $difference = $docTotal - $txnTotal;
-            
-            // Build transaction filter URL
-            $txnUrl = Transaction::getFilteredAdminUrl([
-                'tax_year' => $year,
-                'related_group' => $employer->ID,
-            ]);
-            
-            $yearlyData[$year] = [
-                'has_docs'        => $hasDocs,
-                'docs'            => $preparedDocs,
-                'doc_total'       => $docTotal,
-                'gross_total'     => $grossTotal,
-                'net_total'       => $netTotal,
-                'txn_total'       => $txnTotal,
-                'txn_url'         => $txnUrl,
-                'mismatch'        => $mismatch,
-                'difference'      => $difference,
-                'has_activity'    => $hasDocs || $txnTotal > 0,
-            ];
-        }
-        
-        return $yearlyData;
-    }
-    
-    /**
-     * Calculate aggregated totals across all employers
-     * 
-     * @param array $employerData Prepared employer data
-     * @param array $years Years to calculate
-     * @return array Totals indexed by year
-     */
-    private function calculateAggregatedTotals(array $employerData, array $years): array
-    {
-        $totals = [];
-        
-        foreach ($years as $year) {
-            $employerCount = 0;
-            $grossTotal = 0;
-            $netTotal = 0;
-            
-            foreach ($employerData as $employer) {
-                $yearData = $employer['yearly_data'][$year] ?? null;
-                
-                if ($yearData && $yearData['has_activity']) {
-                    $employerCount++;
-                    
-                    if ($yearData['has_docs']) {
-                        $grossTotal += $yearData['gross_total'];
-                        $netTotal += $yearData['net_total'];
-                    } else {
-                        // No docs but has transactions - use txn total for both
-                        $grossTotal += $yearData['txn_total'];
-                        $netTotal += $yearData['txn_total'];
-                    }
-                }
-            }
-            
-            $totals[$year] = [
-                'employer_count' => $employerCount,
-                'gross_total'    => $grossTotal,
-                'net_total'      => $netTotal,
-            ];
-        }
-        
-        return $totals;
-    }
+	 * Organize tax documents by year
+	 */
+	private function organizeDocsByYear(array $docs, array $years): array
+	{
+		$docsByYear = array_fill_keys($years, []);
+		
+		foreach ($docs as $doc) {
+			$taxYear = get_post_meta($doc->ID, 'tax_year', true);
+			if ($taxYear && isset($docsByYear[$taxYear])) {
+				$docsByYear[$taxYear][] = $doc;
+			}
+		}
+		
+		return $docsByYear;
+	}
+	
+	/**
+	 * Prepare doc display data with formatted amounts
+	 */
+	private function prepareDocData(array $docs): array
+	{
+		$prepared = [];
+		foreach ($docs as $doc) {
+			$gross = (float) get_post_meta($doc->ID, 'gross_income', true);
+			$netComp = (float) get_post_meta($doc->ID, 'net_compensation', true);
+			$totalComp = (float) get_post_meta($doc->ID, 'total_compensation', true);
+			
+			$prepared[] = [
+				'post'  => $doc,
+				'gross' => $gross > 0 ? '$' . number_format($gross, 0) : '—',
+				'net'   => $netComp > 0 ? '$' . number_format($netComp, 0) : '—',
+				'total' => $totalComp > 0 ? '$' . number_format($totalComp, 0) : '—',
+				'gross_raw' => $gross,
+				'net_raw' => $netComp,
+				'total_raw' => $totalComp,
+			];
+		}
+		return $prepared;
+	}
 }
