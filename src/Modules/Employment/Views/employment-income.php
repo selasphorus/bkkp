@@ -143,6 +143,67 @@
 					</td>
 				<?php endforeach; ?>
 				
+				<!-- Totals row -->
+				<?php
+				// Calculate totals per year
+				$totals_by_year = [];
+				foreach ($years as $year) {
+					$employer_count = 0;
+					$gross_total = 0;
+					$net_total = 0;
+					
+					foreach ($employers as $row) {
+						$docs = $row['docs'];
+						$txn_total = $row['transaction_totals'][$year] ?? 0;
+						
+						// Organize docs by tax_year for this employer
+						$has_activity = false;
+						foreach ($docs as $doc) {
+							$tax_year = get_post_meta($doc->ID, 'tax_year', true);
+							if ((int)$tax_year === (int)$year) {
+								$has_activity = true;
+								$h = $handler($doc);
+								$total_comp = (float)$h->getPostMeta('total_comp');
+								$total_withheld = (float)$h->getPostMeta('total_withheld');
+								$gross_total += $total_comp;
+								$net_total += ($total_comp - $total_withheld);
+							}
+						}
+						
+						// Count employer if they have docs or transactions this year
+						if ($has_activity || $txn_total > 0) {
+							$employer_count++;
+						}
+					}
+					
+					$totals_by_year[$year] = [
+						'employers' => $employer_count,
+						'gross' => $gross_total,
+						'net' => $net_total,
+					];
+				}
+				?>
+				<tr class="totals-row">
+					<td colspan="3"><strong>Totals</strong></td>
+					<?php foreach ($years as $year): ?>
+						<td class="tax-year-cell">
+							<?php if ($totals_by_year[$year]['employers'] > 0): ?>
+								<div class="total-employers">
+									<?php echo $totals_by_year[$year]['employers']; ?> employer<?php echo $totals_by_year[$year]['employers'] !== 1 ? 's' : ''; ?>
+								</div>
+								<div class="total-gross">
+									Gross: $<?php echo number_format($totals_by_year[$year]['gross'], 0); ?>
+								</div>
+								<div class="total-net">
+									Net: $<?php echo number_format($totals_by_year[$year]['net'], 0); ?>
+								</div>
+							<?php else: ?>
+								<span class="no-data">—</span>
+							<?php endif; ?>
+						</td>
+					<?php endforeach; ?>
+				</tr>
+				
 			</tr>
 		<?php endforeach; ?>
 		</table>
