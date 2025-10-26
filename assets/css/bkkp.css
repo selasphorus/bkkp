@@ -213,7 +213,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
     }
     
     /* Hide transaction totals and debug info */
-    .whx4-employment .txn-total,
+    .whx4-employment .txn-total:not(.no_docs),
     .whx4-employment .debug-divider,
     .whx4-employment .debug-info {
         display: none !important;

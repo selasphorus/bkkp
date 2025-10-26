@@ -53,6 +53,9 @@
 							$total_withheld = (float)$h->getPostMeta('total_withheld');
 							$doc_total += ($total_comp - $total_withheld);
 						}
+						$docs = true;
+					} else {
+					    $docs = false;
 					}
 					
 					$txn_total = $row['transaction_totals'][$year] ?? 0;
@@ -84,7 +87,7 @@
 					?>
 					<td class="tax-year-cell">
 					<!-- Show docs if they exist -->
-					<?php if (isset($docs_by_year[$year])): ?>
+					<?php if ($docs): ?>
 						<?php foreach ($docs_by_year[$year] as $doc): ?>
 							<?php
 							$h = $handler($doc);
@@ -108,8 +111,8 @@
 						<?php endforeach; ?>
 					<?php endif; ?>
 					<!-- Always show transaction total with link -->
-					<?php if ($txn_total > 0 || isset($docs_by_year[$year])): ?>
-						<div class="txn-total <?php echo $mismatch ? 'mismatch' : 'match'; ?>">
+					<?php if ($txn_total > 0 || $docs): ?>
+						<div class="txn-total <?php echo $mismatch ? 'mismatch' : 'match'; ?> <?php echo $docs ? 'docs' : 'no_docs'; ?>">
 							<a href="<?php echo esc_url($txn_url); ?>" target="_blank">
 								Txns: $<?php echo number_format($txn_total, 0); ?>
 							</a>
