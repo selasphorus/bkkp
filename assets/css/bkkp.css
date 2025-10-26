@@ -213,7 +213,8 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
     .site-header,
     .site-footer,
     #site-navigation,
-    #wpadminbar {
+    #wpadminbar,
+    .screen-only {
         display: none !important;
     }
     

@@ -17,13 +17,13 @@
     <?php else: ?>
         <table class="bkkp">
         <tr>
-            <th>Term</th>
+            <th>Category</th><!-- previously: Term -->
             <?php foreach ($years as $year): ?>
             <th><?php echo $year; ?></th>
             <?php endforeach; ?>
             <!--th>TS</th-->
         </tr>
-        <tr>
+        <tr class="screen-only">
 			<th>Total</th>
 			<?php foreach ($years as $year): ?>
 			<th>
