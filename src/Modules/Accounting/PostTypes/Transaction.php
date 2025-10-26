@@ -12,6 +12,7 @@ class Transaction extends PostTypeHandler
 	// Store ACP hash IDs as class constants
 	// TODO: Move to options table for portability across installations
 	private const ACP_TAX_YEAR_HASH = '21fe4931b33334';
+	private const ACP_ACCOUNT_HASH = '634b1b1d09fbe8';
 	private const ACP_RELATED_GROUP_HASH = '683bc82d0624dc';
 	private const ACP_LAYOUT_ID = '68b645905c8d6'; // "Transaction Basics" layout
 	
@@ -92,6 +93,16 @@ class Transaction extends PostTypeHandler
 				$args["acp_filter[" . self::ACP_TAX_YEAR_HASH . "][0]"] = $year;
 				$args["acp_filter[" . self::ACP_TAX_YEAR_HASH . "][1]"] = $year;
 			}
+		}
+		
+		// Account filter
+		if (isset($filters['account'])) {
+			$args["acp_filter[" . self::ACP_ACCOUNT_HASH . "]"] = $filters['account'];
+		}
+		
+		// Transaction category filter (taxonomy - note the special key format)
+		if (isset($filters['transaction_category'])) {
+			$args["acp_filter[taxonomy-transaction_category]"] = $filters['transaction_category'];
 		}
 		
 		// Related group filter
