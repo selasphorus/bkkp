@@ -81,13 +81,13 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             'debug'          => $debug,
         ];
 
-        /*return ViewLoader::renderToString(
-            $view,
+        return ViewLoader::renderToString(
+            'employment-income',
             $vars,
             ['kind' => 'partial', 'module' => 'employment'] //, 'post_type' => self::CPT
-        );*/
+        );
         
-        $view = ViewLoader::load('employment-income', $vars, $module);
+        //$view = ViewLoader::load('employment-income', $vars, $module);
         return $view;
     }
     
