@@ -223,7 +223,7 @@ final class EmploymentModule extends BaseModule
 	public function findEmployerTransactions(\WP_Post $employer, array $filters = []): array
 	{
 		// Instantiate a Transaction handler
-		$transactionHandler = new \atc\Bkkp\Modules\Accounting\PostTypes\Transaction();
+		$transactionHandler = new Transaction();
 		
 		$base = [
 			'related_group' => $employer->ID,  // Filter to this employer
@@ -240,5 +240,4 @@ final class EmploymentModule extends BaseModule
 			'debug' => $result['debug'] ?? null,
 		];
 	}
-
 }

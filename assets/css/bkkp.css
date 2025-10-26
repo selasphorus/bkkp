@@ -199,6 +199,68 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
     font-weight: 600;
 }
 
+.employment-income-view table {
+    margin-top: 20px;
+}
+
+.employment-income-view .year-header {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+}
+
+.employment-income-view .column-gross,
+.employment-income-view .column-net,
+.employment-income-view .column-total,
+.employment-income-view .column-txn {
+    text-align: right;
+    width: 100px;
+}
+
+.employment-income-view .employer-name {
+    font-weight: 500;
+}
+
+.employment-income-view .doc-detail-row {
+    background-color: #f9f9f9;
+    font-size: 0.95em;
+}
+
+.employment-income-view .doc-detail-row .doc-title {
+    padding-left: 30px;
+    font-style: italic;
+}
+
+.employment-income-view .no-docs {
+    color: #999;
+    font-style: italic;
+}
+
+.employment-income-view .column-txn.mismatch {
+    background-color: #fff3cd;
+}
+
+.employment-income-view .mismatch-indicator {
+    color: #856404;
+    font-weight: bold;
+    margin-left: 5px;
+    cursor: help;
+}
+
+.employment-income-view .totals-row {
+    font-weight: bold;
+    border-top: 2px solid #ddd;
+    background-color: #f0f0f0;
+}
+
+.employment-income-view .troubleshooting {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-left: 4px solid #0073aa;
+    font-size: 0.9em;
+}
+
 /* Hide print header on screen */
 .print-header {
 	display: none;
