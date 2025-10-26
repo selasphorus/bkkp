@@ -9,6 +9,12 @@ class Transaction extends PostTypeHandler
 {
 	public const DATE_META = 'transaction_date';
 	
+	// Store ACP hash IDs as class constants
+	// TODO: Move to options table for portability across installations
+	private const ACP_TAX_YEAR_HASH = '21fe4931b33334';
+	private const ACP_RELATED_GROUP_HASH = '683bc82d0624dc';
+	private const ACP_LAYOUT_ID = '68b645905c8d6'; // "Transaction Basics" layout
+	
 	public function __construct(?\WP_Post $post = null) {
 		$config = [
 			'slug'        => 'transaction',
@@ -56,6 +62,49 @@ class Transaction extends PostTypeHandler
 
 		// Optional extension point for add-ons/themes.
 		return apply_filters('whx4_allowed_url_params_transaction', $spec);
+	}
+	
+	/**
+	 * Build a URL to the admin transactions list with ACP filters applied
+	 * 
+	 * @param array $filters Associative array of filters to apply:
+	 *   - 'tax_year' => int|array - Single year or [start, end] range
+	 *   - 'related_group' => int - Employer/group ID
+	 *   - 'account' => int - Account ID
+	 * @param bool $use_layout Whether to include the saved ACP layout ID
+	 * @return string The filtered admin URL
+	 */
+	public static function getFilteredAdminUrl(array $filters = [], bool $use_layout = true): string
+	{
+		$args = ['post_type' => 'transaction'];
+		
+		if ($use_layout) {
+			$args['layout'] = self::ACP_LAYOUT_ID;
+		}
+		
+		// Tax year filter (range)
+		if (isset($filters['tax_year'])) {
+			$year = $filters['tax_year'];
+			if (is_array($year)) {
+				$args["acp_filter[" . self::ACP_TAX_YEAR_HASH . "][0]"] = $year[0];
+				$args["acp_filter[" . self::ACP_TAX_YEAR_HASH . "][1]"] = $year[1];
+			} else {
+				$args["acp_filter[" . self::ACP_TAX_YEAR_HASH . "][0]"] = $year;
+				$args["acp_filter[" . self::ACP_TAX_YEAR_HASH . "][1]"] = $year;
+			}
+		}
+		
+		// Related group filter
+		if (isset($filters['related_group'])) {
+			$args["acp_filter[" . self::ACP_RELATED_GROUP_HASH . "]"] = $filters['related_group'];
+		}
+		
+		// Add filter action if we have filters
+		if (count($args) > 1) {
+			$args['filter_action'] = 'Filter';
+		}
+		
+		return add_query_arg($args, admin_url('edit.php'));
 	}
 
 	//private function resolveCategories(Transaction $handler, array $atts): array
