@@ -144,57 +144,57 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 }
 
 /*** EMPLOYERS ***/
-.whx4-employment th.year {
+.whx4.employment th.year {
     min-width: 180px;
 }
 
-.whx4-employment .tax-year-cell {
+.whx4.employment .tax-year-cell {
     text-align: right;
     vertical-align: top;
 }
 
-.whx4-employment .tax-amount {
+.whx4.employment .tax-amount {
     margin-bottom: 0rem;
 }
 
-.whx4-employment .tax-amount:last-child {
+.whx4.employment .tax-amount:last-child {
     margin-bottom: 0;
 }
 
-.whx4-employment .comp-amount {
+.whx4.employment .comp-amount {
     font-weight: 600;
     font-size: 1.1rem;
     /*color: #2563eb;*/
     text-decoration: none;
 }
 
-.whx4-employment .comp-amount:hover {
+.whx4.employment .comp-amount:hover {
     text-decoration: underline;
 }
 
-.whx4-employment .withheld-amount {
+.whx4.employment .withheld-amount {
     display: block;
     font-size: 0.9rem;
     color: #6b7280;
     margin-top: 0.15rem;
 }
 
-.whx4-employment .no-data {
+.whx4.employment .no-data {
     color: #9ca3af;
 }
 
-.whx4-employment .txn-total {
+.whx4.employment .txn-total {
     font-size: 0.9em;
     margin-top: 0rem;
     padding: 0.25rem 0;
     font-weight: 500;
 }
 
-.whx4-employment .txn-total.match {
+.whx4.employment .txn-total.match {
     color: #059669;  /* Green */
 }
 
-.whx4-employment .txn-total.mismatch {
+.whx4.employment .txn-total.mismatch {
     color: #dc2626;  /* Red */
     font-weight: 600;
 }
@@ -218,14 +218,14 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
     }
     
     /* Show print header */
-	.whx4-employment .print-header {
+	.whx4 .print-header {
 		display: block;
 		margin-bottom: 1em;
 		border-bottom: 2px solid #000;
 		padding-bottom: 0.5em;
 	}
 	
-	.whx4-employment .print-header h1 {
+	.whx4 .print-header h1 {
 		margin: 0;
 		font-size: 20pt;
 	}
@@ -239,31 +239,31 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 	}
     
     /* Hide transaction totals and debug info */
-    .whx4-employment .txn-total:not(.no_docs),
-    .whx4-employment .debug-divider,
-    .whx4-employment .debug-info {
+    .whx4.employment .txn-total:not(.no_docs),
+    .whx4.employment .debug-divider,
+    .whx4.employment .debug-info {
         display: none !important;
     }
     
     /* Optimize table for printing */
-    .whx4-employment table.bkkp {
+    .whx4.employment table.bkkp {
         width: 100%;
         border-collapse: collapse;
         font-size: 1rem;
     }
     
-    .whx4-employment table.bkkp th,
-    .whx4-employment table.bkkp td {
+    .whx4.employment table.bkkp th,
+    .whx4.employment table.bkkp td {
         border: 1px solid #000;
         padding: 2px;
     }
     
-    .whx4-employment table.bkkp thead {
+    .whx4.employment table.bkkp thead {
         display: table-header-group;
     }
     
     /* Remove link styling */
-    .whx4-employment a {
+    .whx4.employment a {
         text-decoration: none;
         color: #000;
     }

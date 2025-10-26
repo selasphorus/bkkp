@@ -1,4 +1,4 @@
-<div class="whx4-employment">
+<div class="whx4 employment">
     <!-- Print-only header -->
     <div class="print-header">
     <h1>Employment Income for <?php

@@ -1,4 +1,4 @@
-<div class="whx4-accounting">
+<div class="whx4 accounting">
 	
 	<!-- Print-only header -->
     <div class="print-header">
