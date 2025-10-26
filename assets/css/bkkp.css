@@ -221,12 +221,13 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
     .whx4-employment table.bkkp {
         width: 100%;
         border-collapse: collapse;
+        font-size: 1rem;
     }
     
     .whx4-employment table.bkkp th,
     .whx4-employment table.bkkp td {
         border: 1px solid #000;
-        padding: 8px;
+        padding: 2px;
     }
     
     .whx4-employment table.bkkp thead {
