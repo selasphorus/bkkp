@@ -230,8 +230,11 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 		font-size: 20pt;
 	}
 	
-	/* Hide screen-only heading */
-	.whx4-employment > p:first-of-type {
+	/* Hide main page title */
+	.entry-title,
+	.page-title,
+	h1.entry-title,
+	h1.wp-block-post-title {
 		display: none;
 	}
     
