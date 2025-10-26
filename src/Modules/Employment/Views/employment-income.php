@@ -114,7 +114,7 @@
 					<?php if ($txn_total > 0 || $docs): ?>
 						<div class="txn-total <?php echo $mismatch ? 'mismatch' : 'match'; ?> <?php echo $docs ? 'docs' : 'no_docs'; ?>">
 							<a href="<?php echo esc_url($txn_url); ?>" target="_blank">
-								Txns: $<?php echo number_format($txn_total, 0); ?>
+								<span class="txn-total">Txns:&nbsp;</span>$<?php echo number_format($txn_total, 0); ?>
 							</a>
 							<?php if ($mismatch): ?>
 								<span class="difference <?php echo $difference > 0 ? 'over' : 'under'; ?>"><br />(<?php echo $difference > 0 ? 'tx-under' : 'tx-over'; ?>:<?php echo number_format($difference, 0); ?>)</span>
