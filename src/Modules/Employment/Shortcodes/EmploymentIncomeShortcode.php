@@ -164,7 +164,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         
         foreach ($employers as $employer) {
             // Get all docs for this employer (scoped)
-            $taxDocs = $module->findEmployerTaxDocs($employer, $scope);
+            $taxDocs = $module->findEmployerTaxDocs($employer, ['scope' => $scope]);
             $docsByYear = $this->organizeDocsByYear($taxDocs, $years);
             
             // Get all transactions for this employer (scoped)
