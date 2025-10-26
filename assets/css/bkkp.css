@@ -204,6 +204,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
     body > header,
     .wp-site-blocks header,
     body > footer,
+    .wp-site-blocks footer,
     .site-header,
     .site-footer,
     #site-navigation,
