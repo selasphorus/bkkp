@@ -199,6 +199,91 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
     font-weight: 600;
 }
 
+@media print {
+    /* Hide site chrome */
+    header,
+    footer,
+    .site-header,
+    .site-footer,
+    #masthead,
+    #colophon,
+    nav,
+    .nav,
+    .navigation,
+    .sidebar,
+    .admin-bar,
+    #wpadminbar {
+        display: none !important;
+    }
+    
+    /* Hide transaction totals and debug info */
+    .whx4-employment .txn-total,
+    .whx4-employment .debug-divider,
+    .whx4-employment .debug-info {
+        display: none !important;
+    }
+    
+    /* Optimize table for printing */
+    .whx4-employment table.bkkp {
+        width: 100%;
+        border-collapse: collapse;
+        page-break-inside: avoid;
+    }
+    
+    .whx4-employment table.bkkp th,
+    .whx4-employment table.bkkp td {
+        border: 1px solid #000;
+        padding: 8px;
+        page-break-inside: avoid;
+    }
+    
+    .whx4-employment table.bkkp tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    
+    .whx4-employment table.bkkp thead {
+        display: table-header-group; /* Repeat headers on each page */
+    }
+    
+    /* Remove link underlines and colors for cleaner print */
+    .whx4-employment a {
+        text-decoration: none;
+        color: #000;
+    }
+    
+    /* Show link URLs after text (optional) */
+    /* Uncomment if you want URLs printed
+    .whx4-employment a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+    }
+    */
+    
+    /* Ensure background colors print if needed */
+    .whx4-employment table.bkkp th {
+        background-color: #f3f4f6 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    /* Remove box shadows */
+    .whx4-employment table.bkkp {
+        box-shadow: none;
+    }
+    
+    /* Ensure full width usage */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .whx4-employment {
+        max-width: 100%;
+        padding: 0;
+    }
+}
+
 
 /*** MISC ***/
 
