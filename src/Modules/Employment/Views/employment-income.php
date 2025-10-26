@@ -159,6 +159,9 @@
 				
 				// Organize docs by tax_year for this employer
 				$has_activity = false;
+				$year_gross = 0;
+				$year_net = 0;
+				
 				foreach ($docs as $doc) {
 					$tax_year = get_post_meta($doc->ID, 'tax_year', true);
 					if ((int)$tax_year === (int)$year) {
@@ -166,14 +169,23 @@
 						$h = $handler($doc);
 						$total_comp = (float)$h->getPostMeta('total_comp');
 						$total_withheld = (float)$h->getPostMeta('total_withheld');
-						$gross_total += $total_comp;
-						$net_total += ($total_comp - $total_withheld);
+						$year_gross += $total_comp;
+						$year_net += ($total_comp - $total_withheld);
 					}
 				}
 				
-				// Count employer if they have docs or transactions this year
-				if ($has_activity || $txn_total > 0) {
+				// If no docs but transactions exist, use transaction total for gross/net
+				if (!$has_activity && $txn_total > 0) {
+					$year_gross = $txn_total;
+					$year_net = $txn_total; // No withholding info available
+					$has_activity = true;
+				}
+				
+				// Add to totals and count employer if they have activity this year
+				if ($has_activity) {
 					$employer_count++;
+					$gross_total += $year_gross;
+					$net_total += $year_net;
 				}
 			}
 			
