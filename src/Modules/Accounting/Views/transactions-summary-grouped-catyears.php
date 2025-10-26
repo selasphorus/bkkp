@@ -1,13 +1,16 @@
 <div class="whx4-accounting">
 	
-	<div class="troubleshooting">
-	    <p><strong>Transactions (Grouped by Category/Year):</strong></p>
-        <!--h3>Info for Troubleshooting</h3-->
-        <p>[info] <?php echo $info; ?></p>
-        <!--p>[atts] <pre><?php echo print_r($atts, true); ?></pre></p>
-        <p>[years] <pre><?php echo print_r($years, true); ?></pre></p-->
+	<!-- Print-only header -->
+    <div class="print-header">
+    <h1>Transactions for <?php
+    if (count($years) === 1) {
+        echo $years[0];
+    } else {
+        echo min($years) . '–' . max($years);
+    }
+    //echo " &mdash; Categories:"; // wip
+    ?></h1>
     </div>
-    <hr />
     
 	<?php if (!$rows): ?>
         <p>No posts found.</p>

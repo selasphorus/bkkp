@@ -5,7 +5,7 @@
     if (count($years) === 1) {
         echo $years[0];
     } else {
-       echo min($years) . '–' . max($years);
+        echo min($years) . '–' . max($years);
     }
     ?></h1>
     </div>
