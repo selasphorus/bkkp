@@ -66,14 +66,7 @@
 				<td><?php echo $row['term']->name; ?></td>
 				<?php foreach ($row['cols'] as $col): ?>
 					<td>
-					<?php
-					// Build transaction URL
-					$txnUrl = Transaction::getFilteredAdminUrl([
-						'tax_year' => $year,
-						'transaction_category' => $row['term']->term_id,
-					]);
-					// TODO: style according to whether sum is <> previous year
-					?>
+					<?php // TODO: style according to whether sum is <> previous year ?>
 					<a href="<?php echo esc_url($col['url']); ?>" target="_blank">
 					<?php if ($col['sum'] == 0.0): ?>
 						<span class="zero-amount">—</span>
