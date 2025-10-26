@@ -166,12 +166,6 @@ final class TransactionsShortcode implements ShortcodeInterface
 			if ($startY > $endY) { [$startY, $endY] = [$endY, $startY]; }
 			$years = range($startY, $endY);
 			//error_log('[TransactionsShortcode::render] years: ' . print_r($years, true));
-			
-			// Initialize year totals
-			$yearTotals = [];
-			foreach ($years as $y) {
-				$yearTotals[$y] = ['sum' => 0.0, 'count' => 0];
-			}
 		
 			// Build table rows: one row per category; columns per year: sum & count
 			$rows = [];
@@ -207,10 +201,6 @@ final class TransactionsShortcode implements ShortcodeInterface
 						//
 						$cols[$ty]['sum']   += $amount;
 						$cols[$ty]['count'] += 1;
-						
-						// Accumulate year totals
-						$yearTotals[$ty]['sum']   += $amount;
-						$yearTotals[$ty]['count'] += 1;
 		
 						$overall['sum']   += $amount;
 						$overall['count'] += 1;
@@ -228,9 +218,29 @@ final class TransactionsShortcode implements ShortcodeInterface
 				}
 			}
 			
+			// Calculate year totals from the completed rows
+			$yearTotals = $this->calculateYearTotals($rows, $years);
+
+			// Build URLs for each cell
+			foreach ($rows as &$row) {
+				foreach ($years as $yearIndex => $year) {
+					$row['cols'][$yearIndex]['url'] = Transaction::getFilteredAdminUrl([
+						'tax_year' => $year,
+						'transaction_category' => $row['term']->term_id,
+					]);
+				}
+			}
+			
+			// Build year total URLs
+			$yearUrls = [];
+			foreach ($years as $year) {
+				$yearUrls[$year] = Transaction::getFilteredAdminUrl(['tax_year' => $year]);
+			}
+			
 			$viewVars['years'] = $years;
 			$viewVars['rows'] = $rows; // iterate terms; within each, iterate $years for cols
 			$viewVars['yearTotals'] = $yearTotals;
+			$viewVars['yearUrls'] = $yearUrls;
 			//$viewVars['overallTotal'] = $overallTotal; // sum across all groups -- WIP -- ???
 			$viewVars['overall'] = $overall; // grand totals across all years/categories
 			$viewVars['info'] = $info;
@@ -257,4 +267,26 @@ final class TransactionsShortcode implements ShortcodeInterface
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 		}
     }
+    
+    /**
+	 * Calculate totals for each year from the pivot table rows
+	 * 
+	 * @param array $rows The pivot table rows
+	 * @param array $years Array of years
+	 * @return array Associative array keyed by year with 'sum' and 'count' values
+	 */
+	private function calculateYearTotals(array $rows, array $years): array
+	{
+		$yearTotals = array_fill_keys($years, ['sum' => 0.0, 'count' => 0]);
+		
+		foreach ($rows as $row) {
+			foreach ($row['cols'] as $yearIndex => $col) {
+				$year = $years[$yearIndex];
+				$yearTotals[$year]['sum'] += (float)$col['sum'];
+				$yearTotals[$year]['count'] += (int)$col['count'];
+			}
+		}
+		
+		return $yearTotals;
+	}
 }
