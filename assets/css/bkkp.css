@@ -202,6 +202,7 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 @media print {
     /* Hide specific site chrome - adjust selectors to match your theme */
     body > header,
+    .wp-site-blocks header,
     body > footer,
     .site-header,
     .site-footer,
