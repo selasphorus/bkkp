@@ -223,8 +223,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 
 			// Build URLs for each cell
 			foreach ($rows as &$row) {
-				foreach ($years as $yearIndex => $year) {
-					$row['cols'][$yearIndex]['url'] = Transaction::getFilteredAdminUrl([
+				foreach ($years as $year) {
+					$row['cols'][$year]['url'] = Transaction::getFilteredAdminUrl([
 						'tax_year' => $year,
 						'transaction_category' => $row['term']->term_id,
 					]);
@@ -280,10 +280,11 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$yearTotals = array_fill_keys($years, ['sum' => 0.0, 'count' => 0]);
 		
 		foreach ($rows as $row) {
-			foreach ($row['cols'] as $yearIndex => $col) {
-				$year = $years[$yearIndex];
-				$yearTotals[$year]['sum'] += (float)$col['sum'];
-				$yearTotals[$year]['count'] += (int)$col['count'];
+			foreach ($row['cols'] as $year => $col) {  // ✅ $year is the key
+				if (isset($yearTotals[$year])) {
+					$yearTotals[$year]['sum'] += (float)$col['sum'];
+					$yearTotals[$year]['count'] += (int)$col['count'];
+				}
 			}
 		}
 		
