@@ -49,6 +49,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			'categories'           => 'all',             // all|active|CSV|array
 			'include_empty_groups' => '0',
 			'account'              => '',                // account ID or slug to filter by
+			'print_header'         => '', 
 		]);
 
 		// Merge user atts (use known tag to avoid odd filters if $tag is empty)
@@ -84,7 +85,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$viewVars = [];
 		$viewVars['atts'] = $atts;
 		$viewVars['grouped_by'] = $groupMode;
-		$viewVars['print_header'] = $atts['print_header'] ?? null;
+		$viewVars['print_header'] = $atts['print_header'];
 		//
 		$viewSpecs = [ 'kind' => 'view', 'module' => 'accounting', 'post_type' => 'transaction' ];
 		//
