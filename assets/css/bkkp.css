@@ -72,7 +72,7 @@ td:hover .copy-number-icon,
 
 .numeric.positive {
     color: green;
-    font-weight: semibold;
+    font-weight: 600;
 }
 
 /***** Accounts ***/
