@@ -57,21 +57,17 @@
 			</th>
 			<?php endforeach; ?>
 		</tr>
-
-        <?php
-        // TODO: add a row for annual totals (sum of all categories and num transactions)
-        ?>
         <?php foreach ($rows as $row): ?>
             <tr>
 				<td><?php echo $row['term']->name; ?></td>
 				<?php foreach ($row['cols'] as $col): ?>
 					<td>
 					<?php // TODO: style according to whether sum is <> previous year ?>
-					<a href="<?php echo esc_url($col['url']); ?>" target="_blank">
+					<a href="<?php echo esc_url($col['url']); ?>" class="txn-total" target="_blank">
 					<?php if ($col['sum'] == 0.0): ?>
 						<span class="zero-amount">—</span>
 					<?php else: ?>
-						$<?php echo number_format($col['sum'], 2); ?>
+						<span class="numeric">$<?php echo number_format($col['sum'], 2); ?></td>
 					<?php endif; ?>
 					<?php
 					// Show count if non-zero, even if sum is zero
