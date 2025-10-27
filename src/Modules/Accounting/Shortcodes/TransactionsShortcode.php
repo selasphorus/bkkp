@@ -237,14 +237,17 @@ final class TransactionsShortcode implements ShortcodeInterface
 		
 				$result = $handler->getTransactions($filters);
 				$posts  = $result['posts'] ?? [];
-		
-				// initialize columns
+				
+				// Initialize columns
 				$cols = [];
 				foreach ($years as $y) {
 					$cols[$y] = ['sum' => 0.0, 'count' => 0];
 				}
 				
-				// bucket by tax_year
+				// Check if this category has children in our displayed set
+				$hasChildren = isset($hierarchy['children'][$term->term_id]) && !empty($hierarchy['children'][$term->term_id]);
+				
+				// Set up data "buckets" per tax_year
 				foreach ($posts as $p) {
 					$ty = (int) get_post_meta($p->ID, 'tax_year', true);
 					if ($ty >= $startY && $ty <= $endY) {
@@ -265,14 +268,10 @@ final class TransactionsShortcode implements ShortcodeInterface
 							$amount = abs($amount);
 						}
 						
-						// Sums and counts and totals...
 						$cols[$ty]['sum']   += $amount;
 						$cols[$ty]['count'] += 1;
 				
-						// Only count towards grand total if this is a leaf category (has no children in our set)
-						// OR if we haven't counted this transaction yet
-						$hasChildren = isset($hierarchy['children'][$term->term_id]) && !empty($hierarchy['children'][$term->term_id]);
-						
+						// Only count towards grand total if this is a leaf category (no children displayed)
 						if (!$hasChildren) {
 							$txnKey = $p->ID . '-' . $ty;
 							if (!isset($countedTransactions[$txnKey])) {
@@ -281,18 +280,9 @@ final class TransactionsShortcode implements ShortcodeInterface
 								$countedTransactions[$txnKey] = true;
 							}
 						}
-						/*
-						// Only count towards grand total if not already counted
-						// (parent categories include child transactions)
-						$txnKey = $p->ID . '-' . $ty;
-						if (!isset($countedTransactions[$txnKey])) {
-							$overall['sum']   += $amount;
-							$overall['count'] += 1;
-							$countedTransactions[$txnKey] = true;
-						}
-						*/
 					}
 				}
+				
 				// optionally skip empty rows unless include_empty_groups="1"
 				$hasAny = array_sum(array_column($cols, 'count')) > 0;
 				if ($hasAny || ($atts['include_empty_groups'] ?? '0') === '1') {
