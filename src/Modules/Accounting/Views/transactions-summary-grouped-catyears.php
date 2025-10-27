@@ -71,7 +71,7 @@
 					<?php endif; ?>
 					<?php
 					// Show count if non-zero, even if sum is zero
-					if ( $col['count'] > 0 ) { echo '<span class="subtle txn-count">&nbsp;' . '(' . $col['count'] . ')' . '</span>'; }
+					if ( $col['count'] > 0 ) { echo '<span class="subtle txn-count">' . '(' . $col['count'] . ')' . '</span>'; }
 					?>
 					</a>
 					</td>
