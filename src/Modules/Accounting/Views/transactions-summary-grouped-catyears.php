@@ -67,7 +67,7 @@
 					<?php if ($col['sum'] == 0.0): ?>
 						<span class="zero-amount">—</span>
 					<?php else: ?>
-						<span class="numeric">$<?php echo number_format($col['sum'], 2); ?></td>
+						<span class="numeric">$<?php echo number_format($col['sum'], 2); ?></span>
 					<?php endif; ?>
 					<?php
 					// Show count if non-zero, even if sum is zero
