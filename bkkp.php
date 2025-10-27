@@ -76,21 +76,37 @@ add_action( 'whx4_pre_boot', function() {
         });
         
         // Register Assets
-        add_filter('whx4_assets', static function (array $assets): array {
-			// Compute URLs and paths safely
+		add_filter('whx4_assets', static function (array $assets): array {
+			// CSS -- Compute URLs and paths safely
 			$relCss = 'assets/css/bkkp.css';
-			$src    = plugins_url($relCss, __FILE__);
-			$path   = plugin_dir_path(__FILE__) . $relCss;
+			$srcCss = plugins_url($relCss, __FILE__);
+			$pathCss = plugin_dir_path(__FILE__) . $relCss;
 		
 			$assets['styles'][] = [
 				'handle'   => 'bkkp',
-				'src'      => $src,
-				'path'     => $path,      // enables 'ver' => 'auto' filemtime
-				'deps'     => [],         // e.g., ['dashicons']
-				'ver'      => 'auto',     // cache-bust on file change
+				'src'      => $srcCss,
+				'path'     => $pathCss,
+				'deps'     => [],
+				'ver'      => 'auto',
 				'media'    => 'all',
-				'where'    => 'front',    // 'front' | 'admin' | 'both'
-				'autoload' => true,      // set true to always load where-matched
+				'where'    => 'front',
+				'autoload' => true,
+			];
+		
+			// JS -- Compute URLs and paths safely
+			$relJs = 'assets/js/bkkp.js';
+			$srcJs = plugins_url($relJs, __FILE__);
+			$pathJs = plugin_dir_path(__FILE__) . $relJs;
+		
+			$assets['scripts'][] = [
+				'handle'    => 'bkkp',
+				'src'       => $srcJs,
+				'path'      => $pathJs,
+				'deps'      => [],           // e.g., ['jquery']
+				'ver'       => 'auto',
+				'in_footer' => true,         // load in footer (recommended)
+				'where'     => 'front',
+				'autoload'  => true,
 			];
 		
 			return $assets;
@@ -100,8 +116,30 @@ add_action( 'whx4_pre_boot', function() {
     }
 }, 15 ); // Priority < 20 to run before WHx4 boot()
 
-
 // Register WP-CLI commands
+if (defined('WP_CLI') && \WP_CLI) {
+    
+    // Generic meta cleanup command
+    \WP_CLI::add_command('bkkp meta', [MetaFieldCleanup::class, 'handle_cli'], [
+        'shortdesc' => 'Meta field cleanup utilities'
+    ]);
+    
+    // Specific cleanup tasks
+    \WP_CLI::add_command('bkkp cleanup related-group', function($args, $assoc_args) {
+        $dry_run = isset($assoc_args['dry-run']);
+        
+        \WP_CLI::log('Converting related_group to relationship format...');
+        $count = MetaFieldCleanup::convert_to_relationship_format('related_group', 'transaction', $dry_run);
+        
+        if ($dry_run) {
+            \WP_CLI::log(\WP_CLI::colorize("%Y[DRY RUN]%n Would convert {$count} records"));
+        } else {
+            \WP_CLI::success("Converted {$count} records");
+        }
+    });
+}
+
+/*
 if (defined('WP_CLI') && \WP_CLI) {
     require_once plugin_dir_path(__FILE__) . 'src/Admin/MetaFieldCleanup.php';
     
@@ -149,3 +187,4 @@ if (defined('WP_CLI') && \WP_CLI) {
     
     WP_CLI::add_command('bkkp meta-cleanup', 'atc\Bkkp\Admin\MetaFieldCleanup');
 }
+*/
