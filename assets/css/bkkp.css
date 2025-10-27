@@ -70,6 +70,10 @@ td:hover .copy-number-icon,
     color: red;
 }
 
+.numeric.positive {
+    font-style: italic;
+}
+
 /***** Accounts ***/
 
 /* Account view container */

@@ -65,7 +65,7 @@
 					<?php 
 					// TODO: style according to whether sum is <> previous year?
 					$txn_class = "numeric";
-					if ($col['sum'] < 0) { $txn_class .= "negative"; }
+					if ($col['sum'] > 0) { $txn_class .= " positive"; }
 					?>
 					<a href="<?php echo esc_url($col['url']); ?>" class="txn-total" target="_blank">
 					<?php if ($col['sum'] == 0.0): ?>
