@@ -16,6 +16,7 @@ table.bkkp {
 table.bkkp tr th,
 table.bkkp tr td {
     border: 1px solid grey;
+    min-width: 10rem;
     margin: 0;
     padding: 0 3px;
     font-family: verdana;
@@ -40,15 +41,20 @@ table.bkkp a:hover {
 	height: 0.9rem;
 	display: inline-block;
 	vertical-align: text-bottom;
-	opacity: 0.6;
+	opacity: 0;
 	transition: opacity 0.2s;
 	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="%23666"><path d="M15 6h-1V4c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h2v2c0 1.1.9 2 2 2h7c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM4 12V4h8v2H8c-1.1 0-2 .9-2 2v4H4zm11 4H8V8h7v8z"/></svg>');
 	background-size: contain;
 	background-repeat: no-repeat;
 }
 
+td:hover .copy-number-icon,
 .copy-number-icon:hover {
-    opacity: 1;
+    opacity: 0.6;
+}
+
+.copy-number-icon:hover {
+    opacity: 1 !important;
 }
 
 /* Optional: Use a custom icon instead of emoji */
