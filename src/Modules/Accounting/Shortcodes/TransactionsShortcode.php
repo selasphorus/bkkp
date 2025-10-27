@@ -243,19 +243,17 @@ final class TransactionsShortcode implements ShortcodeInterface
 				foreach ($years as $y) {
 					$cols[$y] = ['sum' => 0.0, 'count' => 0];
 				}
-		
+				
 				// bucket by tax_year
 				foreach ($posts as $p) {
 					$ty = (int) get_post_meta($p->ID, 'tax_year', true);
 					if ($ty >= $startY && $ty <= $endY) {
-					    // field name in transition -- for now, check both transaction_amount and amount
+						// field name in transition -- for now, check both transaction_amount and amount
 						$amountRaw = get_post_meta($p->ID, 'transaction_amount', true);
 						if ( empty($amountRaw) ) {
-						    $amountRaw = get_post_meta($p->ID, 'amount', true);
+							$amountRaw = get_post_meta($p->ID, 'amount', true);
 						}						
-						error_log('[TransactionsShortcode::render] amountRaw: ' . $amountRaw);
 						$amount = is_numeric($amountRaw) ? (float)$amountRaw : 0.0;
-						error_log('[TransactionsShortcode::render] $amount: ' . $amount);
 						
 						// Get transaction type and apply sign
 						$type = get_post_meta($p->ID, 'transaction_type', true);
@@ -270,10 +268,20 @@ final class TransactionsShortcode implements ShortcodeInterface
 						// Sums and counts and totals...
 						$cols[$ty]['sum']   += $amount;
 						$cols[$ty]['count'] += 1;
-						/*
-						$overall['sum']   += $amount;
-						$overall['count'] += 1;*/
+				
+						// Only count towards grand total if this is a leaf category (has no children in our set)
+						// OR if we haven't counted this transaction yet
+						$hasChildren = isset($hierarchy['children'][$term->term_id]) && !empty($hierarchy['children'][$term->term_id]);
 						
+						if (!$hasChildren) {
+							$txnKey = $p->ID . '-' . $ty;
+							if (!isset($countedTransactions[$txnKey])) {
+								$overall['sum']   += $amount;
+								$overall['count'] += 1;
+								$countedTransactions[$txnKey] = true;
+							}
+						}
+						/*
 						// Only count towards grand total if not already counted
 						// (parent categories include child transactions)
 						$txnKey = $p->ID . '-' . $ty;
@@ -282,9 +290,9 @@ final class TransactionsShortcode implements ShortcodeInterface
 							$overall['count'] += 1;
 							$countedTransactions[$txnKey] = true;
 						}
+						*/
 					}
 				}
-		
 				// optionally skip empty rows unless include_empty_groups="1"
 				$hasAny = array_sum(array_column($cols, 'count')) > 0;
 				if ($hasAny || ($atts['include_empty_groups'] ?? '0') === '1') {
