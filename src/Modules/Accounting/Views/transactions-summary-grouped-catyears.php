@@ -62,7 +62,7 @@
 			<tr class="<?php echo $row['level'] > 0 ? 'child-category' : 'parent-category'; ?>">
 				<td class="category-name" style="<?php echo $row['level'] > 0 ? 'padding-left: ' . ($row['level'] * 2) . 'em;' : ''; ?>">
 					<?php if ($row['level'] > 0): ?>
-						<span class="indent-marker"><?php echo str_repeat('↳ ', $row['level']); ?></span>
+						<span class="indent-marker">↳ <?php //echo str_repeat('↳ ', $row['level']); ?></span>
 					<?php endif; ?>
 					<?php echo esc_html($row['term']->name); ?>
 				</td>
