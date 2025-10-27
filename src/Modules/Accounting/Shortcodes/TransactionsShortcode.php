@@ -245,7 +245,8 @@ final class TransactionsShortcode implements ShortcodeInterface
 				}
 				
 				// Check if this category has children in our displayed set
-				$hasChildren = isset($hierarchy['children'][$term->term_id]) && !empty($hierarchy['children'][$term->term_id]);
+				$hasChildren = $hasHierarchy && isset($hierarchy['children'][$term->term_id]) && !empty($hierarchy['children'][$term->term_id]);
+				//$hasChildren = isset($hierarchy['children'][$term->term_id]) && !empty($hierarchy['children'][$term->term_id]);
 				
 				// Set up data "buckets" per tax_year
 				foreach ($posts as $p) {
