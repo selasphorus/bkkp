@@ -246,7 +246,6 @@ final class TransactionsShortcode implements ShortcodeInterface
 				
 				// Check if this category has children in our displayed set
 				$hasChildren = $hasHierarchy && isset($hierarchy['children'][$term->term_id]) && !empty($hierarchy['children'][$term->term_id]);
-				//$hasChildren = isset($hierarchy['children'][$term->term_id]) && !empty($hierarchy['children'][$term->term_id]);
 				
 				// Set up data "buckets" per tax_year
 				foreach ($posts as $p) {
@@ -297,7 +296,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			}
 			
 			// Calculate year totals from the completed rows
-			$yearTotals = $this->calculateYearTotals($rows, $years);
+			$yearTotals = $this->calculateYearTotals($rows, $years, $hierarchy);
 
 			// Build URLs for each cell
 			foreach ($rows as &$row) {
@@ -346,23 +345,30 @@ final class TransactionsShortcode implements ShortcodeInterface
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 		}
     }
-    
-    /**
+	
+	/**
 	 * Calculate totals for each year from the pivot table rows
+	 * Only counts leaf categories to avoid double-counting hierarchical data
 	 * 
 	 * @param array $rows The pivot table rows
 	 * @param array $years Array of years
+	 * @param array|null $hierarchy Hierarchy structure (with 'children' key)
 	 * @return array Associative array keyed by year with 'sum' and 'count' values
 	 */
-	private function calculateYearTotals(array $rows, array $years): array
+	private function calculateYearTotals(array $rows, array $years, ?array $hierarchy = null): array
 	{
 		$yearTotals = array_fill_keys($years, ['sum' => 0.0, 'count' => 0]);
 		
 		foreach ($rows as $row) {
-			foreach ($row['cols'] as $year => $col) {
-				if (isset($yearTotals[$year])) {
-					$yearTotals[$year]['sum'] += (float)$col['sum'];
-					$yearTotals[$year]['count'] += (int)$col['count'];
+			// Only count this row if it has no children (leaf category)
+			$hasChildren = $hierarchy && isset($hierarchy['children'][$row['term']->term_id]) && !empty($hierarchy['children'][$row['term']->term_id]);
+			
+			if (!$hasChildren) {
+				foreach ($row['cols'] as $year => $col) {
+					if (isset($yearTotals[$year])) {
+						$yearTotals[$year]['sum'] += (float)$col['sum'];
+						$yearTotals[$year]['count'] += (int)$col['count'];
+					}
 				}
 			}
 		}
