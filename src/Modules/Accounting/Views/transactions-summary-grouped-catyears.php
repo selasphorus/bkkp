@@ -1,9 +1,10 @@
 <?php
 /**
- * @var array $rows Pivot table rows with URLs
+ * @var array $rows Pivot table rows with URLs and hierarchy level
  * @var array $years Array of years
  * @var array $yearTotals Year totals
  * @var array $yearUrls URLs for year totals
+ * @var bool $hasHierarchy Whether categories have parent-child relationships
  * @var string $print_header Optional custom print header
  */
 ?>
@@ -57,9 +58,14 @@
 			</th>
 			<?php endforeach; ?>
 		</tr>
-        <?php foreach ($rows as $row): ?>
-            <tr>
-				<td><?php echo $row['term']->name; ?></td>
+		<?php foreach ($rows as $row): ?>
+			<tr class="<?php echo $row['level'] > 0 ? 'child-category' : 'parent-category'; ?>">
+				<td class="category-name" style="<?php echo $row['level'] > 0 ? 'padding-left: 2em;' : ''; ?>">
+					<?php if ($row['level'] > 0): ?>
+						<span class="indent-marker">↳ </span>
+					<?php endif; ?>
+					<?php echo esc_html($row['term']->name); ?>
+				</td>
 				<?php foreach ($row['cols'] as $col): ?>
 					<td>
 					<?php 

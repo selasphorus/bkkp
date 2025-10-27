@@ -166,12 +166,47 @@ final class TransactionsShortcode implements ShortcodeInterface
 			if ($startY > $endY) { [$startY, $endY] = [$endY, $startY]; }
 			$years = range($startY, $endY);
 			//error_log('[TransactionsShortcode::render] years: ' . print_r($years, true));
-		
+			
+			// Check if we need hierarchical display
+			$hasHierarchy = $handler->hasHierarchicalRelationships($categories);
+			$hierarchy = $hasHierarchy ? $handler->organizeTermsHierarchically($categories) : null;
+			
+			// Track which transactions we've already counted (to avoid double-counting in grand totals)
+			$countedTransactions = [];
+
 			// Build table rows: one row per category; columns per year: sum & count
 			$rows = [];
 			$overall = ['sum' => 0.0, 'count' => 0];
+			
+			// Organize iteration order: parents first, then their children
+			$orderedCategories = [];
+			if ($hasHierarchy) {
+				foreach ($hierarchy['parents'] as $parent) {
+					$orderedCategories[] = ['term' => $parent, 'level' => 0];
+					if (isset($hierarchy['children'][$parent->term_id])) {
+						foreach ($hierarchy['children'][$parent->term_id] as $child) {
+							$orderedCategories[] = ['term' => $child, 'level' => 1];
+						}
+					}
+				}
+				// Add any orphaned children (shouldn't happen, but be safe)
+				foreach ($categories as $term) {
+					if ($term->parent !== 0 && !in_array($term->parent, array_column($hierarchy['parents'], 'term_id'), true)) {
+						$orderedCategories[] = ['term' => $term, 'level' => 0];
+					}
+				}
+			} else {
+				// No hierarchy - treat all as top-level
+				foreach ($categories as $term) {
+					$orderedCategories[] = ['term' => $term, 'level' => 0];
+				}
+			}
+			
+			//foreach ($categories as $term) {
+			foreach ($orderedCategories as $item) {
+				$term = $item['term'];
+				$level = $item['level'];
 		
-			foreach ($categories as $term) {
 				// fetch all transactions in scope for this category (no paging)
 				$filters = $atts;
 				$filters['transaction_category'] = [$term->slug];
@@ -209,11 +244,21 @@ final class TransactionsShortcode implements ShortcodeInterface
 							$amount = abs($amount);
 						}
 						
+						// Sums and counts and totals...
 						$cols[$ty]['sum']   += $amount;
 						$cols[$ty]['count'] += 1;
-		
+						/*
 						$overall['sum']   += $amount;
-						$overall['count'] += 1;
+						$overall['count'] += 1;*/
+						
+						// Only count towards grand total if not already counted
+						// (parent categories include child transactions)
+						$txnKey = $p->ID . '-' . $ty;
+						if (!isset($countedTransactions[$txnKey])) {
+							$overall['sum']   += $amount;
+							$overall['count'] += 1;
+							$countedTransactions[$txnKey] = true;
+						}
 					}
 				}
 		
@@ -224,6 +269,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 						'term'   => $term,     // \WP_Term
 						'cols'   => $cols,     // year => ['sum','count']
 						'result' => $result,   // raw payload if needed
+						'level'  => $level,    // hierarchy depth (0 = parent, 1 = child)
 					];
 				}
 			}
@@ -251,6 +297,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			$viewVars['rows'] = $rows; // iterate terms; within each, iterate $years for cols
 			$viewVars['yearTotals'] = $yearTotals;
 			$viewVars['yearUrls'] = $yearUrls;
+			$viewVars['hasHierarchy'] = $hasHierarchy;
 			//$viewVars['overallTotal'] = $overallTotal; // sum across all groups -- WIP -- ???
 			$viewVars['overall'] = $overall; // grand totals across all years/categories
 			$viewVars['info'] = $info;
