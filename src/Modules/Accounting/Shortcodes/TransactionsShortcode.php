@@ -178,21 +178,30 @@ final class TransactionsShortcode implements ShortcodeInterface
 			$rows = [];
 			$overall = ['sum' => 0.0, 'count' => 0];
 			
-			// Organize iteration order: parents first, then their children
+			// Organize iteration order: parents first, then their children recursively
 			$orderedCategories = [];
 			if ($hasHierarchy) {
-				foreach ($hierarchy['parents'] as $parent) {
-					$orderedCategories[] = ['term' => $parent, 'level' => 0];
-					if (isset($hierarchy['children'][$parent->term_id])) {
-						foreach ($hierarchy['children'][$parent->term_id] as $child) {
-							$orderedCategories[] = ['term' => $child, 'level' => 1];
+				// Recursive function to add term and its children
+				$addTermWithChildren = function($term, $level) use (&$addTermWithChildren, &$orderedCategories, $hierarchy) {
+					$orderedCategories[] = ['term' => $term, 'level' => $level];
+					
+					// Add children if they exist
+					if (isset($hierarchy['children'][$term->term_id])) {
+						foreach ($hierarchy['children'][$term->term_id] as $child) {
+							$addTermWithChildren($child, $level + 1);
 						}
 					}
+				};
+				
+				// Start with root parents
+				foreach ($hierarchy['parents'] as $parent) {
+					$addTermWithChildren($parent, 0);
 				}
-				// Add any orphaned children (shouldn't happen, but be safe)
+				
+				// Add any orphaned children
 				foreach ($categories as $term) {
 					if ($term->parent !== 0 && !in_array($term->parent, array_column($hierarchy['parents'], 'term_id'), true)) {
-						$orderedCategories[] = ['term' => $term, 'level' => 0];
+						$addTermWithChildren($term, 0);
 					}
 				}
 			} else {
