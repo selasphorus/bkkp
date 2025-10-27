@@ -1,18 +1,20 @@
-//
 jQuery(document).ready(function($) {
     // Add copy icons to table cells with numeric values
-    $('td.numeric, td span.numeric').each(function() {
+    // Target either td.numeric OR td containing span.numeric
+    $('td.numeric, td:has(span.numeric)').each(function() {
         var $cell = $(this);
-        var $link = $cell.find('a');
+        var $link = $cell.find('a.txn-total');
+        var $numericSpan = $cell.find('span.numeric');
         
-        if ($link.length) {
-            // Extract just the number (remove formatting)
-            var numberText = $link.text().replace(/[^0-9.-]/g, '');
+        // Only add copy icon if there's a numeric value (not zero/dash)
+        if ($numericSpan.length && $link.length) {
+            // Extract just the number (remove $, commas, and other formatting)
+            var numberText = $numericSpan.text().replace(/[^0-9.-]/g, '');
             
             // Create copy icon
             var $copyIcon = $('<span class="copy-number-icon" data-number="' + numberText + '" title="Copy number">📋</span>');
             
-            // Insert icon after the link
+            // Insert icon after the link (but inside the td)
             $link.after($copyIcon);
         }
     });
@@ -34,6 +36,8 @@ jQuery(document).ready(function($) {
                 setTimeout(function() {
                     $icon.text(originalContent);
                 }, 1000);
+            }).catch(function(err) {
+                console.error('Failed to copy: ', err);
             });
         } else {
             // Fallback for older browsers
