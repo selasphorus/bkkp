@@ -64,6 +64,7 @@
 					<td>
 					<?php 
 					// TODO: style according to whether sum is <> previous year?
+					// We'll display negative numbers without the negative sign but style positive vs negative totals distinctly
 					$txn_class = "numeric";
 					if ($col['sum'] > 0) { $txn_class .= " positive"; }
 					?>
@@ -71,7 +72,7 @@
 					<?php if ($col['sum'] == 0.0): ?>
 						<span class="zero-amount">—</span>
 					<?php else: ?>
-						<span class="<?php echo $txn_class; ?>">$<?php echo number_format($col['sum'], 2); ?></span>
+						<span class="<?php echo $txn_class; ?>">$<?php echo number_format(abs($col['sum']), 2); ?></span>
 					<?php endif; ?>
 					<?php
 					// Show count if non-zero, even if sum is zero

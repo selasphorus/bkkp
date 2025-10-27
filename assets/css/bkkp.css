@@ -71,7 +71,7 @@ td:hover .copy-number-icon,
 }
 
 .numeric.positive {
-    font-style: italic;
+    color: green;
 }
 
 /***** Accounts ***/
