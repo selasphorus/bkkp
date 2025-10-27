@@ -199,11 +199,25 @@ final class TransactionsShortcode implements ShortcodeInterface
 				}
 				
 				// Add any orphaned children
-				foreach ($categories as $term) {
+				/*foreach ($categories as $term) {
 					if ($term->parent !== 0 && !in_array($term->parent, array_column($hierarchy['parents'], 'term_id'), true)) {
 						$addTermWithChildren($term, 0);
 					}
+				}*/
+				
+				// Add any orphaned children (parent not in our term set at all)
+				$allAddedIds = array_column($orderedCategories, 'term');
+				$allAddedIds = array_map(fn($t) => $t->term_id, $allAddedIds);
+				
+				foreach ($categories as $term) {
+					// Only add if: has a parent AND not already added AND parent is not in our categories list
+					if ($term->parent !== 0 
+						&& !in_array($term->term_id, $allAddedIds, true)
+						&& !in_array($term->parent, array_column($categories, 'term_id'), true)) {
+						$addTermWithChildren($term, 0);
+					}
 				}
+
 			} else {
 				// No hierarchy - treat all as top-level
 				foreach ($categories as $term) {
