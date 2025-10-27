@@ -290,7 +290,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$yearTotals = array_fill_keys($years, ['sum' => 0.0, 'count' => 0]);
 		
 		foreach ($rows as $row) {
-			foreach ($row['cols'] as $year => $col) {  // ✅ $year is the key
+			foreach ($row['cols'] as $year => $col) {
 				if (isset($yearTotals[$year])) {
 					$yearTotals[$year]['sum'] += (float)$col['sum'];
 					$yearTotals[$year]['count'] += (int)$col['count'];

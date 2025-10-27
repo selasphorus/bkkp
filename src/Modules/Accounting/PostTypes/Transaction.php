@@ -120,7 +120,7 @@ class Transaction extends PostTypeHandler
 	}
 
 	//private function resolveCategories(Transaction $handler, array $atts): array
-	public function resolveCategories(array $atts): array
+	/*public function resolveCategories(array $atts): array
 	{
 		$param = $atts['categories'] ?? 'all';
 	
@@ -148,6 +148,41 @@ class Transaction extends PostTypeHandler
 		]);
 	
 		return (!is_wp_error($found) && is_array($found)) ? $found : [];
+	}*/
+	public function resolveCategories(array $atts): array
+	{
+		return $this->resolveTerms('transaction_category', $atts['categories'] ?? 'all', $atts);
+	}
+	
+	/**
+	 * Override parent to provide Transaction-specific active term logic
+	 */
+	protected function getTermsForTaxonomy(string $taxonomy, array $filters = [], bool $activeInScope = false): array
+	{
+		if (!$activeInScope || $taxonomy !== 'transaction_category') {
+			return parent::getTermsForTaxonomy($taxonomy, $filters, $activeInScope);
+		}
+	
+		// Active-in-scope for transaction_category
+		$result = $this->getTransactions(array_merge($filters, ['limit' => -1]));
+		$posts  = $result['posts'] ?? [];
+	
+		if ($posts === []) {
+			return [];
+		}
+	
+		$postIds = array_map(static fn($p) => (int)$p->ID, $posts);
+		$termObjs = wp_get_object_terms($postIds, $taxonomy, ['fields' => 'all']);
+		if (!is_array($termObjs) || $termObjs === []) {
+			return [];
+		}
+	
+		// De-dup by term_id
+		$out = [];
+		foreach ($termObjs as $t) {
+			$out[$t->term_id] = $t;
+		}
+		return array_values($out);
 	}
 	
 	/**
