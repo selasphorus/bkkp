@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
             var numberText = $numericSpan.text().replace(/[^0-9.-]/g, '');
             
             // Create copy icon
-            var $copyIcon = $('<span class="copy-number-icon" data-number="' + numberText + '" title="Copy number">📋</span>');
+            var $copyIcon = $('<span class="copy-number-icon" data-number="' + numberText + '" title="Copy number"></span>');
             
             // Insert icon after the link (but inside the td)
             $link.after($copyIcon);

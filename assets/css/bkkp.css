@@ -32,13 +32,17 @@ table.bkkp a:hover {
 
 /* CSS to style the "copy: icon */
 .copy-number-icon {
-    cursor: pointer;
-    margin-left: 6px;
-    font-size: 14px;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-    display: inline-block;
-    vertical-align: middle;
+	cursor: pointer;
+	margin-left: 6px;
+	width: 14px;
+	height: 14px;
+	display: inline-block;
+	vertical-align: top;
+	opacity: 0.6;
+	transition: opacity 0.2s;
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="%23666"><path d="M15 6h-1V4c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h2v2c0 1.1.9 2 2 2h7c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM4 12V4h8v2H8c-1.1 0-2 .9-2 2v4H4zm11 4H8V8h7v8z"/></svg>');
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 
 .copy-number-icon:hover {
