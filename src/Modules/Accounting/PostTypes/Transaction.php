@@ -15,6 +15,7 @@ class Transaction extends PostTypeHandler
 	private const ACP_ACCOUNT_HASH = '634b1b1d09fbe8';
 	private const ACP_RELATED_GROUP_HASH = '683bc82d0624dc';
 	private const ACP_LAYOUT_ID = '68b645905c8d6'; // "Transaction Basics" layout
+	// TODO: Expand to handle other layouts, including: '68b630c2630dd' -- "Import Audit"
 	
 	public function __construct(?\WP_Post $post = null) {
 		$config = [
@@ -236,7 +237,7 @@ class Transaction extends PostTypeHandler
 		$sum = 0.0;
 	
 		foreach ($posts as $post){
-			$raw = get_post_meta($post->ID, 'amount', true); // use getPostMeta instead?
+			$raw = get_post_meta($post->ID, 'amount', true); // TODO: use getPostMeta instead?
 			if ($raw === '' || $raw === null){
 				error_log( "amount is empty for pID: " . $post->ID );
 				continue;
@@ -244,6 +245,20 @@ class Transaction extends PostTypeHandler
 			error_log( "raw amount: {$raw} for pID: " . $post->ID );
 			$num = is_numeric($raw) ? (float)$raw : 0.0;
 			error_log( "amount: {$num} for pID: " . $post->ID );
+			
+			// Get transaction_type and apply sign
+			$type = get_post_meta($post->ID, 'transaction_type', true);
+			// TODO: consider making transaction_type a taxonomy instead of a custom field?
+			//$type_terms = wp_get_post_terms($post->ID, 'transaction_type', ['fields' => 'slugs']);
+			//$type = !empty($type_terms) && !is_wp_error($type_terms) ? $type_terms[0] : '';
+			
+			// Debits are negative, credits are positive
+			if ($type === 'debit') {
+				$num = -abs($num);
+			} else {
+				$num = abs($num);  // Ensure credits are positive
+			}
+			
 			$sum += $num;
 		}
 	

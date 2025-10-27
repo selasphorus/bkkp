@@ -198,7 +198,17 @@ final class TransactionsShortcode implements ShortcodeInterface
 						error_log('[TransactionsShortcode::render] amountRaw: ' . $amountRaw);
 						$amount = is_numeric($amountRaw) ? (float)$amountRaw : 0.0;
 						error_log('[TransactionsShortcode::render] $amount: ' . $amount);
-						//
+						
+						// Get transaction type and apply sign
+						$type = get_post_meta($p->ID, 'transaction_type', true);
+						
+						// Debits are negative, credits are positive
+						if ($type === 'debit') {
+							$amount = -abs($amount);
+						} else {
+							$amount = abs($amount);
+						}
+						
 						$cols[$ty]['sum']   += $amount;
 						$cols[$ty]['count'] += 1;
 		
