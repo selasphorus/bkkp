@@ -1,7 +1,7 @@
 //
 jQuery(document).ready(function($) {
     // Add copy icons to table cells with numeric values
-    $('.bkkp td.numeric').each(function() {
+    $('td.numeric, td span.numeric').each(function() {
         var $cell = $(this);
         var $link = $cell.find('a');
         

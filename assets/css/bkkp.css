@@ -30,6 +30,30 @@ table.bkkp a:hover {
     text-decoration: underline;
 }
 
+/* CSS to style the "copy: icon */
+.copy-number-icon {
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 14px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.copy-number-icon:hover {
+    opacity: 1;
+}
+
+/* Optional: Use a custom icon instead of emoji */
+.copy-number-icon.icon-style {
+    width: 16px;
+    height: 16px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>');
+    background-size: contain;
+    text-indent: -9999px;
+}
+
 /***** Accounts ***/
 
 /* Account view container */
