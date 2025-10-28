@@ -284,7 +284,7 @@ final class TransactionFields implements FieldGroupInterface
                     'prepend' => '',
                     'append' => '',
                 ),
-                array(
+                /*array(
                     'key' => 'field_65baa64e7817b',
                     'label' => 'Transaction Tags',
                     'name' => 'tags',
@@ -310,6 +310,21 @@ final class TransactionFields implements FieldGroupInterface
                     'bidirectional_target' => array(
                     ),
                 ),
+                array(
+                    'key' => 'field_65baa64e7817b',
+                    'label' => 'Transaction Tags TXT',
+                    'name' => 'transaction_tags_txt',
+                    'aria-label' => '',
+                    'type' => 'text',
+                    'instructions' => '',
+                    'required' => 0,
+                    'conditional_logic' => 0,
+                    'wrapper' => array(
+                        'width' => '40',
+                        'class' => '',
+                        'id' => '',
+                    ),
+                ),*/
                 array(
                     'key' => 'field_65baa62078179',
                     'label' => 'Transaction Type',
