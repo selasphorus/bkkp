@@ -25,6 +25,7 @@ class TagMappingData
             
             // Add your 150+ mappings below using this format:
             // 'combo-tag' => ['tag1', 'tag2', 'tag3'],
+            '1099 ??? Bonus IT: FFI Unverified' => ['1099', 'attn-rqrd', 'Bonus', 'IT: FFI', 'Unverified'],
             
             // You can organize them by category if it helps:
             
