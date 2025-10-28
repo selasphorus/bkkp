@@ -27,6 +27,26 @@ class TagMappingData
             // 'combo-tag' => ['tag1', 'tag2', 'tag3'],
             '1099 ??? Bonus IT: FFI Unverified' => ['1099', 'attn-rqrd', 'Bonus', 'IT: FFI', 'Unverified'],
             
+            '*DONE* ??? Fraudulent?' => ['DONE', 'attn-rqrd', 'maybe-fraudulent'],
+            '*DONE* 134-Other' => ['DONE', '134-other'],
+            '*DONE* Biz Billable' => ['DONE', 'biz', 'deductible'],
+            '*DONE* Biz Billable PayPal PayPal X-check' => ['DONE', 'biz', 'deductible', 'paypal', 'xcheck'],
+            '*DONE* CHECK SttmntVerified' => ['DONE', 'CHECK', 'SttmntVerified'],
+            '*DONE* DIRECT DEPOSIT SttmntVerified W2' => ['DONE', 'Direct Deposit', 'SttmntVerified', 'W2'],
+            '*DONE* MintERR' => ['DONE', 'MintERR'],
+            '*DONE* No Receipt' => ['DONE', 'No Receipt'],
+            /*
+            'xxx' => ['DONE', 'biz', 'deductible'],
+            'xxx' => ['DONE', 'biz', 'deductible'],
+            'xxx' => ['DONE', 'biz', 'deductible'],
+            'xxx' => ['DONE', 'biz', 'deductible'],
+            'xxx' => ['DONE', 'biz', 'deductible'],
+            'xxx' => ['DONE', 'biz', 'deductible'],
+            'xxx' => ['DONE', 'biz', 'deductible'],
+            'xxx' => ['DONE', 'biz', 'deductible'],
+            */
+            
+            
             // You can organize them by category if it helps:
             
             // === 1099 Related ===
