@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       Birdhive Bookkeeping
+ * Plugin Name:       Bkkp
  * Description:       A WordPress plugin for personal bookkeeping
- * Dependencies:      Requires WHx4 -- and SDG? for various utility functions?
+ * Dependencies:      Requires WHx4
  * Requires Plugins:  whx4
  * Version:           0.1
  * Author:            atc
@@ -18,12 +18,12 @@ declare(strict_types=1);
 namespace atc\Bkkp;
 
 // Prevent direct access
-if ( !defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
 // Require Composer autoloader
-if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
@@ -35,88 +35,91 @@ use atc\Bkkp\Modules\Employment\EmploymentModule as Employment;
 use atc\Bkkp\Modules\Documents\DocumentsModule as Documents; // TODO, maybe?: create separate mini-plugin to handle documents
 use atc\Bkkp\Modules\TaxPrep\TaxPrepModule as TaxPrep;
 use atc\Bkkp\Modules\Communications\CommunicationsModule as Communications;
-//
+
+// Admin Controllers
 use atc\Bkkp\Admin\MetaFieldCleanup;
+use atc\Bkkp\Admin\TagCleanupPageController;
 
 // Once plugins are loaded, boot everything up
-add_action( 'whx4_pre_boot', function() {
+add_action('whx4_pre_boot', function() {
     // Wait until WHx4 is loaded, but BEFORE it boots
-    //error_log( '$$$ whx4_pre_boot $$$' );
-    if ( class_exists( Plugin::class ) ) {
-        //error_log( '$$$ about to attempt to register additional modules $$$' );
-
-        // Register the module with WHx4
-        add_filter( 'whx4_register_modules', function( array $modules ): array {
-            //error_log( '$$$ whx4_register_modules hook fired $$$' );
-            $modules['accounting'] = Accounting::class;
-            $modules['employment'] = Employment::class;
-            $modules['documents'] = Documents::class;
-            $modules['taxprep'] = TaxPrep::class;
-            $modules['communications'] = Communications::class;
-            return $modules;
-        } );
-        
-        // Register Field Keys
-        add_filter( 'whx4_registered_field_keys', function() {
-            //error_log( '$$$ whx4_registered_field_keys hook fired $$$' );
-            if ( ! function_exists( 'acf_get_local_fields' ) ) {
-                return [];
-            }
-
-            $fields = acf_get_local_fields();
-            $keys = [];
-
-            foreach ( $fields as $field ) {
-                if ( isset( $field['key'] ) ) {
-                    $keys[] = $field['key'];
-                }
-            }
-
-            return $keys;
-        });
-        
-        // Register Assets
-		add_filter('whx4_assets', static function (array $assets): array {
-			// CSS -- Compute URLs and paths safely
-			$relCss = 'assets/css/bkkp.css';
-			$srcCss = plugins_url($relCss, __FILE__);
-			$pathCss = plugin_dir_path(__FILE__) . $relCss;
-		
-			$assets['styles'][] = [
-				'handle'   => 'bkkp',
-				'src'      => $srcCss,
-				'path'     => $pathCss,
-				'deps'     => [],
-				'ver'      => 'auto',
-				'media'    => 'all',
-				'where'    => 'front',
-				'autoload' => true,
-			];
-		
-			// JS -- Compute URLs and paths safely
-			$relJs = 'assets/js/bkkp.js';
-			$srcJs = plugins_url($relJs, __FILE__);
-			$pathJs = plugin_dir_path(__FILE__) . $relJs;
-		
-			$assets['scripts'][] = [
-				'handle'    => 'bkkp',
-				'src'       => $srcJs,
-				'path'      => $pathJs,
-				'deps'      => [],           // e.g., ['jquery']
-				'ver'       => 'auto',
-				'in_footer' => true,         // load in footer (recommended)
-				'where'     => 'front',
-				'autoload'  => true,
-			];
-		
-			return $assets;
-		});
-    } else {
-       //error_log( '$$$ Plugin class DNE $$$' );
+    if (!class_exists(Plugin::class)) {
+        return;
     }
-}, 15 ); // Priority < 20 to run before WHx4 boot()
 
-// Register WP-CLI commands
+    // Register the modules with WHx4
+    add_filter('whx4_register_modules', function(array $modules): array {
+        $modules['accounting'] = Accounting::class;
+        $modules['employment'] = Employment::class;
+        $modules['documents'] = Documents::class;
+        $modules['taxprep'] = TaxPrep::class;
+        $modules['communications'] = Communications::class;
+        return $modules;
+    });
+    
+    // Register Field Keys
+    add_filter('whx4_registered_field_keys', function() {
+        if (!function_exists('acf_get_local_fields')) {
+            return [];
+        }
+
+        $fields = acf_get_local_fields();
+        $keys = [];
+
+        foreach ($fields as $field) {
+            if (isset($field['key'])) {
+                $keys[] = $field['key'];
+            }
+        }
+
+        return $keys;
+    });
+    
+    // Register Assets
+    add_filter('whx4_assets', static function (array $assets): array {
+        // CSS
+        $relCss = 'assets/css/bkkp.css';
+        $srcCss = plugins_url($relCss, __FILE__);
+        $pathCss = plugin_dir_path(__FILE__) . $relCss;
+    
+        $assets['styles'][] = [
+            'handle'   => 'bkkp',
+            'src'      => $srcCss,
+            'path'     => $pathCss,
+            'deps'     => [],
+            'ver'      => 'auto',
+            'media'    => 'all',
+            'where'    => 'front',
+            'autoload' => true,
+        ];
+    
+        // JS
+        $relJs = 'assets/js/bkkp.js';
+        $srcJs = plugins_url($relJs, __FILE__);
+        $pathJs = plugin_dir_path(__FILE__) . $relJs;
+    
+        $assets['scripts'][] = [
+            'handle'    => 'bkkp',
+            'src'       => $srcJs,
+            'path'      => $pathJs,
+            'deps'      => [],        // e.g., ['jquery']
+            'ver'       => 'auto',
+            'in_footer' => true,
+            'where'     => 'front',
+            'autoload'  => true,
+        ];
+    
+        return $assets;
+    });
+    
+    // Register Admin Pages
+    if (is_admin()) {
+        (new TagCleanupPageController())->addHooks();
+    }
+    
+}, 15); // Priority < 20 to run before WHx4 boot()
+
+// Register WP-CLI commands (keeping existing CLI functionality)
 if (defined('WP_CLI') && \WP_CLI) {
     
     // Generic meta cleanup command
