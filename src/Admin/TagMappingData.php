@@ -30,21 +30,27 @@ class TagMappingData
             '*DONE* ??? Fraudulent?' => ['DONE', 'attn-rqrd', 'Maybe Fraudulent'],
             '*DONE* 134-Other' => ['DONE', '134-Other'],
             '*DONE* Biz Billable' => ['DONE', 'Biz', 'Deductible'],
-            '*DONE* Biz Billable PayPal PayPal X-check' => ['DONE', 'Biz', 'Deductible', 'PayPal', 'X-check'],
+            '*DONE* Biz Billable PayPal PayPal X-check' => ['DONE', 'Biz', 'Deductible', 'PayPal', 'PayPal X-check', 'X-check'],
             '*DONE* CHECK SttmntVerified' => ['DONE', 'CHECK', 'SttmntVerified'],
             '*DONE* DIRECT DEPOSIT SttmntVerified W2' => ['DONE', 'Direct Deposit', 'SttmntVerified', 'W2'],
             '*DONE* MintERR' => ['DONE', 'MintERR'],
             '*DONE* No Receipt' => ['DONE', 'No Receipt'],
-            /*
-            'xxx' => ['DONE', 'biz', 'deductible'],
-            'xxx' => ['DONE', 'biz', 'deductible'],
-            'xxx' => ['DONE', 'biz', 'deductible'],
-            'xxx' => ['DONE', 'biz', 'deductible'],
-            'xxx' => ['DONE', 'biz', 'deductible'],
-            'xxx' => ['DONE', 'biz', 'deductible'],
-            'xxx' => ['DONE', 'biz', 'deductible'],
-            'xxx' => ['DONE', 'biz', 'deductible'],
-            */
+            
+            '*DONE* OOT4B' => ['DONE', 'biz', 'deductible', 'OOT4B'],
+            '*DONE* OOT4B Out of Town' => ['DONE', 'biz', 'deductible', 'OOT4B', 'OOT'],
+            '*DONE* OOT4B SttmntVerified' => ['DONE', 'biz', 'deductible', 'OOT4B', 'SttmntVerified'],
+            '*DONE* Out of Town' => ['DONE', 'OOT'],
+            '*DONE* PayPal PayPal X-check' => ['DONE', 'PayPal', 'PayPal X-check'],
+            '*DONE* PayPal PayPal X-check Return/Refund' => ['DONE', 'PayPal', 'PayPal X-check', 'Return/Refund'],
+            '*DONE* PayPal PayPal X-check SttmntVerified' => ['DONE', 'PayPal', 'PayPal X-check', 'SttmntVerified'],
+            '*DONE* Return/Refund' => ['DONE', 'Return/Refund'],
+            '*DONE* Return/Refund X-check OK' => ['DONE', 'Return/Refund', 'X-check OK'],
+            '*DONE* SttmntVerified' => ['DONE', 'SttmntVerified'],
+            '*DONE* SttmntVerified W2' => ['DONE', 'SttmntVerified', 'W2'],
+            '*DONE* X-check OK' => ['DONE', 'X-check OK'],
+            'DONE 1099 SttmntVerified' => ['DONE', '1099', 'SttmntVerified'],
+            //'xxx' => ['DONE', 'biz', 'deductible'],
+            
             
             
             // You can organize them by category if it helps:
