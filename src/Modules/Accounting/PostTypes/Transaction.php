@@ -14,8 +14,10 @@ class Transaction extends PostTypeHandler
 	private const ACP_TAX_YEAR_HASH = '21fe4931b33334';
 	private const ACP_ACCOUNT_HASH = '634b1b1d09fbe8';
 	private const ACP_RELATED_GROUP_HASH = '683bc82d0624dc';
-	private const ACP_LAYOUT_ID = '68b645905c8d6'; // "Transaction Basics" layout
-	// TODO: Expand to handle other layouts, including: '68b630c2630dd' -- "Import Audit"
+	private const ACP_LAYOUT_ID = '68f62156839f4'; // "Transaction Basics+" layout
+	// TODO: Expand to handle other layouts, including:
+	// '68b645905c8d6'; // "Transaction Basics" layout
+	// '68b630c2630dd' -- "Import Audit"
 	
 	public function __construct(?\WP_Post $post = null) {
 		$config = [
