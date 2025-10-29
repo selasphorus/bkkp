@@ -111,14 +111,14 @@ class MetaFieldCleanup {
 	private static function make_amounts_unsigned(&$results, $dry_run) {
 		global $wpdb;
 		
-		// Get only post_ids with negative amounts AND transaction_type='debit'
+		// Get only post_ids with negative amounts AND ttype='debit'
 		$post_ids = $wpdb->get_col(
 			"SELECT DISTINCT pm1.post_id 
 			FROM {$wpdb->postmeta} pm1
 			INNER JOIN {$wpdb->postmeta} pm2 ON pm1.post_id = pm2.post_id
 			WHERE pm1.meta_key = 'amount' 
 			AND CAST(pm1.meta_value AS DECIMAL(10,2)) < 0
-			AND pm2.meta_key = 'transaction_type'
+			AND pm2.meta_key = 'ttype'
 			AND pm2.meta_value = 'debit'"
 		);
 		

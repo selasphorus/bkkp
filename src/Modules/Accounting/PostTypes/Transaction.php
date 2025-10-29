@@ -47,11 +47,16 @@ class Transaction extends PostTypeHandler
 				'map_to'   => ['arg' => 'scope'], // PostQuery will forward to ScopedDateResolver
 				'override' => true,
 			],
-			'transaction_type' => [
+			'ttype' => [
+				'sanitize' => [PostTypeHandler::class, 'sanitizeTermSlugsParam'],
+				'map_to'   => ['arg' => 'ttype'],
+				'override' => true,
+			],
+			/*'transaction_type' => [
 				'sanitize' => [PostTypeHandler::class, 'sanitizeTermSlugsParam'],
 				'map_to'   => ['tax' => 'transaction_type', 'field' => 'slug'], // TaxQueryBuilder input
 				'override' => true,
-			],
+			],*/
 			'transaction_category' => [
 				'sanitize' => [PostTypeHandler::class, 'sanitizeTermSlugsParam'],
 				'map_to'   => ['tax' => 'transaction_category', 'field' => 'slug'], // TaxQueryBuilder input
@@ -283,14 +288,15 @@ class Transaction extends PostTypeHandler
 			$num = is_numeric($raw) ? (float)$raw : 0.0;
 			error_log( "amount: {$num} for pID: " . $post->ID );
 			
-			// Get transaction_type and apply sign
-			$type = get_post_meta($post->ID, 'transaction_type', true);
+			// Get ttype and apply sign
+			$ttype = get_post_meta($post->ID, 'ttype', true);
+			
 			// TODO: consider making transaction_type a taxonomy instead of a custom field?
 			//$type_terms = wp_get_post_terms($post->ID, 'transaction_type', ['fields' => 'slugs']);
 			//$type = !empty($type_terms) && !is_wp_error($type_terms) ? $type_terms[0] : '';
 			
 			// Debits are negative, credits are positive
-			if ($type === 'debit') {
+			if ($ttype === 'debit') {
 				$num = -abs($num);
 			} else {
 				$num = abs($num);  // Ensure credits are positive
@@ -309,7 +315,7 @@ class Transaction extends PostTypeHandler
 	 * Supports comma-separated input.
 	 *
 	 * @param array $filters The filters array (passed by reference)
-	 * @param string $filterKey The filter key to map (e.g., 'transaction_category', 'transaction_type')
+	 * @param string $filterKey The filter key to map (e.g., 'transaction_category', 'ttype', 'transaction_type')
 	 * @param string $taxonomy The taxonomy name (defaults to same as $filterKey)
 	 */
 	// WIP -- this doesn't work yet -- breaks the transactions shortcode (no records found)

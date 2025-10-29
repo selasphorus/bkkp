@@ -49,7 +49,7 @@ class Account extends PostTypeHandler
 		];
 		
 		// Collect URL params if available (scope, category, type)
-		$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','transaction_type']);
+		$urlArgs = UrlParamBridge::collect(Transaction::class, ['scope','transaction_category','ttype','transaction_type']);
 		
 		// Set default scope? TBD
 		
@@ -84,7 +84,7 @@ class Account extends PostTypeHandler
 		
 		foreach ($transactions as $transaction) {
 			$dateValue = get_post_meta($transaction->ID, 'transaction_date', true);
-			$type = get_post_meta($transaction->ID, 'transaction_type', true);
+			$ttype = get_post_meta($transaction->ID, 'ttype', true);
 			
 			// Extract year and month from yyyymmdd format
 			$year = substr($dateValue, 0, 4);
@@ -107,10 +107,10 @@ class Account extends PostTypeHandler
 			$yearData[$year]['total']++;
 			$monthData[$year][$month]['total']++;
 			
-			if ($type === 'credit') {
+			if ($ttype === 'credit') {
 				$yearData[$year]['credits']++;
 				$monthData[$year][$month]['credits']++;
-			} elseif ($type === 'debit') {
+			} elseif ($ttype === 'debit') {
 				$yearData[$year]['debits']++;
 				$monthData[$year][$month]['debits']++;
 			}
@@ -138,7 +138,7 @@ class Account extends PostTypeHandler
 	//public function getCredits( $scope = "this_month"): array //string
 	public function getCredits(array $filters = []): array
 	{
-		$filters['transaction_type'] = 'credit';
+		$filters['ttype'] = 'credit';
 		return $this->getTransactions($filters);
 	}
 	
@@ -147,7 +147,7 @@ class Account extends PostTypeHandler
 	 */
 	public function getDebits(array $filters = []): array
 	{
-		$filters['transaction_type'] = 'debit';
+		$filters['ttype'] = 'debit';
 		return $this->getTransactions($filters);
 	}
 }

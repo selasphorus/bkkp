@@ -40,9 +40,10 @@ final class AccountTransactionsShortcode implements ShortcodeInterface
         return [
             'account' => '',
             'limit'   => -1,
-            // You can also expose 'scope' and 'transaction_type' as shortcode atts;
+            // You can also expose 'scope', 'ttype', and 'transaction_type' as shortcode atts;
             // URL params can later be set to override or not via precedence rules.
             'scope'            => '',
+            'ttype'            => '',
             'transaction_type' => '',
         ];
     }

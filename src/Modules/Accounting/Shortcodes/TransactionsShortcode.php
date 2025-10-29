@@ -259,10 +259,10 @@ final class TransactionsShortcode implements ShortcodeInterface
 						$amount = is_numeric($amountRaw) ? (float)$amountRaw : 0.0;
 						
 						// Get transaction type and apply sign
-						$type = get_post_meta($p->ID, 'transaction_type', true);
+						$ttype = get_post_meta($p->ID, 'ttype', true);
 						
 						// Debits are negative, credits are positive
-						if ($type === 'debit') {
+						if ($ttype === 'debit') {
 							$amount = -abs($amount);
 						} else {
 							$amount = abs($amount);

@@ -357,7 +357,7 @@ final class TransactionFields implements FieldGroupInterface
                 array(
                     'key' => 'field_bkkp_transactions_transaction_type',
                     'label' => 'Transaction Type',
-                    'name' => 'transaction_type',
+                    'name' => 'transaction_type', // TODO: Maybe make this a taxonomy instead?
                     'aria-label' => '',
                     'type' => 'select',
                     'instructions' => '',
