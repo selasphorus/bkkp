@@ -326,7 +326,36 @@ final class TransactionFields implements FieldGroupInterface
                     ),
                 ),*/
                 array(
-                    'key' => 'field_65baa62078179',
+                    'key' => 'field_65baa62078179', // Rename to 'key' => 'field_bkkp_transactions_ttype'?
+                    'label' => 'Credit/Debit',
+                    'name' => 'ttype',
+                    'aria-label' => '',
+                    'type' => 'select',
+                    'instructions' => '',
+                    'required' => 0,
+                    'conditional_logic' => 0,
+                    'wrapper' => array(
+                        'width' => '15',
+                        'class' => '',
+                        'id' => '',
+                    ),
+                    'choices' => array(
+                        'unknown' => 'Unknown',
+                        'debit' => 'Debit',
+                        'credit' => 'Credit',
+                    ),
+                    'default_value' => 'unknown',
+                    'return_format' => 'value',
+                    'multiple' => 0,
+                    'allow_null' => 0,
+                    'ui' => 0,
+                    'ajax' => 0,
+                    'placeholder' => '',
+                    'create_options' => 0,
+                    'save_options' => 0,
+                ),
+                array(
+                    'key' => 'field_bkkp_transactions_transaction_type',
                     'label' => 'Transaction Type',
                     'name' => 'transaction_type',
                     'aria-label' => '',
@@ -343,6 +372,10 @@ final class TransactionFields implements FieldGroupInterface
                         'unknown' => 'Unknown',
                         'debit' => 'Debit',
                         'credit' => 'Credit',
+                        'purchase' => 'Purchase',
+                        'payment' => 'Payment',
+                        'installment' => 'Installment',
+                        'other' => 'Other',
                         //TODO: Add Investment-related options like 'Contribution'?
                     ),
                     'default_value' => 'unknown',
