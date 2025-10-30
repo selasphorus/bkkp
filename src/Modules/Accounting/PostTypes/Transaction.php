@@ -112,20 +112,36 @@ class Transaction extends PostTypeHandler
 		if (isset($filters['scope'])) {
 			$scope = $filters['scope'];
 			
-			// Use ScopedDateResolver to convert scope to date range
-			$dateRange = \atc\WHx4\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
+			// Handle YYYY-MM format explicitly (first day to last day of month)
+			if (is_string($scope) && preg_match('/^(\d{4})-(\d{2})$/', $scope, $matches)) {
+				$year = $matches[1];
+				$month = $matches[2];
+				
+				// Use DateHelper to parse the start of month
+				$startDate = \atc\WHx4\Utils\DateHelper::parseFlexibleDate("$year-$month-01", true);
+				$endDate = $startDate->modify('last day of this month');
+				
+				$dateRange = [
+					'start' => $startDate->format('Y-m-d'),
+					'end' => $endDate->format('Y-m-d')
+				];
+			} else {
+				// Use ScopedDateResolver for other scope formats
+				$dateRange = \atc\WHx4\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
+			}
 			
-			if ($dateRange['start'] && $dateRange['end']) {
+			if (!empty($dateRange['start']) && !empty($dateRange['end'])) {
 				$rules[] = [
 					'uid' => self::generateRuleUid(),
 					'id' => self::ACP_TRANSACTION_DATE_HASH,
 					'operator' => 'between',
 					'value' => [
-						$dateRange['start'],  // Already in Y-m-d format
-						$dateRange['end']     // Already in Y-m-d format
+						$dateRange['start'],
+						$dateRange['end']
 					]
 				];
 			}
+		}
 		}
 		
 		// Account filter
@@ -145,11 +161,11 @@ class Transaction extends PostTypeHandler
 		
 		// Add Smart Filtering rules if we have any
 		if (!empty($rules)) {
-			$rulesJson = json_encode([
+			// Properly encode as JSON string (WordPress will URL-encode it)
+			$args['ac-rules'] = wp_json_encode([
 				'condition' => 'AND',
 				'rules' => $rules
 			]);
-			$args['ac-rules'] = $rulesJson;
 		}
 		
 		// Add filter action if we have filters
