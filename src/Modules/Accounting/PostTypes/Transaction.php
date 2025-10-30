@@ -142,7 +142,6 @@ class Transaction extends PostTypeHandler
 				];
 			}
 		}
-		}
 		
 		// Account filter
 		if (isset($filters['account'])) {
