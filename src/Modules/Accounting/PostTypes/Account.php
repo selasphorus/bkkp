@@ -241,28 +241,45 @@ class Account extends PostTypeHandler
 		$stats = $this->getTransactionStats($filters);
 		
 		// Full month names for display
-		$monthNames = [
+		/*$monthNames = [
 			'01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
 			'05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
 			'09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
-		];
-		// TO be replaced with: $monthNames = DateHelper::getMonthNames('full');
+		];*/
+		$monthNames = DateHelper::getMonthNames('long');
 		
 		$preparedYears = [];
 		
 		foreach ($stats['yearly'] as $year => $yearStats) {
 			$preparedMonths = [];
+			$previousMonth = null; 
 			
 			if (isset($stats['monthly'][$year])) {
+			
 				foreach ($stats['monthly'][$year] as $month => $monthData) {
+					// Detect if there's a data gap from the previous month
+					$hasGap = false;
+					if ($previousMonth !== null) {
+						$prevMonthNum = (int)$previousMonth;
+						$currMonthNum = (int)$month;
+						
+						// Check if months are not consecutive (descending order)
+						if ($currMonthNum !== ($prevMonthNum - 1)) {
+							$hasGap = true;
+						}
+					}
+					
 					$preparedMonths[] = [
 						'month_number' => $month,
 						'month_name' => $monthNames[$month],
 						'total' => $monthData['total'],
 						'credits' => $monthData['credits'],
 						'debits' => $monthData['debits'],
-						'url' => $monthData['url']
+						'url' => $monthData['url'],
+						'has_gap' => $hasGap
 					];
+					
+					$previousMonth = $month;
 				}
 			}
 			
