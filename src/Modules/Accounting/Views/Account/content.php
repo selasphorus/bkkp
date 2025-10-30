@@ -58,7 +58,7 @@ if (!defined('ABSPATH')) {
                                 <?php foreach ($yearData['months'] as $monthData): ?>
                                     <tr>
                                         <td class="col-month">
-                                            <a href="<?php echo esc_url($monthData['url']); ?>" target="_blank">
+                                            <a href="<?php echo esc_url($monthData['url']); ?>" target="_blank"<?php if ($monthData['has_gap']){ echo ' class="data-gap"'; } ?>>
                                                 <?php echo esc_html($monthData['month_name']); ?>
                                             </a>
                                         </td>
