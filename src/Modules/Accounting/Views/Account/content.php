@@ -1,57 +1,49 @@
 <?php
-use atc\WHx4\Core\PostTypeHandler;
+/**
+ * Account Content View
+ * 
+ * Displays account status and transaction statistics
+ * Pure presentation layer - all data preparation done in Account handler
+ * 
+ * @var string $status Account status
+ * @var array $viewData Prepared transaction statistics
+ * @var array $postMeta Post meta for debug display
+ */
 
-/** @var \WP_Post $post */
-$handler = PostTypeHandler::getHandlerForPost($post);
-
-if ($handler) {
-    $status = $handler->getStatus();
-    $stats = $handler->getTransactionStats();
-    
-    $yearData = $stats['yearly'];
-    $monthData = $stats['monthly'];
-    $totalCount = $stats['total_count'];
-    
-    // Month names for display
-    $monthNames = [
-        '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr',
-        '05' => 'May', '06' => 'Jun', '07' => 'Jul', '08' => 'Aug',
-        '09' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec'
-    ];
-    // TO be replaced with:
-    //$monthNames = DateHelper::getMonthNames();
+if (!defined('ABSPATH')) {
+    exit;
 }
 ?>
 
 <div class="account-view">
     <div class="account-summary">
         <p><strong>Account Status:</strong> <?php echo esc_html($status); ?></p>
-        <p><strong>Total Transactions on Record:</strong> <?php echo $totalCount; ?></p>
+        <p><strong>Total Transactions on Record:</strong> <?php echo $viewData['total_count']; ?></p>
     </div>
     
-    <?php if (!empty($yearData)): ?>
+    <?php if ($viewData['has_data']): ?>
         <h3>Transaction History</h3>
         
-        <?php foreach ($yearData as $year => $yearStats): ?>
+        <?php foreach ($viewData['years'] as $yearData): ?>
             <details class="transaction-year">
                 <summary class="year-summary">
-                    <span class="year-label"><?php echo esc_html($year); ?></span>
-                    <span class="year-count">(<?php echo $yearStats['total']; ?> transactions)</span>
+                    <span class="year-label"><?php echo esc_html($yearData['year']); ?></span>
+                    <span class="year-count">(<?php echo $yearData['stats']['total']; ?> transactions)</span>
                 </summary>
                 
                 <div class="year-details">
                     <div class="year-totals">
                         <div class="stat-row">
                             <span class="stat-label">Total Transactions:</span>
-                            <span class="stat-value"><?php echo $yearStats['total']; ?></span>
+                            <span class="stat-value"><?php echo $yearData['stats']['total']; ?></span>
                             <span class="stat-label">Credits:</span>
-                            <span class="stat-value"><?php echo $yearStats['credits']; ?></span>
+                            <span class="stat-value"><?php echo $yearData['stats']['credits']; ?></span>
                             <span class="stat-label">Debits:</span>
-                            <span class="stat-value"><?php echo $yearStats['debits']; ?></span>
+                            <span class="stat-value"><?php echo $yearData['stats']['debits']; ?></span>
                         </div>
                     </div>
                     
-                    <?php if (isset($monthData[$year])): ?>
+                    <?php if ($yearData['has_months']): ?>
                         <h4 class="monthly-heading">Monthly Breakdown</h4>
                         <table class="monthly-table">
                             <thead>
@@ -63,12 +55,16 @@ if ($handler) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($monthData[$year] as $month => $data): ?>
+                                <?php foreach ($yearData['months'] as $monthData): ?>
                                     <tr>
-                                        <td class="col-month"><?php echo $monthNames[$month]; ?></td>
-                                        <td class="col-total"><?php echo $data['total']; ?></td>
-                                        <td class="col-credits"><?php echo $data['credits']; ?></td>
-                                        <td class="col-debits"><?php echo $data['debits']; ?></td>
+                                        <td class="col-month">
+                                            <a href="<?php echo esc_url($monthData['url']); ?>" target="_blank">
+                                                <?php echo esc_html($monthData['month_name']); ?>
+                                            </a>
+                                        </td>
+                                        <td class="col-total"><?php echo $monthData['total']; ?></td>
+                                        <td class="col-credits"><?php echo $monthData['credits']; ?></td>
+                                        <td class="col-debits"><?php echo $monthData['debits']; ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -85,6 +81,6 @@ if ($handler) {
     <hr class="debug-divider" />
     <details class="debug-info">
         <summary>Post Meta (debug)</summary>
-        <pre><?php print_r($handler->getPostMeta()); ?></pre>
+        <pre><?php print_r($postMeta); ?></pre>
     </details>
 </div>

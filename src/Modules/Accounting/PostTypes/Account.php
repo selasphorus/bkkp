@@ -100,6 +100,84 @@ class Account extends PostTypeHandler
 				$monthData[$year] = [];
 			}
 			if (!isset($monthData[$year][$month])) {
+				$monthData[$year][$month] = [
+					'total' => 0,
+					'credits' => 0,
+					'debits' => 0,
+					'url' => null
+				];
+			}
+			
+			// Increment counters
+			$yearData[$year]['total']++;
+			$monthData[$year][$month]['total']++;
+			
+			if ($ttype === 'credit') {
+				$yearData[$year]['credits']++;
+				$monthData[$year][$month]['credits']++;
+			} elseif ($ttype === 'debit') {
+				$yearData[$year]['debits']++;
+				$monthData[$year][$month]['debits']++;
+			}
+		}
+		
+		// Sort by year descending
+		krsort($yearData);
+		krsort($monthData);
+		
+		// Sort months within each year descending and generate URLs
+		foreach ($monthData as $year => &$months) {
+			krsort($months);
+			
+			// Generate filtered URLs for each month
+			foreach ($months as $month => &$data) {
+				$data['url'] = Transaction::getFilteredAdminUrl([
+					'account' => $this->getPostId(),
+					'scope' => $year . '-' . $month
+				]);
+			}
+		}
+		
+		return [
+			'yearly' => $yearData,
+			'monthly' => $monthData,
+			'total_count' => count($transactions)
+		];
+	}
+
+	/**
+	 * Get transaction statistics grouped by year and month
+	 * 
+	 * @param array $filters Optional filters to pass to getTransactions()
+	 * @return array ['yearly' => [...], 'monthly' => [...]]
+	 */
+	// v1 -- works but lacks CMS links
+	/*
+	public function getTransactionStats(array $filters = []): array
+	{
+		$transactions = $this->getTransactions($filters);
+		
+		$yearData = [];
+		$monthData = [];
+		
+		foreach ($transactions as $transaction) {
+			$dateValue = get_post_meta($transaction->ID, 'transaction_date', true);
+			$ttype = get_post_meta($transaction->ID, 'ttype', true);
+			
+			// Extract year and month from yyyymmdd format
+			$year = substr($dateValue, 0, 4);
+			$month = substr($dateValue, 4, 2);
+			
+			// Initialize year data if needed
+			if (!isset($yearData[$year])) {
+				$yearData[$year] = ['total' => 0, 'credits' => 0, 'debits' => 0];
+			}
+			
+			// Initialize month data if needed
+			if (!isset($monthData[$year])) {
+				$monthData[$year] = [];
+			}
+			if (!isset($monthData[$year][$month])) {
 				$monthData[$year][$month] = ['total' => 0, 'credits' => 0, 'debits' => 0];
 			}
 			
@@ -130,7 +208,7 @@ class Account extends PostTypeHandler
 			'monthly' => $monthData,
 			'total_count' => count($transactions)
 		];
-	}
+	}*/
 
 	/**
 	 * Get credit transactions only
@@ -149,5 +227,72 @@ class Account extends PostTypeHandler
 	{
 		$filters['ttype'] = 'debit';
 		return $this->getTransactions($filters);
+	}
+	
+	/**
+	 * Prepare transaction statistics for display
+	 * Pre-calculates all view data to keep templates clean
+	 * 
+	 * @param array $filters Optional filters to pass to getTransactions()
+	 * @return array Prepared data ready for view rendering
+	 */
+	public function prepareTransactionStatsForView(array $filters = []): array
+	{
+		$stats = $this->getTransactionStats($filters);
+		
+		// Full month names for display
+		$monthNames = [
+			'01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
+			'05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
+			'09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
+		];
+		// TO be replaced with: $monthNames = DateHelper::getMonthNames('full');
+		
+		$preparedYears = [];
+		
+		foreach ($stats['yearly'] as $year => $yearStats) {
+			$preparedMonths = [];
+			
+			if (isset($stats['monthly'][$year])) {
+				foreach ($stats['monthly'][$year] as $month => $monthData) {
+					$preparedMonths[] = [
+						'month_number' => $month,
+						'month_name' => $monthNames[$month],
+						'total' => $monthData['total'],
+						'credits' => $monthData['credits'],
+						'debits' => $monthData['debits'],
+						'url' => $monthData['url']
+					];
+				}
+			}
+			
+			$preparedYears[] = [
+				'year' => $year,
+				'stats' => $yearStats,
+				'months' => $preparedMonths,
+				'has_months' => !empty($preparedMonths)
+			];
+		}
+		
+		return [
+			'years' => $preparedYears,
+			'total_count' => $stats['total_count'],
+			'has_data' => !empty($stats['yearly'])
+		];
+	}
+	
+	/**
+	 * Prepare all data needed for the content view
+	 * This keeps the view clean and dependency-free
+	 * 
+	 * @return array Variables ready for view consumption
+	 */
+	public function prepareViewData(): array
+	{
+		return [
+			'status' => $this->getStatus(),
+			'viewData' => $this->prepareTransactionStatsForView(),
+			'postMeta' => $this->getPostMeta(),
+		];
 	}
 }
