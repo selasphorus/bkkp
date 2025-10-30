@@ -12,6 +12,7 @@ class Transaction extends PostTypeHandler
 	// Store ACP hash IDs as class constants
 	// TODO: Move to options table for portability across installations
 	private const ACP_TAX_YEAR_HASH = '21fe4931b33334';
+	private const ACP_TRANSACTION_DATE_HASH = '4ab8908983d70c';
 	private const ACP_ACCOUNT_HASH = '634b1b1d09fbe8';
 	private const ACP_RELATED_GROUP_HASH = '683bc82d0624dc';
 	private const ACP_LAYOUT_ID = '68f62156839f4'; // "Transaction Basics+" layout
@@ -78,8 +79,10 @@ class Transaction extends PostTypeHandler
 	 * 
 	 * @param array $filters Associative array of filters to apply:
 	 *   - 'tax_year' => int|array - Single year or [start, end] range
+	 *   - 'scope' => string - Date scope (e.g., '2025-01', 'this_month', '2024-2025')
 	 *   - 'related_group' => int - Employer/group ID
 	 *   - 'account' => int - Account ID
+	 *   - 'transaction_category' => int|string - Category term ID or slug
 	 * @param bool $use_layout Whether to include the saved ACP layout ID
 	 * @return string The filtered admin URL
 	 */
@@ -91,6 +94,8 @@ class Transaction extends PostTypeHandler
 			$args['layout'] = self::ACP_LAYOUT_ID;
 		}
 		
+		$rules = [];
+		
 		// Tax year filter (range)
 		if (isset($filters['tax_year'])) {
 			$year = $filters['tax_year'];
@@ -100,6 +105,26 @@ class Transaction extends PostTypeHandler
 			} else {
 				$args["acp_filter[" . self::ACP_TAX_YEAR_HASH . "][0]"] = $year;
 				$args["acp_filter[" . self::ACP_TAX_YEAR_HASH . "][1]"] = $year;
+			}
+		}
+		
+		// Scope filter - converts to transaction_date range using Smart Filtering
+		if (isset($filters['scope'])) {
+			$scope = $filters['scope'];
+			
+			// Use ScopedDateResolver to convert scope to date range
+			$dateRange = \atc\WHx4\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
+			
+			if ($dateRange['start'] && $dateRange['end']) {
+				$rules[] = [
+					'uid' => self::generateRuleUid(),
+					'id' => self::ACP_TRANSACTION_DATE_HASH,
+					'operator' => 'between',
+					'value' => [
+						$dateRange['start'],  // Already in Y-m-d format
+						$dateRange['end']     // Already in Y-m-d format
+					]
+				];
 			}
 		}
 		
@@ -118,12 +143,31 @@ class Transaction extends PostTypeHandler
 			$args["acp_filter[" . self::ACP_RELATED_GROUP_HASH . "]"] = $filters['related_group'];
 		}
 		
+		// Add Smart Filtering rules if we have any
+		if (!empty($rules)) {
+			$rulesJson = json_encode([
+				'condition' => 'AND',
+				'rules' => $rules
+			]);
+			$args['ac-rules'] = $rulesJson;
+		}
+		
 		// Add filter action if we have filters
 		if (count($args) > 1) {
 			$args['filter_action'] = 'Filter';
 		}
 		
 		return add_query_arg($args, admin_url('edit.php'));
+	}
+
+	/**
+	 * Generate a pseudo-random UID for ACP rule (matches ACP's format)
+	 * 
+	 * @return string 14-character hex string
+	 */
+	private static function generateRuleUid(): string
+	{
+		return bin2hex(random_bytes(7));
 	}
 
 	//private function resolveCategories(Transaction $handler, array $atts): array
