@@ -1,7 +1,8 @@
 @charset "UTF-8";
 /* CSS Document */
 
-.troubleshooting {
+.troubleshooting,
+.hidden {
     display: none;
 }
 
