@@ -36,6 +36,12 @@ final class AccountsShortcode implements ShortcodeInterface
     {
         $info = "";
         
+        error_log('[AccountsShortcode] render() called');
+		error_log('[AccountsShortcode] atts: ' . print_r($atts, true));
+    
+		// Return something immediately to test
+		return '<div style="background: yellow; padding: 20px;">AccountsShortcode is rendering!</div>';
+        
         // Defaults
         $defaults = [
             'scope' => 'this_year',
