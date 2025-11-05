@@ -40,7 +40,7 @@ final class AccountsShortcode implements ShortcodeInterface
 		error_log('[AccountsShortcode] atts: ' . print_r($atts, true));
     
 		// Return something immediately to test
-		return '<div style="background: yellow; padding: 20px;">AccountsShortcode is rendering!</div>';
+		return '<div style="background: yellow; padding: 20px;">AccountsShortcode atts: <pre>' . print_r($atts, true) . '</pre></div>';
         
         // Defaults
         $defaults = [
