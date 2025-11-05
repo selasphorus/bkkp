@@ -37,7 +37,31 @@ final class AccountingModule extends BaseModule
             return $handlers;
         });
         
+        // Register Assets
+		add_filter('whx4_assets', function (array $assets): array {
+			$moduleDir = __DIR__; // Get the module directory path
+			
+			// CSS
+			$relCss = 'Assets/accounting.css';
+			$srcCss = plugins_url($relCss, __FILE__);
+			$pathCss = $moduleDir . '/' . $relCss;
+		
+			$assets['styles'][] = [
+				'handle'   => 'bkkp-accounting',  // More specific handle
+				'src'      => $srcCss,
+				'path'     => $pathCss,
+				'deps'     => [],
+				'ver'      => 'auto',
+				'media'    => 'all',
+				'where'    => 'front',
+				'autoload' => true,
+			];
+		
+			return $assets;
+		});
+
         ShortcodeManager::add(\atc\Bkkp\Modules\Accounting\Shortcodes\TransactionsShortcode::class);
+        ShortcodeManager::add(\atc\Bkkp\Modules\Accounting\Shortcodes\AccountsShortcode::class);
     }
 
     public function getPostTypeHandlerClasses(): array
