@@ -73,10 +73,16 @@ final class AccountsShortcode implements ShortcodeInterface
         $info .= "groupMode: {$groupMode}<br />";
         $info .= "scope: {$scope}<br />";
         
+        error_log('[AccountsShortcode] After scope resolution: ' . $atts['scope']);
+        error_log('[AccountsShortcode] Group mode: ' . $groupMode);
+
         // Get filtered accounts
         $accounts = $this->resolveAccounts($atts);
         
+        error_log('[AccountsShortcode] Accounts found: ' . count($accounts));
+        
         if (empty($accounts)) {
+            error_log('[AccountsShortcode] No accounts found - returning early');
             return '<p>No accounts found matching the specified criteria.</p>';
         }
         
@@ -91,6 +97,8 @@ final class AccountsShortcode implements ShortcodeInterface
         ];
         
         $viewSpecs = ['kind' => 'view', 'module' => 'accounting', 'post_type' => 'account'];
+        
+        error_log('[AccountsShortcode] About to render with group_by: ' . $groupMode);
         
         // Branch based on grouping mode
         switch ($groupMode) {
@@ -164,6 +172,9 @@ final class AccountsShortcode implements ShortcodeInterface
         }
         
         $query = new \WP_Query($filters);
+        
+        error_log('[AccountsShortcode::resolveAccounts] Query found: ' . $query->found_posts . ' posts');
+        
         return $query->posts;
     }
     
