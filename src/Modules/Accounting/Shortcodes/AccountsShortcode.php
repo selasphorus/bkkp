@@ -57,7 +57,7 @@ final class AccountsShortcode implements ShortcodeInterface
 		error_log('[AccountsShortcode] merged atts: ' . print_r($atts, true));
     
 		// Return something immediately to test
-		return '<div style="background: yellow; padding: 20px;">AccountsShortcode merged atts: <pre>' . print_r($atts, true) . '</pre></div>';
+		#return '<div style="background: yellow; padding: 20px;">AccountsShortcode merged atts: <pre>' . print_r($atts, true) . '</pre></div>';
         
         // Resolve scope with query-var override
         $scope = PostTypeHandler::getScopeFromRequest($atts, $atts['scope']);
