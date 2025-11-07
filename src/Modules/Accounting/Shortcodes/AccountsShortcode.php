@@ -372,6 +372,7 @@ final class AccountsShortcode implements ShortcodeInterface
 		
 		$output = ViewLoader::renderToString($viewName, $viewVars, $viewSpecs);
 		
+		error_log('[renderPivotView] ViewLoader output: ' . $output);
 		error_log('[renderPivotView] ViewLoader returned ' . strlen($output) . ' bytes');
 		
 		return $output;
