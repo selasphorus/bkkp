@@ -171,6 +171,8 @@ final class AccountsShortcode implements ShortcodeInterface
             ];
         }
         
+        error_log('[AccountsShortcode::resolveAccounts] Filters: ' . print_r($filters, true));
+        
         $query = new \WP_Query($filters);
         
         error_log('[AccountsShortcode::resolveAccounts] Query found: ' . $query->found_posts . ' posts');
