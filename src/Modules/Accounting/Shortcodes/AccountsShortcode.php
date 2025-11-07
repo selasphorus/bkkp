@@ -184,6 +184,29 @@ final class AccountsShortcode implements ShortcodeInterface
      * Render account × months pivot table
      */
     private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
+	{
+		error_log('[renderAccountMonths] Starting with ' . count($accounts) . ' accounts');
+		error_log('[renderAccountMonths] Scope: ' . $atts['scope']);
+		
+		$bounds = ScopedDateResolver::resolve($atts['scope'], ['mode' => 'DATE']);
+		error_log('[renderAccountMonths] Bounds: ' . print_r($bounds, true));
+		
+		$periods = DateHelper::generateMonthPeriods($bounds['start'], $bounds['end']);
+		error_log('[renderAccountMonths] Periods generated: ' . count($periods));
+		error_log('[renderAccountMonths] Periods: ' . print_r($periods, true));
+		
+		$periodLabels = $this->formatPeriodLabels($periods, 'month');
+		
+		$pivotData = $this->buildPivotData($accounts, $atts, $periods, 'month');
+		error_log('[renderAccountMonths] Pivot rows: ' . count($pivotData['rows']));
+		
+		$result = $this->renderPivotView('accounts-pivot-months', $pivotData, $periods, $periodLabels, $viewVars, $viewSpecs);
+		error_log('[renderAccountMonths] View rendered, length: ' . strlen($result));
+		
+		return $result;
+	}
+
+    /*private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
     {
         $bounds = ScopedDateResolver::resolve($atts['scope'], ['mode' => 'DATE']);
         $periods = DateHelper::generateMonthPeriods($bounds['start'], $bounds['end']);
@@ -192,7 +215,7 @@ final class AccountsShortcode implements ShortcodeInterface
         $pivotData = $this->buildPivotData($accounts, $atts, $periods, 'month');
         
         return $this->renderPivotView('accounts-pivot-months', $pivotData, $periods, $periodLabels, $viewVars, $viewSpecs);
-    }
+    }*/
     
     /**
      * Render account × years pivot table
@@ -334,6 +357,27 @@ final class AccountsShortcode implements ShortcodeInterface
      * Render pivot view with common structure
      */
     private function renderPivotView(string $viewName, array $pivotData, array $periods, array $periodLabels, array $viewVars, array $viewSpecs): string
+	{
+		error_log('[renderPivotView] View name: ' . $viewName);
+		error_log('[renderPivotView] ViewSpecs: ' . print_r($viewSpecs, true));
+		
+		$viewVars['pivot_data'] = $pivotData['rows'];
+		$viewVars['periods'] = $periods;
+		$viewVars['period_labels'] = $periodLabels;
+		$viewVars['period_totals'] = $pivotData['period_totals'];
+		$viewVars['grand_total'] = $pivotData['grand_total'];
+		$viewVars['has_categories'] = $this->hasMultipleCategories($pivotData['rows']);
+		
+		error_log('[renderPivotView] About to call ViewLoader');
+		
+		$output = ViewLoader::renderToString($viewName, $viewVars, $viewSpecs);
+		
+		error_log('[renderPivotView] ViewLoader returned ' . strlen($output) . ' bytes');
+		
+		return $output;
+	}
+
+    /*private function renderPivotView(string $viewName, array $pivotData, array $periods, array $periodLabels, array $viewVars, array $viewSpecs): string
     {
         $viewVars['pivot_data'] = $pivotData['rows'];
         $viewVars['periods'] = $periods;
@@ -343,7 +387,7 @@ final class AccountsShortcode implements ShortcodeInterface
         $viewVars['has_categories'] = $this->hasMultipleCategories($pivotData['rows']);
         
         return ViewLoader::renderToString($viewName, $viewVars, $viewSpecs);
-    }
+    }*/
     
     /**
      * Check if accounts span multiple categories
