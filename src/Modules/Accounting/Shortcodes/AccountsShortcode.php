@@ -35,9 +35,7 @@ final class AccountsShortcode implements ShortcodeInterface
     public function render(array $atts, ?string $content = null, string $tag = ''): string
     {
         $info = "";
-        
-        error_log('[AccountsShortcode] render() called');
-		//error_log('[AccountsShortcode] atts: ' . print_r($atts, true));
+        #error_log('[AccountsShortcode] render() called');
         
         // Defaults
         $defaults = [
@@ -54,7 +52,6 @@ final class AccountsShortcode implements ShortcodeInterface
         
         $rawAtts = (array)$atts;
         $atts = shortcode_atts($defaults, $rawAtts, self::tag());
-		error_log('[AccountsShortcode] merged atts: ' . print_r($atts, true));
     
 		// Return something immediately to test
 		#return '<div style="background: yellow; padding: 20px;">AccountsShortcode merged atts: <pre>' . print_r($atts, true) . '</pre></div>';
@@ -72,17 +69,13 @@ final class AccountsShortcode implements ShortcodeInterface
         
         $info .= "groupMode: {$groupMode}<br />";
         $info .= "scope: {$scope}<br />";
-        
-        error_log('[AccountsShortcode] After scope resolution: ' . $atts['scope']);
-        error_log('[AccountsShortcode] Group mode: ' . $groupMode);
 
         // Get filtered accounts
         $accounts = $this->resolveAccounts($atts);
         
-        error_log('[AccountsShortcode] Accounts found: ' . count($accounts));
+        #error_log('[AccountsShortcode] Accounts found: ' . count($accounts));
         
         if (empty($accounts)) {
-            error_log('[AccountsShortcode] No accounts found - returning early');
             return '<p>No accounts found matching the specified criteria.</p>';
         }
         
@@ -98,7 +91,7 @@ final class AccountsShortcode implements ShortcodeInterface
         
         $viewSpecs = ['kind' => 'partial', 'module' => 'accounting', 'post_type' => 'account'];
         
-        error_log('[AccountsShortcode] About to render with group_by: ' . $groupMode);
+        #error_log('[AccountsShortcode] About to render with group_by: ' . $groupMode);
         
         // Branch based on grouping mode
         switch ($groupMode) {
@@ -170,12 +163,11 @@ final class AccountsShortcode implements ShortcodeInterface
                 ],
             ];
         }
-        
-        error_log('[AccountsShortcode::resolveAccounts] Filters: ' . print_r($filters, true));
+        #error_log('[AccountsShortcode::resolveAccounts] Filters: ' . print_r($filters, true));
         
         $query = new \WP_Query($filters);
         
-        error_log('[AccountsShortcode::resolveAccounts] Query found: ' . $query->found_posts . ' posts');
+        #error_log('[AccountsShortcode::resolveAccounts] Query found: ' . $query->found_posts . ' posts');
         
         return $query->posts;
     }
@@ -183,7 +175,7 @@ final class AccountsShortcode implements ShortcodeInterface
     /**
      * Render account × months pivot table
      */
-    private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
+    /*private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
 	{
 		error_log('[renderAccountMonths] Starting with ' . count($accounts) . ' accounts');
 		error_log('[renderAccountMonths] Scope: ' . $atts['scope']);
@@ -204,9 +196,8 @@ final class AccountsShortcode implements ShortcodeInterface
 		error_log('[renderAccountMonths] View rendered, length: ' . strlen($result));
 		
 		return $result;
-	}
-
-    /*private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
+	}*/
+	private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
     {
         $bounds = ScopedDateResolver::resolve($atts['scope'], ['mode' => 'DATE']);
         $periods = DateHelper::generateMonthPeriods($bounds['start'], $bounds['end']);
@@ -215,7 +206,7 @@ final class AccountsShortcode implements ShortcodeInterface
         $pivotData = $this->buildPivotData($accounts, $atts, $periods, 'month');
         
         return $this->renderPivotView('accounts-pivot-months', $pivotData, $periods, $periodLabels, $viewVars, $viewSpecs);
-    }*/
+    }
     
     /**
      * Render account × years pivot table
@@ -358,9 +349,6 @@ final class AccountsShortcode implements ShortcodeInterface
      */
     private function renderPivotView(string $viewName, array $pivotData, array $periods, array $periodLabels, array $viewVars, array $viewSpecs): string
 	{
-		error_log('[renderPivotView] View name: ' . $viewName);
-		error_log('[renderPivotView] ViewSpecs: ' . print_r($viewSpecs, true));
-		
 		$viewVars['pivot_data'] = $pivotData['rows'];
 		$viewVars['periods'] = $periods;
 		$viewVars['period_labels'] = $periodLabels;
@@ -368,27 +356,10 @@ final class AccountsShortcode implements ShortcodeInterface
 		$viewVars['grand_total'] = $pivotData['grand_total'];
 		$viewVars['has_categories'] = $this->hasMultipleCategories($pivotData['rows']);
 		
-		error_log('[renderPivotView] About to call ViewLoader');
-		
 		$output = ViewLoader::renderToString($viewName, $viewVars, $viewSpecs);
-		
-		error_log('[renderPivotView] ViewLoader output: ' . $output);
-		error_log('[renderPivotView] ViewLoader returned ' . strlen($output) . ' bytes');
 		
 		return $output;
 	}
-
-    /*private function renderPivotView(string $viewName, array $pivotData, array $periods, array $periodLabels, array $viewVars, array $viewSpecs): string
-    {
-        $viewVars['pivot_data'] = $pivotData['rows'];
-        $viewVars['periods'] = $periods;
-        $viewVars['period_labels'] = $periodLabels;
-        $viewVars['period_totals'] = $pivotData['period_totals'];
-        $viewVars['grand_total'] = $pivotData['grand_total'];
-        $viewVars['has_categories'] = $this->hasMultipleCategories($pivotData['rows']);
-        
-        return ViewLoader::renderToString($viewName, $viewVars, $viewSpecs);
-    }*/
     
     /**
      * Check if accounts span multiple categories
