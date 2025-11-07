@@ -3,3 +3,5 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+*-v[0-9][0-9]*.*
+*-wip*.*
