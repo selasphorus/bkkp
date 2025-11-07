@@ -199,7 +199,11 @@ final class AccountsShortcode implements ShortcodeInterface
 	}*/
 	private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
     {
-        $bounds = ScopedDateResolver::resolve($atts['scope'], ['mode' => 'DATE']);
+        error_log('[renderAccountMonths] Scope: ' . $atts['scope']);
+		
+		$bounds = ScopedDateResolver::resolve($atts['scope'], ['mode' => 'DATE']);
+		error_log('[renderAccountMonths] Bounds: ' . print_r($bounds, true));
+		
         $periods = DateHelper::generateMonthPeriods($bounds['start'], $bounds['end']);
         $periodLabels = $this->formatPeriodLabels($periods, 'month');
         
