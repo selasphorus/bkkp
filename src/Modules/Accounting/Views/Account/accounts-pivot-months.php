@@ -42,10 +42,10 @@ if (!defined('ABSPATH')) {
             <thead>
                 <tr>
                     <th class="col-account">Account</th>
-                    <?php if ($has_categories): ?>
+                    <?php /*if ($has_categories): ?>
                         <th class="col-category screen-only">Category</th>
-                    <?php endif; ?>
-                    <th class="col-status screen-only">Status</th>
+                    <?php endif;*/ ?>
+                    <!--th class="col-status screen-only">Status</th-->
                     <?php foreach ($periods as $period): ?>
                         <th class="col-period"><?php echo esc_html($period_labels[$period]); ?></th>
                     <?php endforeach; ?>
@@ -56,6 +56,13 @@ if (!defined('ABSPATH')) {
                 <?php 
                 $currentCategory = null;
                 foreach ($pivot_data as $row): 
+                    // Get account name
+                    if ( $abbr = get_post_meta($row['account']->ID, 'abbr', true)) {
+                        $acct_name = $abbr;
+                    } else {
+                        $acct_name = esc_html($row['account']->post_title);
+                    }                    
+                    
                     // Category separator row
                     if ($has_categories && $row['category'] !== $currentCategory):
                         $currentCategory = $row['category'];
@@ -70,17 +77,17 @@ if (!defined('ABSPATH')) {
                 <tr class="account-row" data-account-id="<?php echo $row['account']->ID; ?>">
                     <td class="col-account">
                         <a href="<?php echo esc_url(get_permalink($row['account'])); ?>">
-                            <?php echo esc_html($row['account']->post_title); ?>
+                            <?php echo $acct_name; ?>
                         </a>
                     </td>
-                    <?php if ($has_categories): ?>
+                    <?php /*if ($has_categories): ?>
                         <td class="col-category screen-only"><?php echo esc_html($row['category']); ?></td>
-                    <?php endif; ?>
-                    <td class="col-status screen-only">
+                    <?php endif;*/ ?>
+                    <!--td class="col-status screen-only">
                         <span class="status-badge status-<?php echo esc_attr($row['status']); ?>">
                             <?php echo esc_html(ucfirst($row['status'])); ?>
                         </span>
-                    </td>
+                    </td-->
                     
                     <?php foreach ($periods as $period): 
                         $cell = $row['periods'][$period];
