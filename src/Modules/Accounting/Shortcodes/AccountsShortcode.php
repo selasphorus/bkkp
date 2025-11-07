@@ -96,7 +96,7 @@ final class AccountsShortcode implements ShortcodeInterface
             'info' => $info,
         ];
         
-        $viewSpecs = ['kind' => 'view', 'module' => 'accounting', 'post_type' => 'account'];
+        $viewSpecs = ['kind' => 'partial', 'module' => 'accounting', 'post_type' => 'account'];
         
         error_log('[AccountsShortcode] About to render with group_by: ' . $groupMode);
         
