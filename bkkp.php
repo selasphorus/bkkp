@@ -18,8 +18,12 @@ declare(strict_types=1);
 namespace atc\Bkkp;
 
 // Prevent direct access
-if (!defined('ABSPATH')) {
-    exit;
+if ( !defined( 'ABSPATH' ) ) exit;
+
+// Make sure we don't expose any info if called directly
+if ( !function_exists( 'add_action' ) ) {
+	echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
+	exit;
 }
 
 // Require Composer autoloader
@@ -120,7 +124,7 @@ add_action('whx4_pre_boot', function() {
 }, 15); // Priority < 20 to run before WHx4 boot()
 
 // Register WP-CLI commands (keeping existing CLI functionality)
-if (defined('WP_CLI') && \WP_CLI) {
+/*if (defined('WP_CLI') && \WP_CLI) {
     
     // Generic meta cleanup command
     \WP_CLI::add_command('bkkp meta', [MetaFieldCleanup::class, 'handle_cli'], [
@@ -140,7 +144,7 @@ if (defined('WP_CLI') && \WP_CLI) {
             \WP_CLI::success("Converted {$count} records");
         }
     });
-}
+}*/
 
 /*
 if (defined('WP_CLI') && \WP_CLI) {
