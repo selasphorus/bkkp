@@ -68,7 +68,7 @@ if (!defined('ABSPATH')) {
                         $currentCategory = $row['category'];
                 ?>
                 <tr class="category-separator">
-                    <td colspan="<?php echo 3 + count($periods); ?>" class="category-header">
+                    <td colspan="<?php echo 2 + count($periods); ?>" class="category-header">
                         <strong><?php echo esc_html($currentCategory); ?></strong>
                     </td>
                 </tr>

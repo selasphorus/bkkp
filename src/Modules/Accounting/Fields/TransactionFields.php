@@ -428,13 +428,14 @@ final class TransactionFields implements FieldGroupInterface
                     'prepend' => '',
                     'append' => '',
                 ),
+                // TODO: add check_num, tags_txt?
                 [
                     'key' => 'field_bkkp_transactions_reference_num',
                     'label' => 'Reference Number',
                     'name' => 'reference_num',
                     'aria-label' => '',
                     'type' => 'text',
-                    'instructions' => 'Optional -- if provided by Financial Institution',
+                    'instructions' => 'Optional -- if provided by Financial Institution', // as "Reference Number" or "Transaction ID"
                     'required' => 0,
                     'conditional_logic' => 0,
                     'wrapper' => array(
