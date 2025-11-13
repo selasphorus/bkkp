@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atc\Bkkp\Modules\Employment\Shortcodes;
 
 use atc\BhWP\Core\WHx4;
-use atc\WHx4\Utils\ClassInfo;
+use atc\BhWP\Utils\ClassInfo;
 use atc\BhWP\Core\PostTypeHandler;
 use atc\BhWP\Core\ViewLoader;
 use atc\BhWP\Core\SubtypeRegistry;

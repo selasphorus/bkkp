@@ -212,7 +212,7 @@ class Transaction extends PostTypeHandler
 				$month = $matches[2];
 				
 				// Use DateHelper to parse the start of month
-				$startDate = \atc\WHx4\Utils\DateHelper::parseFlexibleDate("$year-$month-01", true);
+				$startDate = \atc\BhWP\Utils\DateHelper::parseFlexibleDate("$year-$month-01", true);
 				$endDate = $startDate->modify('last day of this month');
 				
 				$dateRange = [

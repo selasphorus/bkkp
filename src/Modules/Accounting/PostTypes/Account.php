@@ -5,7 +5,7 @@ namespace atc\Bkkp\Modules\Accounting\PostTypes;
 use atc\BhWP\Core\PostTypeHandler;
 use atc\BhWP\Core\Query\PostQuery;
 use atc\BhWP\Core\Http\UrlParamBridge;
-use atc\WHx4\Utils\DateHelper;
+use atc\BhWP\Utils\DateHelper;
 //
 use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 
