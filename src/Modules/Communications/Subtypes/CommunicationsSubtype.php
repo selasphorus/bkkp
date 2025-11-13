@@ -2,9 +2,9 @@
 
 namespace atc\Bkkp\Modules\Communications\Subtypes;
 
-use atc\WHx4\Core\Contracts\SubtypeInterface;
-use atc\WHx4\Core\Traits\SubtypeDefaults;
-use atc\WHx4\Core\Traits\SubtypeQueryHelpers;
+use atc\BhWP\Core\Contracts\SubtypeInterface;
+use atc\BhWP\Core\Traits\SubtypeDefaults;
+use atc\BhWP\Core\Traits\SubtypeQueryHelpers;
 
 // TODO: rethink this implementation as a Subtype of Post
 // -- may want to build logbook module in case on some installations Post type is being used another way

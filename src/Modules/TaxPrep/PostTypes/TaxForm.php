@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\TaxPrep\PostTypes;
 
-use atc\WHx4\Core\PostTypeHandler;
+use atc\BhWP\Core\PostTypeHandler;
 
 class TaxForm extends PostTypeHandler
 {

@@ -2,9 +2,9 @@
 
 namespace atc\Bkkp\Modules\Employment\Subtypes;
 
-use atc\WHx4\Core\Contracts\SubtypeInterface;
-use atc\WHx4\Core\Traits\SubtypeDefaults;
-use atc\WHx4\Core\Traits\SubtypeQueryHelpers;
+use atc\BhWP\Core\Contracts\SubtypeInterface;
+use atc\BhWP\Core\Traits\SubtypeDefaults;
+use atc\BhWP\Core\Traits\SubtypeQueryHelpers;
 
 final class GigsSubtype implements SubtypeInterface
 {

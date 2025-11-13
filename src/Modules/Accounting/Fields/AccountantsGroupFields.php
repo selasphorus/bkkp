@@ -2,9 +2,9 @@
 
 namespace atc\Bkkp\Modules\Employment\Fields;
 
-use atc\WHx4\Core\Contracts\FieldGroupInterface;
-use atc\WHx4\Core\Contracts\SubtypeFieldGroupInterface;
-use atc\WHx4\Core\SubtypeRegistrar;
+use atc\BhWP\Core\Contracts\FieldGroupInterface;
+use atc\BhWP\Core\Contracts\SubtypeFieldGroupInterface;
+use atc\BhWP\Core\SubtypeRegistrar;
 
 final class AccountantsGroupFields implements FieldGroupInterface, SubtypeFieldGroupInterface
 {

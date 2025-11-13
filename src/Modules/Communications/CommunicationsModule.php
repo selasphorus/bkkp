@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Communications;
 
-use atc\WHx4\Core\Module as BaseModule;
+use atc\BhWP\Core\Module as BaseModule;
 
 //use atc\Bkkp\Modules\Communications\PostTypes\XXX;
 

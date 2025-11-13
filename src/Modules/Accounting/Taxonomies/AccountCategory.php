@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Accounting\Taxonomies;
 
-use atc\WHx4\Core\TaxonomyHandler;
+use atc\BhWP\Core\TaxonomyHandler;
 
 class AccountCategory extends TaxonomyHandler
 {

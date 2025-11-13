@@ -2,8 +2,8 @@
 
 namespace atc\Bkkp\Modules\Accounting\Fields;
 
-use atc\WHx4\Core\Contracts\FieldGroupInterface;
-use atc\WHx4\Core\Contracts\PostTypeFieldGroupInterface;
+use atc\BhWP\Core\Contracts\FieldGroupInterface;
+use atc\BhWP\Core\Contracts\PostTypeFieldGroupInterface;
 
 final class GroupFields implements FieldGroupInterface, PostTypeFieldGroupInterface
 {

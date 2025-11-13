@@ -2,8 +2,8 @@
 
 namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
-use atc\WHx4\Core\PostTypeHandler;
-use atc\WHx4\Core\Query\PostQuery;
+use atc\BhWP\Core\PostTypeHandler;
+use atc\BhWP\Core\Query\PostQuery;
 
 class Transaction extends PostTypeHandler
 {
@@ -127,7 +127,7 @@ class Transaction extends PostTypeHandler
 				];
 			} else {
 				// Use ScopedDateResolver for other scope formats
-				$dateRange = \atc\WHx4\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
+				$dateRange = \atc\BhWP\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
 			}
 			
 			if (!empty($dateRange['start']) && !empty($dateRange['end'])) {
@@ -221,7 +221,7 @@ class Transaction extends PostTypeHandler
 				];
 			} else {
 				// Use ScopedDateResolver for other scope formats
-				$dateRange = \atc\WHx4\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
+				$dateRange = \atc\BhWP\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
 			}
 			
 			if (!empty($dateRange['start']) && !empty($dateRange['end'])) {

@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Accounting\Fields;
 
-use atc\WHx4\Core\Contracts\FieldGroupInterface;
+use atc\BhWP\Core\Contracts\FieldGroupInterface;
 
 // TODO: rename all fields (keys/names) according to whx4 naming conventions
 final class AccountFields implements FieldGroupInterface

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace atc\Bkkp\Modules\Employment\Shortcodes;
 
-use atc\WHx4\Core\WHx4;
+use atc\BhWP\Core\WHx4;
 use atc\WHx4\Utils\ClassInfo;
-use atc\WHx4\Core\PostTypeHandler;
-use atc\WHx4\Core\ViewLoader;
-use atc\WHx4\Core\SubtypeRegistry;
-use atc\WHx4\Core\Contracts\ShortcodeInterface;
-use atc\WHx4\Core\Query\ScopedDateResolver;
+use atc\BhWP\Core\PostTypeHandler;
+use atc\BhWP\Core\ViewLoader;
+use atc\BhWP\Core\SubtypeRegistry;
+use atc\BhWP\Core\Contracts\ShortcodeInterface;
+use atc\BhWP\Core\Query\ScopedDateResolver;
 //
 use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 //use atc\Bkkp\Modules\Employment\EmploymentModule; // ?

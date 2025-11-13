@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\TaxPrep\Taxonomies;
 
-use atc\WHx4\Core\TaxonomyHandler;
+use atc\BhWP\Core\TaxonomyHandler;
 
 // e.g. "Extension Payment"
 class TaxCategory extends TaxonomyHandler
