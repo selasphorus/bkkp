@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Bkkp
  * Description:       A WordPress plugin for personal bookkeeping
- * Dependencies:      Requires WHx4
- * Requires Plugins:  whx4
+ * Dependencies:      Requires BhWP, WHx4
+ * Requires Plugins:  bhwp, whx4
  * Version:           0.1
  * Author:            atc
  * License:           GPL-2.0-or-later
@@ -31,9 +31,9 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
-use atc\WHx4\Plugin;
+use atc\BhWP\Plugin;
 
-// WHx4 Add-on Modules
+// BhWP Add-on Modules
 use atc\Bkkp\Modules\Accounting\AccountingModule as Accounting;
 use atc\Bkkp\Modules\Employment\EmploymentModule as Employment;
 use atc\Bkkp\Modules\Documents\DocumentsModule as Documents; // TODO, maybe?: create separate mini-plugin to handle documents
@@ -45,14 +45,14 @@ use atc\Bkkp\Admin\MetaFieldCleanup;
 use atc\Bkkp\Admin\TagCleanupPageController;
 
 // Once plugins are loaded, boot everything up
-add_action('whx4_pre_boot', function() {
-    // Wait until WHx4 is loaded, but BEFORE it boots
+add_action('bhwp_pre_boot', function() {
+    // Wait until BhWP is loaded, but BEFORE it boots
     if (!class_exists(Plugin::class)) {
         return;
     }
 
     // Register the modules with WHx4
-    add_filter('whx4_register_modules', function(array $modules): array {
+    add_filter('bhwp_register_modules', function(array $modules): array {
         $modules['accounting'] = Accounting::class;
         $modules['employment'] = Employment::class;
         $modules['documents'] = Documents::class;
@@ -62,7 +62,7 @@ add_action('whx4_pre_boot', function() {
     });
     
     // Register Field Keys
-    add_filter('whx4_registered_field_keys', function() {
+    add_filter('bhwp_registered_field_keys', function() {
         if (!function_exists('acf_get_local_fields')) {
             return [];
         }
@@ -80,7 +80,7 @@ add_action('whx4_pre_boot', function() {
     });
     
     // Register Assets
-    add_filter('whx4_assets', static function (array $assets): array {
+    add_filter('bhwp_assets', static function (array $assets): array {
         // CSS
         $relCss = 'assets/css/bkkp.css';
         $srcCss = plugins_url($relCss, __FILE__);
