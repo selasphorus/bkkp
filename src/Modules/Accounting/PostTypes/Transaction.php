@@ -127,7 +127,7 @@ class Transaction extends PostTypeHandler
 				];
 			} else {
 				// Use ScopedDateResolver for other scope formats
-				$dateRange = \atc\WXC\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
+				$dateRange = \atc\WXC\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
 			}
 			
 			if (!empty($dateRange['start']) && !empty($dateRange['end'])) {
