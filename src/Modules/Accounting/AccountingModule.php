@@ -24,7 +24,7 @@ final class AccountingModule extends BaseModule
         parent::boot();
 
         add_filter( 'whx4_register_subtypes', function( array $providers ): array {
-            $providers[] = new \atc\Bkkp\Modules\Accounting\Subtypes\AccountantsSubtype(); // TODO: add use statement above to simplify this line?
+            $providers[] = new Subtypes\AccountantsSubtype();
             //$providers[] = new \atc\Bkkp\Modules\Accounting\Subtypes\WorkPaymentsSubtype();
             return $providers;
         } );
@@ -60,8 +60,8 @@ final class AccountingModule extends BaseModule
 			return $assets;
 		});
 
-        ShortcodeManager::add(\atc\Bkkp\Modules\Accounting\Shortcodes\TransactionsShortcode::class);
-        ShortcodeManager::add(\atc\Bkkp\Modules\Accounting\Shortcodes\AccountsShortcode::class);
+        ShortcodeManager::add(Shortcodes\TransactionsShortcode::class);
+        ShortcodeManager::add(Shortcodes\AccountsShortcode::class);
     }
 
     public function getPostTypeHandlerClasses(): array
