@@ -16,10 +16,6 @@ class ComposerStaticInit3956c3eb9dafc6793c5a22ab7753b771
     );
 
     public static $prefixLengthsPsr4 = array (
-        'a' =>
-        array (
-            'atc\\Bkkp\\' => 9,
-        ),
         'Z' =>
         array (
             'ZipStream\\' => 10,
@@ -74,14 +70,11 @@ class ComposerStaticInit3956c3eb9dafc6793c5a22ab7753b771
         array (
             'Brick\\Money\\' => 12,
             'Brick\\Math\\' => 11,
+            'Bkkp\\' => 5,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'atc\\Bkkp\\' =>
-        array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
         'ZipStream\\' =>
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
@@ -182,6 +175,10 @@ class ComposerStaticInit3956c3eb9dafc6793c5a22ab7753b771
         'Brick\\Math\\' =>
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
+        ),
+        'Bkkp\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 
