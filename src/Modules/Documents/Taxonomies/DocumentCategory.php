@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Documents\Taxonomies;
 
-use atc\WXC\Core\TaxonomyHandler;
+use atc\WXC\Taxonomies\TaxonomyHandler;
 
 class DocumentCategory extends TaxonomyHandler
 {

@@ -2,9 +2,9 @@
 
 namespace atc\Bkkp\Modules\Employment\Subtypes;
 
-use atc\WXC\Core\Contracts\SubtypeInterface;
-use atc\WXC\Core\Traits\SubtypeDefaults;
-use atc\WXC\Core\Traits\SubtypeQueryHelpers;
+use atc\WXC\Contracts\SubtypeInterface;
+use atc\WXC\Traits\SubtypeDefaults;
+use atc\WXC\Traits\SubtypeQueryHelpers;
 
 final class WorkPaymentsSubtype implements SubtypeInterface
 {

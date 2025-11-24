@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
-use atc\WXC\Core\PostTypeHandler;
+use atc\WXC\PostTypes\PostTypeHandler;
 
 // TBD: should this class be related in some way to more general LogEntry class?
 class LedgerEntry extends PostTypeHandler

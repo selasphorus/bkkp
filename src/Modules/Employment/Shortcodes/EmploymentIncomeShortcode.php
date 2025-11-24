@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace atc\Bkkp\Modules\Employment\Shortcodes;
 
-use atc\WXC\Core\WHx4;
+use atc\WXC\App;
 use atc\WXC\Utils\ClassInfo;
-use atc\WXC\Core\PostTypeHandler;
-use atc\WXC\Core\ViewLoader;
-use atc\WXC\Core\SubtypeRegistry;
-use atc\WXC\Core\Contracts\ShortcodeInterface;
-use atc\WXC\Core\Query\ScopedDateResolver;
+use atc\WXC\PostTypes\PostTypeHandler;
+use atc\WXC\Templates\ViewLoader;
+use atc\WXC\PostTypes\SubtypeRegistry;
+use atc\WXC\Contracts\ShortcodeInterface;
+use atc\WXC\Query\ScopedDateResolver;
 //
 use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 //use atc\Bkkp\Modules\Employment\EmploymentModule; // ?
@@ -27,7 +27,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
     {
         $info = "";
         
-        $ctx = WHx4::ctx();
+        $ctx = App::ctx();
         $key = ClassInfo::getModuleKey(self::class);
         $module = $ctx->getModule($key);
         if (!$module) {

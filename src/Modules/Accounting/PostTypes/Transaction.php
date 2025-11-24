@@ -2,8 +2,8 @@
 
 namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
-use atc\WXC\Core\PostTypeHandler;
-use atc\WXC\Core\Query\PostQuery;
+use atc\WXC\PostTypes\PostTypeHandler;
+use atc\WXC\Query\PostQuery;
 
 class Transaction extends PostTypeHandler
 {

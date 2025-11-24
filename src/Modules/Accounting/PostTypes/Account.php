@@ -2,9 +2,9 @@
 
 namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
-use atc\WXC\Core\PostTypeHandler;
-use atc\WXC\Core\Query\PostQuery;
-use atc\WXC\Core\Http\UrlParamBridge;
+use atc\WXC\PostTypes\PostTypeHandler;
+use atc\WXC\Query\PostQuery;
+use atc\WXC\Http\UrlParamBridge;
 use atc\WXC\Utils\DateHelper;
 //
 use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
