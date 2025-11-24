@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace atc\Bkkp\Modules\Employment\Subtypes;
 
-use atc\BhWP\Core\Contracts\SubtypeInterface;
-use atc\BhWP\Core\Traits\SubtypeDefaults;
-use atc\BhWP\Core\Traits\SubtypeQueryHelpers;
+use WXC\Core\Contracts\SubtypeInterface;
+use WXC\Core\Traits\SubtypeDefaults;
+use WXC\Core\Traits\SubtypeQueryHelpers;
 
 final class EmployersSubtype implements SubtypeInterface
 {

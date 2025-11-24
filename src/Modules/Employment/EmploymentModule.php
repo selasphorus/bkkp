@@ -2,10 +2,10 @@
 
 namespace atc\Bkkp\Modules\Employment;
 
-use atc\BhWP\Core\Module as BaseModule;
-use atc\BhWP\Core\Shortcodes\ShortcodeManager;
-use atc\BhWP\Core\PostTypeHandler;
-use atc\BhWP\Core\Query\PostQuery;
+use WXC\Core\Module as BaseModule;
+use WXC\Core\Shortcodes\ShortcodeManager;
+use WXC\Core\PostTypeHandler;
+use WXC\Core\Query\PostQuery;
 
 // Post Types
 //use atc\Bkkp\Modules\Employment\PostTypes\Employer;

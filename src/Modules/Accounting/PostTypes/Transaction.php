@@ -2,8 +2,8 @@
 
 namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
-use atc\BhWP\Core\PostTypeHandler;
-use atc\BhWP\Core\Query\PostQuery;
+use WXC\Core\PostTypeHandler;
+use WXC\Core\Query\PostQuery;
 
 class Transaction extends PostTypeHandler
 {
@@ -127,7 +127,7 @@ class Transaction extends PostTypeHandler
 				];
 			} else {
 				// Use ScopedDateResolver for other scope formats
-				$dateRange = \atc\BhWP\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
+				$dateRange = \WXC\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
 			}
 			
 			if (!empty($dateRange['start']) && !empty($dateRange['end'])) {
@@ -212,7 +212,7 @@ class Transaction extends PostTypeHandler
 				$month = $matches[2];
 				
 				// Use DateHelper to parse the start of month
-				$startDate = \atc\BhWP\Utils\DateHelper::parseFlexibleDate("$year-$month-01", true);
+				$startDate = \WXC\Utils\DateHelper::parseFlexibleDate("$year-$month-01", true);
 				$endDate = $startDate->modify('last day of this month');
 				
 				$dateRange = [
@@ -221,7 +221,7 @@ class Transaction extends PostTypeHandler
 				];
 			} else {
 				// Use ScopedDateResolver for other scope formats
-				$dateRange = \atc\BhWP\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
+				$dateRange = \WXC\Core\Query\ScopedDateResolver::resolve($scope, ['mode' => 'DATE']);
 			}
 			
 			if (!empty($dateRange['start']) && !empty($dateRange['end'])) {

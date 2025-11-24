@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\TaxPrep\PostTypes;
 
-use atc\BhWP\Core\PostTypeHandler;
+use WXC\Core\PostTypeHandler;
 
 // DEPRECATED! TODO: convert all TaxPayment posts to Documents in tax-payments category
 class TaxPayment extends PostTypeHandler

@@ -2,8 +2,8 @@
 
 namespace atc\Bkkp\Modules\Accounting;
 
-use atc\BhWP\Core\Module as BaseModule;
-use atc\BhWP\Core\Shortcodes\ShortcodeManager;
+use WXC\Core\Module as BaseModule;
+use WXC\Core\Shortcodes\ShortcodeManager;
 
 // Post Types
 use atc\Bkkp\Modules\Accounting\PostTypes\Account;

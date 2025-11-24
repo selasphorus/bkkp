@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\TaxPrep\Taxonomies;
 
-use atc\BhWP\Core\TaxonomyHandler;
+use WXC\Core\TaxonomyHandler;
 
 // This Taxonomy may no longer be needed -- TBD
 // e.g. "1099", "1099-INT", "1099-MISC", "W2"

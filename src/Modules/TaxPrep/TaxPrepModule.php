@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\TaxPrep;
 
-use atc\BhWP\Core\Module as BaseModule;
+use WXC\Core\Module as BaseModule;
 
 // Post Types
 use atc\Bkkp\Modules\TaxPrep\PostTypes\TaxForm;
