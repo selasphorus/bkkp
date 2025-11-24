@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace smith\Rex\Modules\Moneybags\Shortcodes;
 
 use smith\Rex\Shortcodes\ShortcodeInterface;
-use WXC\Core\PostTypeHandler;
+use atc\WXC\Core\PostTypeHandler;
 
 // WIP!
 

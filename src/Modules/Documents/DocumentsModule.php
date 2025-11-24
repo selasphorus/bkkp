@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Documents;
 
-use WXC\Core\Module as BaseModule;
+use atc\WXC\Core\Module as BaseModule;
 
 // Post Types
 use atc\Bkkp\Modules\Documents\PostTypes\Document;

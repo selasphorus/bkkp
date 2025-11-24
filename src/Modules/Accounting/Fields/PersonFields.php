@@ -2,8 +2,8 @@
 
 namespace atc\Bkkp\Modules\Accounting\Fields;
 
-use WXC\Core\Contracts\FieldGroupInterface;
-use WXC\Core\Contracts\PostTypeFieldGroupInterface;
+use atc\WXC\Core\Contracts\FieldGroupInterface;
+use atc\WXC\Core\Contracts\PostTypeFieldGroupInterface;
 
 // Possibly can phase this out -- only one field left
 final class PersonFields implements FieldGroupInterface, PostTypeFieldGroupInterface

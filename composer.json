@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Bkkp\\": "src/"
+            "atc\\Bkkp\\": "src/"
         }
     },
     "config": {

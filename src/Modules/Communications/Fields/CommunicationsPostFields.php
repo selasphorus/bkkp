@@ -2,9 +2,9 @@
 
 namespace atc\Bkkp\Modules\Communications\Fields;
 
-use WXC\Core\Contracts\FieldGroupInterface;
-use WXC\Core\Contracts\SubtypeFieldGroupInterface;
-use WXC\Core\SubtypeRegistrar;
+use atc\WXC\Core\Contracts\FieldGroupInterface;
+use atc\WXC\Core\Contracts\SubtypeFieldGroupInterface;
+use atc\WXC\Core\SubtypeRegistrar;
 
 // TODO: rename all fields (keys/names) according to whx4 naming conventions
 final class CommunicationsPostFields implements FieldGroupInterface, SubtypeFieldGroupInterface

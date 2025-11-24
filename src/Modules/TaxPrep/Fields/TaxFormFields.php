@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\TaxPrep\Fields;
 
-use WXC\Core\Contracts\FieldGroupInterface;
+use atc\WXC\Core\Contracts\FieldGroupInterface;
 
 // TODO: rename all fields (keys/names) according to whx4 naming conventions
 final class TaxFormFields implements FieldGroupInterface

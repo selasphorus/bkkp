@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Communications;
 
-use WXC\Core\Module as BaseModule;
+use atc\WXC\Core\Module as BaseModule;
 
 //use atc\Bkkp\Modules\Communications\PostTypes\XXX;
 
@@ -17,9 +17,9 @@ final class CommunicationsModule extends BaseModule
 
         add_filter( 'whx4_register_subtypes', function( array $providers ): array {
              // TODO: add use statement above to simplify these lines?
-            $providers[] = new \atc\Bkkp\Modules\Communications\Subtypes\CommunicationsSubtype(); // Subtype of Post PostType
-            //$providers[] = new \atc\Bkkp\Modules\Communications\Subtypes\WorkPaymentsSubtype(); // Subtype of Document PostType
-            //$providers[] = new \atc\Bkkp\Modules\Communications\Subtypes\GigsSubtype(); // Subtype of Event PostType
+            $providers[] = new \Bkkp\Modules\Communications\Subtypes\CommunicationsSubtype(); // Subtype of Post PostType
+            //$providers[] = new \Bkkp\Modules\Communications\Subtypes\WorkPaymentsSubtype(); // Subtype of Document PostType
+            //$providers[] = new \Bkkp\Modules\Communications\Subtypes\GigsSubtype(); // Subtype of Event PostType
             return $providers;
         } );
 

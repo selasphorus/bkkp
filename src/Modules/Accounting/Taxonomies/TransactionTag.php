@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Accounting\Taxonomies;
 
-use WXC\Core\TaxonomyHandler;
+use atc\WXC\Core\TaxonomyHandler;
 
 class TransactionTag extends TaxonomyHandler
 {

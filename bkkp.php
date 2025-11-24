@@ -31,7 +31,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
-use WXC\Plugin;
+use atc\WXC\Plugin;
 
 // WXC Add-on Modules
 use atc\Bkkp\Modules\Accounting\AccountingModule as Accounting;

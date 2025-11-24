@@ -2,9 +2,9 @@
 
 namespace atc\Bkkp\Modules\Accounting\Subtypes;
 
-use WXC\Core\Contracts\SubtypeInterface;
-use WXC\Core\Traits\SubtypeDefaults;
-use WXC\Core\Traits\SubtypeQueryHelpers;
+use atc\WXC\Core\Contracts\SubtypeInterface;
+use atc\WXC\Core\Traits\SubtypeDefaults;
+use atc\WXC\Core\Traits\SubtypeQueryHelpers;
 
 final class AccountantsSubtype implements SubtypeInterface
 {

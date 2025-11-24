@@ -2,8 +2,8 @@
 
 namespace atc\Bkkp\Modules\Accounting;
 
-use WXC\Core\Module as BaseModule;
-use WXC\Core\Shortcodes\ShortcodeManager;
+use atc\WXC\Core\Module as BaseModule;
+use atc\WXC\Core\Shortcodes\ShortcodeManager;
 
 // Post Types
 use atc\Bkkp\Modules\Accounting\PostTypes\Account;
@@ -24,8 +24,8 @@ final class AccountingModule extends BaseModule
         parent::boot();
 
         add_filter( 'whx4_register_subtypes', function( array $providers ): array {
-            $providers[] = new \atc\Bkkp\Modules\Accounting\Subtypes\AccountantsSubtype(); // TODO: add use statement above to simplify this line?
-            //$providers[] = new \atc\Bkkp\Modules\Accounting\Subtypes\WorkPaymentsSubtype();
+            $providers[] = new \Bkkp\Modules\Accounting\Subtypes\AccountantsSubtype(); // TODO: add use statement above to simplify this line?
+            //$providers[] = new \Bkkp\Modules\Accounting\Subtypes\WorkPaymentsSubtype();
             return $providers;
         } );
 
@@ -60,8 +60,8 @@ final class AccountingModule extends BaseModule
 			return $assets;
 		});
 
-        ShortcodeManager::add(\atc\Bkkp\Modules\Accounting\Shortcodes\TransactionsShortcode::class);
-        ShortcodeManager::add(\atc\Bkkp\Modules\Accounting\Shortcodes\AccountsShortcode::class);
+        ShortcodeManager::add(\Bkkp\Modules\Accounting\Shortcodes\TransactionsShortcode::class);
+        ShortcodeManager::add(\Bkkp\Modules\Accounting\Shortcodes\AccountsShortcode::class);
     }
 
     public function getPostTypeHandlerClasses(): array

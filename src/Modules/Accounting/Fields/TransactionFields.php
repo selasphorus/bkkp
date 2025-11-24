@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Accounting\Fields;
 
-use WXC\Core\Contracts\FieldGroupInterface;
+use atc\WXC\Core\Contracts\FieldGroupInterface;
 
 final class TransactionFields implements FieldGroupInterface
 {

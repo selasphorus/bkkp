@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Documents\PostTypes;
 
-use WXC\Core\PostTypeHandler;
+use atc\WXC\Core\PostTypeHandler;
 
 class Document extends PostTypeHandler
 {

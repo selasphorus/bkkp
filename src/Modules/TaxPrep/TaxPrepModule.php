@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\TaxPrep;
 
-use WXC\Core\Module as BaseModule;
+use atc\WXC\Core\Module as BaseModule;
 
 // Post Types
 use atc\Bkkp\Modules\TaxPrep\PostTypes\TaxForm;
@@ -23,8 +23,8 @@ final class TaxPrepModule extends BaseModule
         parent::boot();
 
         add_filter( 'whx4_register_subtypes', function( array $providers ): array {
-            $providers[] = new \atc\Bkkp\Modules\TaxPrep\Subtypes\TaxDocumentsSubtype(); // TODO: add use statement above to simplify this line?
-            //$providers[] = new \atc\Bkkp\Modules\TaxPrep\Subtypes\WorkPaymentsSubtype();
+            $providers[] = new \Bkkp\Modules\TaxPrep\Subtypes\TaxDocumentsSubtype(); // TODO: add use statement above to simplify this line?
+            //$providers[] = new \Bkkp\Modules\TaxPrep\Subtypes\WorkPaymentsSubtype();
             return $providers;
         } );
 

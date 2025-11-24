@@ -2,7 +2,7 @@
 
 namespace atc\Bkkp\Modules\Documents\Fields;
 
-use WXC\Core\Contracts\FieldGroupInterface;
+use atc\WXC\Core\Contracts\FieldGroupInterface;
 
 // TODO: rename all fields (keys/names) according to whx4 naming conventions
 // TODO: update array definitions for consistency ( [] instead of array() )
