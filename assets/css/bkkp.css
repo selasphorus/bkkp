@@ -34,6 +34,14 @@ table.bkkp a:hover {
     text-decoration: underline;
 }
 
+
+
+.wp-block-post-title,
+.accounting, .accounts-pivot {
+    max-width: 96%;
+}
+
+
 /* CSS to style the "copy: icon */
 .copy-number-icon {
 	cursor: pointer;
