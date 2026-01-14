@@ -136,10 +136,10 @@ if (!defined('ABSPATH')) {
             <tfoot>
                 <tr class="totals-row">
                     <td class="col-account"><strong>Totals</strong></td>
-                    <?php if ($has_categories): ?>
+                    <?php /*if ($has_categories): ?>
                         <td class="col-category screen-only"></td>
-                    <?php endif; ?>
-                    <td class="col-status screen-only"></td>
+                    <?php endif;*/ ?>
+                    <!--td class="col-status screen-only"></td-->
                     
                     <?php foreach ($periods as $period): 
                         $total = $period_totals[$period];
