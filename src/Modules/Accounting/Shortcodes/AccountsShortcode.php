@@ -254,7 +254,7 @@ final class AccountsShortcode implements ShortcodeInterface
             
             foreach ($periods as $period) {
                 $cellStats = $this->extractPeriodStats($stats, $period, $periodType);
-                $hasData = $cellStats && $cellStats['total'] > 0;
+                $hasData = $cellStats !== null && ($cellStats['credits'] > 0 || $cellStats['debits'] > 0);
                 $hasGap = $previousHadData && !$hasData;
                 
                 $cellData = [
