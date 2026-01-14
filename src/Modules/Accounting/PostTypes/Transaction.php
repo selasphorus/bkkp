@@ -26,6 +26,7 @@ class Transaction extends PostTypeHandler
 			'slug'        => 'transaction',
 			'menu_icon'   => 'dashicons-yes-alt',
 			'capability_type' => ['account','accounts'],
+			'taxonomies'   => [ 'transaction_tag', 'transaction_category' ],
 		];
 
 		parent::__construct( $config, $post );

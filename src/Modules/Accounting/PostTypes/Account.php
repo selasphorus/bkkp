@@ -17,7 +17,7 @@ class Account extends PostTypeHandler
 			'slug'        => 'account',
 			'menu_icon'   => 'dashicons-bank',
 			'capability_type' => ['account','accounts'],
-			//'taxonomies'   => [ 'habitat' ],
+			'taxonomies'   => [ 'account_category' ],
 		];
 
 		parent::__construct( $config, $post );
