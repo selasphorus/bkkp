@@ -4,9 +4,11 @@ namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
 use atc\WXC\PostTypes\PostTypeHandler;
 use atc\WXC\Query\PostQuery;
+use atc\WXC\Traits\AppliesScopeToMainQuery;
 
 class Transaction extends PostTypeHandler
 {
+	use AppliesScopeToMainQuery;
 	public const DATE_META = 'transaction_date';
 	
 	// Store ACP hash IDs as class constants
@@ -35,6 +37,9 @@ class Transaction extends PostTypeHandler
 	public function boot(): void
 	{
 	    parent::boot(); // Optional if you add shared logic later
+	    
+	    // Register scope filtering
+        $this->registerScopeFilter();
 	}
 
 	/**
@@ -398,7 +403,7 @@ class Transaction extends PostTypeHandler
 		// Force CPT + date meta (scope uses this key; DATE mode)
 		$filters['post_type'] = 'transaction';
 		$filters['date_meta'] = [
-			'key'       => 'transaction_date',
+			'key'       => self::DATE_META, //'transaction_date',
 			'meta_type' => 'NUMERIC', // because ACF stores dates funny yyyymmdd so can't use DATE
 		];
 		
