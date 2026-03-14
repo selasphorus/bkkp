@@ -22,6 +22,7 @@ final class EmploymentModule extends BaseModule
 
         parent::boot();
         
+        // TODO: standardize addition of query vars across WXC ecosystem
         add_filter('query_vars', function(array $vars): array{
 			$vars[] = 'scope';
 			$vars[] = 'whx4_scope';
@@ -36,7 +37,8 @@ final class EmploymentModule extends BaseModule
             return $providers;
         } );
         
-        ShortcodeManager::add(\Bkkp\Modules\Employment\Shortcodes\EmploymentIncomeShortcode::class);
+        //ShortcodeManager::add(\Bkkp\Modules\Employment\Shortcodes\EmploymentIncomeShortcode::class);
+        ShortcodeManager::add(Shortcodes\EmploymentIncomeShortcode::class);
     }
 	
 	// Employment has only Subtypes, no CPTs of its own, but Module requires this method... TODO: improve this setup
