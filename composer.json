@@ -17,7 +17,7 @@
     "config": {
 		"platform": {
 			"php": "8.2.30"
-		}
+		},
         "allow-plugins": {
             "composer/installers": true
         }
