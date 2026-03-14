@@ -14,8 +14,8 @@ function build_document_title( $post_id = null, $arr = array() ) {
     // TS/logging setup
     $do_ts = devmode_active();
     $do_log = false;
-    //sdg_log( "divline2", $do_log );
-    //sdg_log( "function called: build_document_title", $do_log );
+    //wxc_log( "divline2", $do_log );
+    //wxc_log( "function called: build_document_title", $do_log );
     
     if ( $post_id == null ) { return false; }
     
@@ -26,7 +26,7 @@ function build_document_title( $post_id = null, $arr = array() ) {
      // Set var values
     if ( !empty($arr) ) {
         
-        //sdg_log( "[btt] running btt using array derived from _POST.", $do_log );
+        //wxc_log( "[btt] running btt using array derived from _POST.", $do_log );
         //$field_name = $arr['field_name'];
         
     } else if ( $post_id ) {
@@ -50,7 +50,7 @@ function build_document_title( $post_id = null, $arr = array() ) {
     
     // Taxonomies
     if ( empty($arr) && $post_id ) {
-        //sdg_log( "[btt] get taxonomy info from post_id: ".$post_id, $do_log );
+        //wxc_log( "[btt] get taxonomy info from post_id: ".$post_id, $do_log );
         
         $doc_categories = wp_get_post_terms( $post_id, 'document_category', array( 'fields' => 'ids' ) );
         
@@ -63,7 +63,7 @@ function build_document_title( $post_id = null, $arr = array() ) {
         if ( empty($keys_str) ) {
             $keys_str = get_field('key_name_txt', $post_id, false);
         }
-        sdg_log( "[btt] keys_str: ".$keys_str, $do_log );*/
+        wxc_log( "[btt] keys_str: ".$keys_str, $do_log );*/
     }
     
     // Build the title
