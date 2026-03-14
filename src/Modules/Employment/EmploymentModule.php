@@ -31,9 +31,9 @@ final class EmploymentModule extends BaseModule
 
         add_filter( 'whx4_register_subtypes', function( array $providers ): array {
              // TODO: add use statement above to simplify these lines?
-            $providers[] = new \Bkkp\Modules\Employment\Subtypes\EmployersSubtype(); // Subtype of Group PostType
-            $providers[] = new \Bkkp\Modules\Employment\Subtypes\WorkPaymentsSubtype(); // Subtype of Document PostType
-            $providers[] = new \Bkkp\Modules\Employment\Subtypes\GigsSubtype(); // Subtype of Event PostType
+            $providers[] = new atc\Bkkp\Modules\Employment\Subtypes\EmployersSubtype(); // Subtype of Group PostType
+            $providers[] = new atc\Bkkp\Modules\Employment\Subtypes\WorkPaymentsSubtype(); // Subtype of Document PostType
+            $providers[] = new atc\Bkkp\Modules\Employment\Subtypes\GigsSubtype(); // Subtype of Event PostType
             return $providers;
         } );
         
@@ -225,7 +225,7 @@ final class EmploymentModule extends BaseModule
 	public function findEmployerTransactions(\WP_Post $employer, array $filters = []): array
 	{
 		// Instantiate a Transaction handler
-		$transactionHandler = new \Bkkp\Modules\Accounting\PostTypes\Transaction();
+		$transactionHandler = new atc\Bkkp\Modules\Accounting\PostTypes\Transaction();
 		
 		$base = [
 			'related_group' => $employer->ID,  // Filter to this employer
