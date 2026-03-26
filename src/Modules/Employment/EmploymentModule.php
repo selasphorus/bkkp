@@ -68,7 +68,7 @@ final class EmploymentModule extends BaseModule
      */
     public function findEmployers(string $scope, array $options = []): array
 	{
-		$postType = 'group';
+		$postType = ['group','person'];
 		
 		//error_log('[findEmployers] scope: ' . $scope);
 		$qvScope = get_query_var('whx4_scope') ?: get_query_var('scope') ?: ($_GET['whx4_scope'] ?? $_GET['scope'] ?? '');
@@ -80,7 +80,7 @@ final class EmploymentModule extends BaseModule
 		
 		// NTS: The array_replace() function replaces the values of the first array with the values from following arrays.
 		$filters = array_replace([
-			'post_type' => $postType,
+			//'post_type' => $postType, // redundant/deprecated
 			'scope'     => $scope,
 			'date_meta' => [
 			    'key'   => 'years_of_employment',
