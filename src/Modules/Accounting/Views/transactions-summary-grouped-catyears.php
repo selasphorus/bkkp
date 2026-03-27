@@ -98,7 +98,7 @@
 		</table>
     <?php endif; ?>
     
-    <?php if (!empty($debug) && WP_DEBUG): ?>
+    <?php if (!empty($debug) ): //&& WP_DEBUG ?>
 	<div class="troubleshooting">
 		<details>
 			<summary><strong>Debug Information</strong></summary>
