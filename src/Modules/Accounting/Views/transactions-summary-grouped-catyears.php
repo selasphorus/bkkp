@@ -98,12 +98,13 @@
 		</table>
     <?php endif; ?>
     
-    <?php if (!empty($debug) ): //&& WP_DEBUG ?>
+    <?php //if (!empty($debug) ): //&& WP_DEBUG ?>
 	<div class="troubleshooting">
 		<details>
 			<summary><strong>Debug Information</strong></summary>
-			<pre><?php echo esc_html(print_r($debug, true)); ?></pre>
+			<pre>debug: <?php echo esc_html(print_r($debug, true)); ?></pre>
+			<pre>info: <?php echo esc_html(print_r($info, true)); ?></pre>
 		</details>
 	</div>
-	<?php endif; ?>
+	<?php //endif; ?>
 </div>
