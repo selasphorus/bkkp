@@ -4,7 +4,7 @@
  * Description:       A WordPress plugin for personal bookkeeping
  * Dependencies:      Requires WHx4-Core, WHx4
  * Requires Plugins:  whx4-core, whx4
- * Version:           0.1.031426
+ * Version:           0.1.032726
  * Author:            atc
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,7 @@
 
 declare(strict_types=1);
 
-namespace atc\Bkkp;
+//namespace atc\Bkkp;
 
 // Prevent direct access
 if ( !defined( 'ABSPATH' ) ) exit;
