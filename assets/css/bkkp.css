@@ -41,6 +41,9 @@ table.bkkp a:hover {
     max-width: 96%;
 }
 
+.accounts-pivot .category-header {
+    color: #4090D1;
+}
 
 /* CSS to style the "copy: icon */
 .copy-number-icon {
