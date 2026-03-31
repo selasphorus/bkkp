@@ -34,7 +34,14 @@ table.bkkp a:hover {
     text-decoration: underline;
 }
 
-
+/***/
+.credit {
+    color: green;
+}
+.debit {
+    color: red;
+}
+/***/
 
 .wp-block-post-title,
 .accounting, .accounts-pivot {
