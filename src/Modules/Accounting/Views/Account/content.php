@@ -37,9 +37,9 @@ if (!defined('ABSPATH')) {
                             <span class="stat-label">Total Transactions:</span>
                             <span class="stat-value"><?php echo $yearData['stats']['total']; ?></span>
                             <span class="stat-label">Credits:</span>
-                            <span class="stat-value"><?php echo $yearData['stats']['credits']; ?></span>
+                            <span class="stat-value credit"><?php echo $yearData['stats']['credits']; ?></span>
                             <span class="stat-label">Debits:</span>
-                            <span class="stat-value"><?php echo $yearData['stats']['debits']; ?></span>
+                            <span class="stat-value debit"><?php echo $yearData['stats']['debits']; ?></span>
                         </div>
                     </div>
                     
@@ -63,8 +63,8 @@ if (!defined('ABSPATH')) {
                                             </a>
                                         </td>
                                         <td class="col-total"><?php echo $monthData['total']; ?></td>
-                                        <td class="col-credits"><?php echo $monthData['credits']; ?></td>
-                                        <td class="col-debits"><?php echo $monthData['debits']; ?></td>
+                                        <td class="col-credits credit"><?php echo $monthData['credits']; ?></td>
+                                        <td class="col-debits debit"><?php echo $monthData['debits']; ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

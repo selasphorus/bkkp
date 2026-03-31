@@ -112,7 +112,7 @@ if (!defined('ABSPATH')) {
                                    target="_blank"
                                    title="Total: <?php echo $cell['total']; ?> | Credits: <?php echo $cell['credits']; ?> | Debits: <?php echo $cell['debits']; ?>">
                                     <span class="cell-data">
-                                        <?php echo $cell['total']; ?>/<?php echo $cell['credits']; ?>/<?php echo $cell['debits']; ?>
+                                        <?php echo $cell['total']; ?>/<span class="credit"><?php echo $cell['credits']; ?></span>/<span class="debit"><?php echo $cell['debits']; ?></span>
                                     </span>
                                 </a>
                             <?php else: ?>
@@ -126,7 +126,7 @@ if (!defined('ABSPATH')) {
                            target="_blank"
                            title="Total: <?php echo $row['totals']['total']; ?> | Credits: <?php echo $row['totals']['credits']; ?> | Debits: <?php echo $row['totals']['debits']; ?>">
                             <strong class="cell-data">
-                                <?php echo $row['totals']['total']; ?>/<?php echo $row['totals']['credits']; ?>/<?php echo $row['totals']['debits']; ?>
+                                <?php echo $row['totals']['total']; ?>/<span class="credit"><?php echo $row['totals']['credits']; ?></span>/<span class="debit"><?php echo $row['totals']['debits']; ?></span>
                             </strong>
                         </a>
                     </td>
@@ -146,14 +146,14 @@ if (!defined('ABSPATH')) {
                     ?>
                         <td class="col-period">
                             <strong class="cell-data">
-                                <?php echo $total['total']; ?>/<?php echo $total['credits']; ?>/<?php echo $total['debits']; ?>
+                                <?php echo $total['total']; ?>/<span class="credit"><?php echo $total['credits']; ?></span>/<span class="debit"><?php echo $total['debits']; ?></span>
                             </strong>
                         </td>
                     <?php endforeach; ?>
                     
                     <td class="col-total">
                         <strong class="cell-data grand-total">
-                            <?php echo $grand_total['total']; ?>/<?php echo $grand_total['credits']; ?>/<?php echo $grand_total['debits']; ?>
+                            <?php echo $grand_total['total']; ?>/<span class="credit"><?php echo $grand_total['credits']; ?></span>/<span class="debit"><?php echo $grand_total['debits']; ?></span>
                         </strong>
                     </td>
                 </tr>
