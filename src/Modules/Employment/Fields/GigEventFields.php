@@ -20,7 +20,6 @@ final class GigEventFields implements FieldGroupInterface, SubtypeFieldGroupInte
 
     public static function register(): void
     {
-        //error_log( '=== GigEventFields: register()) ===' );
         if ( ! function_exists( 'acf_add_local_field_group' ) ) {
             return;
         }

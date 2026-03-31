@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # The purpose of this file is to format raw CSV files (downloaded from financial institutions) to make them ready for import into bkkp
-# Last mods: 10/17/25
+# Last mods: 03/30/2026
 #
 # Recommended filename format: YYYY-COMPANY-ACCT-description.csv or YYYYMM-COMPANY-ACCT.csv
 # Examples: 2024-USAA-7574-annual.csv, 202409-USAA-7574.csv, 20240901-20240930-USAA-7574.csv
@@ -19,11 +19,11 @@ use File::Path qw(make_path);
 use POSIX qw/strftime/;
 
 # Transaction type classifications
-# Maps source transaction types to debit/credit and sign convention
+# Maps source transaction type strings (as they appear in the type column) to
+# the canonical bkkp ttype: 'debit' or 'credit'. Used to determine correct sign
+# when a type column is present. Unrecognized types trigger a one-time prompt.
 my %type_classifications = (
-    # Transaction types and their categories
-    # ---
-    # Standard debit types
+    # Debit types (money leaving the account)
     'purchase'     => 'debit',
     'sale'         => 'debit',
     'withdrawal'   => 'debit',
@@ -31,12 +31,61 @@ my %type_classifications = (
     'fee'          => 'debit',
     'debit'        => 'debit',
     'other'        => 'debit',  # Default assumption
-    # Standard credit types
+    # Credit types (money entering the account)
     'payment'      => 'credit',
     'credit'       => 'credit',
     'return'       => 'credit',
     'refund'       => 'credit',
     'deposit'      => 'credit',
+);
+
+# Per-account configuration. Keys are lc(company) => lc(last4).
+#   name:             human-readable account label for output
+#   inverted_amounts: set to 1 when the source CSV uses a non-standard sign
+#                     convention — i.e. debits are positive and credits are
+#                     negative. When set, all amounts are negated after any
+#                     type-column correction, so the output always follows the
+#                     standard bkkp convention (debits negative, credits positive).
+my %account_config = (
+    'usaa' => {
+		'7574' => { name => 'USAA Checking' },
+		'7566' => { name => 'USAA Savings' },
+		'3160' => { name => 'USAA Visa',  inverted_amounts => 1 },
+	},
+	'uiecu' => {
+		'7029' => { name => 'UIECU Savings' },
+	},
+	'chase' => {
+		'3720' => { name => 'Chase "Amazon Prime" Visa [3720]' },
+		'3943' => { name => 'Chase "Sapphire" Visa [3943]' },
+		'6386' => { name => 'Chase "Freedom" Visa [6386]' },
+	},
+	'fnbo' => {
+		'3654' => { name => 'FNBO Amtrak card' },
+	},
+	'applecard' =>{
+		'1272' => { name => 'Apple Card' },
+	},
+	'applebank' =>{
+		'8704' => { name => 'Apple Bank ExtraValue Checking' },
+	},
+	'amex' => {
+		'2008' => { name => 'American Express "Blue Cash Everyday" [2008]',  inverted_amounts => 1  },
+	},
+	'vanguard' => {
+		#'3654' => { name => 'Vanguard Roth IRA' },
+		#'3654' => { name => 'Vanguard SEP IRA' },
+	}
+);	
+
+# Maps normalized source category values (post subcategory extraction) to
+# canonical bkkp category names. Keys are lowercase for case-insensitive
+# matching. Values use the exact capitalization expected by the DB.
+# Unmapped values pass through as-is and trigger a warning at runtime.
+my %category_map = (
+    'restaurant'        => 'Restaurants',
+    'computer supplies' => 'Computer Supplies',
+    # add entries as new source values are encountered
 );
 
 # Check if input file name is provided as command-line argument
@@ -151,10 +200,16 @@ while (!defined $acct || $acct eq '' || $acct !~ /^\d+$/) {
 }
 $acct = uc($acct);  # Normalize to uppercase
 
-# Prompt for data source
+# Infer data source from file extension; only prompt when ambiguous.
+# Standard downloaded CSVs are assumed to be csv/ptfi without prompting.
+my $data_source;
+if ($input_filename =~ /\.csv$/i) {
+    $data_source = "csv/ptfi";
+} else {
 print "What's the data source? (default: csv/ptfi): ";
-chomp(my $data_source = <STDIN>);
-$data_source = "csv/ptfi" if $data_source eq '';  # Use default if empty
+    chomp($data_source = <STDIN>);
+    $data_source = "csv/ptfi" if $data_source eq '';
+}
 
 # Now locate the actual input file
 my $input_file;
@@ -221,10 +276,12 @@ my $header_row = $csv->getline($input_fh);
 #print "\n";
 
 # Normalize column names and find required indexes (indices?)
-my ($date_index, $amount_index, $type_index) = (-1, -1, -1);
+my ($date_index, $amount_index, $type_index, $category_index) = (-1, -1, -1, -1);
 my @date_columns;  # Track all date-related columns
 
-# Track indices for all description-related fields
+# Track indices for all description-related fields.
+# Values are initialized to -1 (meaning "not present in this file") and
+# updated during header parsing. build_descriptions() checks >= 0 before use.
 my %desc_indices = (
     'merchant' => -1,
     'investment_name' => -1,
@@ -269,7 +326,9 @@ foreach my $i (0..$#$header_row) {
         # (Don't modify these headers yet - we'll handle them specially later)
         # Track the index for this description field
         $desc_indices{$header} = $i;
-    }
+    } elsif ($header eq 'category') {
+		$category_index = $i;
+	}
     # TODO: mod to deal w/ reference_num/transaction_id fields
     
     # Update the header in the array with the normalized version
@@ -293,6 +352,11 @@ while (my $row = $csv->getline($input_fh)) {
     if ($amount_index >= 0 && defined $row->[$amount_index]) {
         $row->[$amount_index] =~ s/[\$,]//g;
     }
+    
+    # Strip leading/trailing single quotes from all fields (export artifacts)
+	for my $i (0..$#$row) {
+		$row->[$i] =~ s/^'|'$//g if defined $row->[$i];
+	}
     push @content, $row;
 }
 
@@ -322,19 +386,42 @@ my ($max_year) = $max_date =~ /^(\d{4})/;
 my %transactions_by_year;
 foreach my $row (@sorted_content) {
     my $date = $row->[$date_index];
-    my ($tx_year) = $date =~ /^(\d{4})/;
-    push @{$transactions_by_year{$tx_year}}, $row if defined $tx_year;
+    my ($tax_year) = $date =~ /^(\d{4})/;
+    push @{$transactions_by_year{$tax_year}}, $row if defined $tax_year;
 }
 
 # Track if we've warned about missing account mapping
 my $warned_about_account = 0;
 
+# Resolve account name and sign convention from %account_config once,
+# before processing rows. The $inverted_amounts flag is used during
+# per-row amount processing to correct non-standard sign conventions.
+my ($account_name_resolved, $inverted_amounts);
+if ($account_name ne "") {
+    # Account name supplied as command-line argument; assume standard signs.
+    $account_name_resolved = $account_name;
+    $inverted_amounts      = 0;
+} else {
+    my $cfg = $account_config{lc($company)}{lc($acct)};
+    if (defined $cfg) {
+        $account_name_resolved = $cfg->{name};
+        $inverted_amounts      = $cfg->{inverted_amounts} // 0;
+    } else {
+        warn "No account config found for $company-$acct, using default\n";
+        $account_name_resolved = "$company-$acct";
+        $inverted_amounts      = 0;
+    }
+}
+
 # Track unrecognized types we've already prompted for
 my %prompted_types;
 
+# Track unmapped categories we've already warned about (warn once per unique value)
+my %warned_categories;
+
 # Process each year's transactions separately
-foreach my $tx_year (sort keys %transactions_by_year) {
-    my @year_transactions = @{$transactions_by_year{$tx_year}};
+foreach my $tax_year (sort keys %transactions_by_year) {
+    my @year_transactions = @{$transactions_by_year{$tax_year}};
     
     # Determine date range for this year's transactions
     my $year_min_date = $year_transactions[0]->[$date_index];
@@ -355,7 +442,7 @@ foreach my $tx_year (sort keys %transactions_by_year) {
 	my $year_output_file;
 	if ($input_file =~ m{^(.*)/raw/(.*)$}) {
 		my $base_path = $1;
-		$year_output_file = "$base_path/processed/$tx_year/${standard_filename}${date_suffix}.csv";
+		$year_output_file = "$base_path/processed/$tax_year/${standard_filename}${date_suffix}.csv";
 	} else {
 		# Fallback
 		$year_output_file = $directory . "${standard_filename}${date_suffix}.csv";
@@ -379,7 +466,7 @@ foreach my $tx_year (sort keys %transactions_by_year) {
         chomp($response);
         
         unless ($response =~ /^[Yy]$/) {
-            print "Skipping $tx_year transactions. Operation aborted for this year.\n";
+            print "Skipping $tax_year transactions. Operation aborted for this year.\n";
             next;  # Skip to next year
         }
     }
@@ -404,8 +491,8 @@ foreach my $tx_year (sort keys %transactions_by_year) {
 		$header;
 	} @$header_row;
 	
-	my $new_header_row = ['uid', 'tax_year', 'company', 'last4', 'account', 'amount', 'ttype', 
-						  'description', 'original_description', 'data_source', @modified_header];
+	my $new_header_row = ['uid', 'tax_year', 'company', 'last4', 'account', 'amount', 'ttype',
+                      'description', 'original_description', 'category', 'category_raw', 'data_source', @modified_header];
     
     # Print revised header to output file
     $csv->print($year_output_fh, $new_header_row);
@@ -413,42 +500,55 @@ foreach my $tx_year (sort keys %transactions_by_year) {
     # Initialize autoincrement counter for this year
     my $counter = 1;
     
+    # Tracks count of transactions sharing date+company+acct+amount within this file,
+	# to disambiguate same-day same-amount transactions in the UID.
+	my %uid_counters;
+    
     # Process each transaction for this year
     foreach my $row (@year_transactions) {
         
-        # Get the date value and extract year (already normalized to YYYY-MM-DD)
+        # Get the date value (already normalized to YYYY-MM-DD)
         my $date = $row->[$date_index];
-        my ($row_year) = $date =~ /^(\d{4})/;
         
 		# Get source type if available
 		my $source_type = '';
 		if ($type_index != -1 && defined $row->[$type_index]) {
+			$row->[$type_index] = lc($row->[$type_index]); # Make source_type values lowercase to match to field options
 			$source_type = $row->[$type_index];
 		}
         
         # Extract and format the amount value
         my $amount = $row->[$amount_index];
         
-        # Determine correct sign and transaction type
+        # --- Sign correction ---
+        # Goal: after this block, negative $amount = debit, positive = credit,
+        # regardless of how the source institution signed the values.
+        #
+        # Two independent corrections may apply:
+        #   1. Type-column correction: if a type column exists, use it to verify
+        #      the sign matches the expected convention and flip if not.
+        #   2. Account-level inversion: if inverted_amounts is set in
+        #      %account_config, negate after any type-column correction.
+        #      This handles sources that export debits as positive / credits as
+        #      negative regardless of whether a type column is present.
+        
         if ($source_type ne '') {
 			my $type_key = lc($source_type);
-			#print "Found type_key: '$type_key'\n"; #tft
 			
-			# Determine what type the current sign indicates
+            # Determine what ttype the current sign implies
 			my $current_ttype = ($amount >= 0) ? 'credit' : 'debit';
 			
 			if (exists $type_classifications{$type_key}) {
 				
-				# Based on the given source type_key, do we expect a credit or debit?
+                # Known type: flip sign if it disagrees with the type column
 				my $expected_ttype = $type_classifications{$type_key};
-				
-				# If they don't match, flip the sign
 				if ($current_ttype ne $expected_ttype) {
 					$amount = -$amount;
 				}
 				
 			} else {
-				# Unrecognized type - prompt user (only once per type)
+                # Unrecognized type — prompt once, remember for this run.
+                # The sign-flip check runs on every row using the stored classification.
 				unless (exists $prompted_types{$type_key}) {
 					print "\nUnrecognized transaction type: '$source_type'\n";
 					print "Amount for this transaction: $amount\n";
@@ -461,86 +561,73 @@ foreach my $tx_year (sort keys %transactions_by_year) {
 					$prompted_types{$type_key} = 1;
 					
 					print "\nNote: This classification will be used for all '$source_type' transactions in this run.\n";
-					print "To make this permanent, add this line to the \%type_classifications hash in the script:\n";
+                    print "To make this permanent, add this line to %type_classifications in the script:\n";
 					print "    '$type_key' => '$ttype_classification',\n\n";
-					
-					# Now check if sign needs flipping
-					if ($current_ttype ne $ttype_classification) {
+                }
+                # Apply classification (whether just prompted or previously stored)
+                my $expected_ttype = $type_classifications{$type_key};
+                if ($current_ttype ne $expected_ttype) {
 						$amount = -$amount;
 					}
 				}
-			}
+
+            # Account-level inversion applies on top of type-column correction
+            $amount = -$amount if $inverted_amounts;
+
 		} else {
-			# No type column - determine from amount sign (standard convention)
-			#print "No type_key found.\n";
+            # No type column — rely on sign convention alone.
+            # If this account uses inverted signs, negate to normalize.
+            $amount = -$amount if $inverted_amounts;
 		}
 		
-		# Determine final ttype from (corrected) amount
+        # Derive ttype from the now-corrected amount
 		my $ttype = ($amount >= 0) ? 'credit' : 'debit';
         
         $amount = sprintf("%.2f", $amount);
         $row->[$amount_index] = $amount;
         
-        # Calculate absolute value of amount
+        # Absolute value used for the output 'amount' column (sign conveyed by ttype)
         my $amount_abs = abs($amount);
 		
-        # Determine transaction type
-        $ttype = $amount >= 0 ? 'credit' : 'debit';
-        
         # Build description and original_description using our new logic
         my ($description, $original_description) = build_descriptions($row, \%desc_indices);
         
-        # Determine account name
-        my $account = $account_name;
-		if ($account eq "") {
-			# Account mappings
-			my %account_mappings = (
-				'usaa' => {
-					'7574' => 'USAA Checking',
-					'7566' => 'USAA Savings',
-					'3160' => 'USAA Visa',
-				},
-				'uiecu' => {
-					'7029' => 'UIECU Savings',
-				},
-				'chase' => {
-					'3720' => 'Chase "Amazon Prime" Visa [3720]',
-					'3943' => 'Chase "Sapphire" Visa [3943]',
-					'6386' => 'Chase "Freedom" Visa [6386]',
-				},
-				'fnbo' => {
-				    '3654' => 'FNBO Amtrak card', # WIP
-				},
-				'apple' => {
-				    '1272' => 'Apple Card',
-				},
-				'amex' => {
-				    '2008' => 'American Express "Blue Cash Everyday" [2008]',
-				},
-				'vanguard' => {
-				    #'3654' => 'Vanguard Roth IRA',
-				    #'3654' => 'Vanguard Roth IRA',
-				}
-			);
+        # Capture raw category value, then normalize "Parent-Subcategory" to subcategory only.
+        # Raw value preserved separately; normalization happens here rather than in the read
+        # loop to keep read and transform stages cleanly separated.
+        my ($category, $category_raw) = ('', '');
+        if ($category_index >= 0 && defined $row->[$category_index]) {
+            $category_raw = $row->[$category_index];
+            $category     = $category_raw;
+            $category =~ s/^[^-]+-// if $category =~ /-/;
+            # Normalize to canonical DB category name via %category_map
+            my $category_key = lc($category);
+            if (exists $category_map{$category_key}) {
+                $category = $category_map{$category_key};
+            } elsif ($category ne '' && !exists $warned_categories{$category_key}) {
+                warn "Unmapped category: '$category' (raw: '$category_raw') — add to \%category_map to suppress this warning\n";
+                $warned_categories{$category_key} = 1;
+            }
+        }
+        
+        # Account name and sign convention resolved before the loop (see above)
+        my $account = $account_name_resolved;
 			
-			$account = $account_mappings{lc($company)}{lc($acct)}; #$account = $account_mappings{$company}{$acct}; # could also change mappings to UC
-			unless (defined $account) {
-				unless ($warned_about_account) {
-					warn "No account mapping found for $company-$acct, using default\n";
-					$warned_about_account = 1;
-				}
-				$account = "$company-$acct";
-			}
-		}
-    
 		# Create a unique identifier for this transaction
-		my $formatted_counter = sprintf("%04d", $counter); # Counter formatted with leading zeros
-		my $import_datetime = strftime("%Y%m%d-%H%M%S", localtime);
-		my $uid = "$date-$company-$acct-$amount_abs-$import_datetime-$formatted_counter";
+		#my $formatted_counter = sprintf("%04d", $counter); # Counter formatted with leading zeros
+		#my $import_datetime = strftime("%Y%m%d-%H%M%S", localtime);
+		#my $uid = "$date-$company-$acct-$amount_abs-$import_datetime-$formatted_counter";
+		
+		# Build a deterministic UID from stable fields. A zero-padded counter
+		# scoped to date+company+acct+amount handles same-day duplicate amounts.
+		my $uid_key = "$date-$company-$acct-$amount_abs";
+		$uid_counters{$uid_key}++;
+		my $uid = sprintf("%s-%04d", $uid_key, $uid_counters{$uid_key});
 		
 		# Prepend new columns including our processed descriptions (keeping all original data)
-		unshift @$row, $uid, $row_year, $company, $acct, $account, 
-                sprintf("%.2f", $amount_abs), $ttype, $description, $original_description, $data_source;
+        unshift @$row, $uid, $tax_year, $company, $acct, $account,
+                sprintf("%.2f", $amount_abs), $ttype, $description, $original_description,
+                $category, $category_raw, $data_source;
 		
 		# Write the modified row to the output file
 		$csv->print($year_output_fh, $row);
@@ -554,7 +641,7 @@ foreach my $tx_year (sort keys %transactions_by_year) {
     
     #last if $counter >= 10; # Break out of the loop after processing 10 rows - for TS
     
-    print "Processed " . ($counter - 1) . " transactions for $tx_year. Output written to $year_output_file\n";
+    print "Processed " . ($counter - 1) . " transactions for $tax_year. Output written to $year_output_file\n";
 }
 
 # Tag the input file as "processed"

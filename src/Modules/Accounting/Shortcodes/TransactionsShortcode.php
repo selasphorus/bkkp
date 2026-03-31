@@ -74,7 +74,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 		$info .= "groupMode: {$groupMode}<br />";
 		$atts['group_by'] = $groupMode;
 		
-		error_log('[TransactionsShortcode::render] atts: ' . print_r($atts, true));
+		error_log('atts: ' . print_r($atts, true));
 		//$info .= "processed atts: <pre>".print_r($atts,true)."</pre>";
 		$info .= "processed atts:<br />";
 		$info .= "[scope]: ".$atts['scope']."<br />";
@@ -147,7 +147,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			// Resolve year window from scope
 			$startY = $endY = null;
 			$bounds  = ScopedDateResolver::resolve($scope, ['mode' => 'DATE']); // ['start'=>DT,'end'=>DT]
-			//error_log('[TransactionsShortcode::render] bounds: ' . print_r($bounds, true));
+			//error_log('bounds: ' . print_r($bounds, true));
 			$start  = $bounds['start'] ?? null;
 			$end    = $bounds['end'] ?? null;
 			//
@@ -159,12 +159,12 @@ final class TransactionsShortcode implements ShortcodeInterface
 				$end instanceof \DateTimeInterface ? (int)$end->format('Y') :
 				(is_string($end) && $end !== '' ? (int)date('Y', strtotime($end)) : $startY)
 			);
-			//error_log('[TransactionsShortcode::render] startY: ' . $startY . '; endY: ' . $endY);
+			//error_log('startY: ' . $startY . '; endY: ' . $endY);
 			
 			// Safety: swap if reversed; clamp to sane range
 			if ($startY > $endY) { [$startY, $endY] = [$endY, $startY]; }
 			$years = range($startY, $endY);
-			//error_log('[TransactionsShortcode::render] years: ' . print_r($years, true));
+			//error_log('years: ' . print_r($years, true));
 			
 			// Check if we need hierarchical display
 			$hasHierarchy = $handler->hasHierarchicalRelationships($categories);
@@ -323,7 +323,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			$viewVars['info'] = $info;
 
 			//
-			//error_log('[TransactionsShortcode::render] viewVars: ' . print_r($viewVars, true));
+			//error_log('viewVars: ' . print_r($viewVars, true));
 			//
 			return ViewLoader::renderToString( $view, $viewVars, $viewSpecs );
 		

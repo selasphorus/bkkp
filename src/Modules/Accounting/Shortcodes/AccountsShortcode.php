@@ -35,7 +35,6 @@ final class AccountsShortcode implements ShortcodeInterface
     public function render(array $atts, ?string $content = null, string $tag = ''): string
     {
         $info = "";
-        #error_log('[AccountsShortcode] render() called');
         
         // Defaults
         $defaults = [
@@ -73,7 +72,7 @@ final class AccountsShortcode implements ShortcodeInterface
         // Get filtered accounts
         $accounts = $this->resolveAccounts($atts);
         
-        #error_log('[AccountsShortcode] Accounts found: ' . count($accounts));
+        #error_log('Accounts found: ' . count($accounts));
         
         if (empty($accounts)) {
             return '<p>No accounts found matching the specified criteria.</p>';
@@ -91,7 +90,7 @@ final class AccountsShortcode implements ShortcodeInterface
         
         $viewSpecs = ['kind' => 'partial', 'module' => 'accounting', 'post_type' => 'account'];
         
-        #error_log('[AccountsShortcode] About to render with group_by: ' . $groupMode);
+        #error_log('About to render with group_by: ' . $groupMode);
         
         // Branch based on grouping mode
         switch ($groupMode) {
@@ -163,11 +162,11 @@ final class AccountsShortcode implements ShortcodeInterface
                 ],
             ];
         }
-        #error_log('[AccountsShortcode::resolveAccounts] Filters: ' . print_r($filters, true));
+        #error_log('Filters: ' . print_r($filters, true));
         
         $query = new \WP_Query($filters);
         
-        #error_log('[AccountsShortcode::resolveAccounts] Query found: ' . $query->found_posts . ' posts');
+        #error_log('Query found: ' . $query->found_posts . ' posts');
         
         return $query->posts;
     }
@@ -177,32 +176,32 @@ final class AccountsShortcode implements ShortcodeInterface
      */
     /*private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
 	{
-		error_log('[renderAccountMonths] Starting with ' . count($accounts) . ' accounts');
-		error_log('[renderAccountMonths] Scope: ' . $atts['scope']);
+		error_log('Starting with ' . count($accounts) . ' accounts');
+		error_log('Scope: ' . $atts['scope']);
 		
 		$bounds = ScopedDateResolver::resolve($atts['scope'], ['mode' => 'DATE']);
-		error_log('[renderAccountMonths] Bounds: ' . print_r($bounds, true));
+		error_log('Bounds: ' . print_r($bounds, true));
 		
 		$periods = DateHelper::generateMonthPeriods($bounds['start'], $bounds['end']);
-		error_log('[renderAccountMonths] Periods generated: ' . count($periods));
-		error_log('[renderAccountMonths] Periods: ' . print_r($periods, true));
+		error_log('Periods generated: ' . count($periods));
+		error_log('Periods: ' . print_r($periods, true));
 		
 		$periodLabels = $this->formatPeriodLabels($periods, 'month');
 		
 		$pivotData = $this->buildPivotData($accounts, $atts, $periods, 'month');
-		error_log('[renderAccountMonths] Pivot rows: ' . count($pivotData['rows']));
+		error_log('Pivot rows: ' . count($pivotData['rows']));
 		
 		$result = $this->renderPivotView('accounts-pivot-months', $pivotData, $periods, $periodLabels, $viewVars, $viewSpecs);
-		error_log('[renderAccountMonths] View rendered, length: ' . strlen($result));
+		error_log('View rendered, length: ' . strlen($result));
 		
 		return $result;
 	}*/
 	private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
     {
-        error_log('[renderAccountMonths] Scope: ' . $atts['scope']);
+        error_log('Scope: ' . $atts['scope']);
 		
 		$bounds = ScopedDateResolver::resolve($atts['scope'], ['mode' => 'DATE']);
-		error_log('[renderAccountMonths] Bounds: ' . print_r($bounds, true));
+		error_log('Bounds: ' . print_r($bounds, true));
 		
         $periods = DateHelper::generateMonthPeriods($bounds['start'], $bounds['end']);
         $periodLabels = $this->formatPeriodLabels($periods, 'month');
