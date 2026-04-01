@@ -87,6 +87,7 @@ class Account extends PostTypeHandler
 		foreach ($transactions as $transaction) {
 			$dateValue = get_post_meta($transaction->ID, 'transaction_date', true);
 			$ttype = get_post_meta($transaction->ID, 'ttype', true);
+			$amount = (float)get_post_meta($transaction->ID, 'amount', true);
 			
 			// Extract year and month from yyyymmdd format
 			$year = substr($dateValue, 0, 4);
@@ -94,7 +95,14 @@ class Account extends PostTypeHandler
 			
 			// Initialize year data if needed
 			if (!isset($yearData[$year])) {
-				$yearData[$year] = ['total' => 0, 'credits' => 0, 'debits' => 0];
+				$yearData[$year] = [
+					'total' => 0, 
+					'credits' => 0, 
+					'debits' => 0,
+					'credit_amount' => 0.0,
+					'debit_amount' => 0.0,
+					'net' => 0.0
+				];
 			}
 			
 			// Initialize month data if needed
@@ -106,6 +114,9 @@ class Account extends PostTypeHandler
 					'total' => 0,
 					'credits' => 0,
 					'debits' => 0,
+					'credit_amount' => 0.0,
+					'debit_amount' => 0.0,
+					'net' => 0.0,
 					'url' => null
 				];
 			}
@@ -116,10 +127,25 @@ class Account extends PostTypeHandler
 			
 			if ($ttype === 'credit') {
 				$yearData[$year]['credits']++;
+				$yearData[$year]['credit_amount'] += $amount;
 				$monthData[$year][$month]['credits']++;
-			} elseif ($ttype === 'debit') {
+				$monthData[$year][$month]['credit_amount'] += $amount;
+			} elseif ($ttype === 'debit') {				
 				$yearData[$year]['debits']++;
+				$yearData[$year]['debit_amount'] += $amount;
 				$monthData[$year][$month]['debits']++;
+				$monthData[$year][$month]['debit_amount'] += $amount;
+			}
+		}
+		
+		// WIP amount totals
+		foreach ($yearData as $year => &$data) {
+			$data['net'] = $data['credit_amount'] - $data['debit_amount'];
+		}
+		
+		foreach ($monthData as $year => &$months) {
+			foreach ($months as $month => &$data) {
+				$data['net'] = $data['credit_amount'] - $data['debit_amount'];
 			}
 		}
 		

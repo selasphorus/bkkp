@@ -41,6 +41,18 @@ if (!defined('ABSPATH')) {
                             <span class="stat-label">Debits:</span>
                             <span class="stat-value debit"><?php echo $yearData['stats']['debits']; ?></span>
                         </div>
+                        <div class="stat-row">
+							<span class="stat-label">Total Credits:</span>
+							<span class="stat-value">$<?php echo number_format($yearStats['credit_amount'], 2); ?></span>
+						</div>
+						<div class="stat-row">
+							<span class="stat-label">Total Debits:</span>
+							<span class="stat-value">$<?php echo number_format($yearStats['debit_amount'], 2); ?></span>
+						</div>
+						<div class="stat-row stat-net">
+							<span class="stat-label">Net:</span>
+							<span class="stat-value">$<?php echo number_format($yearStats['net'], 2); ?></span>
+						</div>
                     </div>
                     
                     <?php if ($yearData['has_months']): ?>
