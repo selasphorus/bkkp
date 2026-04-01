@@ -440,12 +440,12 @@ class Transaction extends PostTypeHandler
 		foreach ($posts as $post){
 			$raw = get_post_meta($post->ID, 'amount', true); // TODO: use getPostMeta instead?
 			if ($raw === '' || $raw === null){
-				error_log( "amount is empty for pID: " . $post->ID );
+				Logger::debug( "amount is empty for pID: " . $post->ID );
 				continue;
 			}
-			error_log( "raw amount: {$raw} for pID: " . $post->ID );
+			Logger::debug( "raw amount: {$raw} for pID: " . $post->ID );
 			$num = is_numeric($raw) ? (float)$raw : 0.0;
-			error_log( "amount: {$num} for pID: " . $post->ID );
+			Logger::debug( "amount: {$num} for pID: " . $post->ID );
 			
 			// Get ttype and apply sign
 			$ttype = get_post_meta($post->ID, 'ttype', true);

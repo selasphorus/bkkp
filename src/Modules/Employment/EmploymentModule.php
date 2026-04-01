@@ -146,7 +146,7 @@ final class EmploymentModule extends BaseModule
 		// Taxonomies
 		$taxSpec = $filters['tax'] ?? [];
 		$taxSpec['document_category'] = array_unique(array_merge($taxSpec['document_category'] ?? [], ['tax-forms'])); // limit to tax forms
-		Logger::debug('taxSpec', $taxSpec, 'query');
+		Logger::debug( 'taxSpec', $taxSpec, 'query' );
 	
 		// Base params (all docs by default)
 		$params = [
