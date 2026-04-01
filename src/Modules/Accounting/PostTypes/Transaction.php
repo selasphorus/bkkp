@@ -2,6 +2,7 @@
 
 namespace atc\Bkkp\Modules\Accounting\PostTypes;
 
+use atc\WXC\Logger;
 use atc\WXC\PostTypes\PostTypeHandler;
 use atc\WXC\Query\PostQuery;
 use atc\WXC\Traits\AppliesScopeToMainQuery;

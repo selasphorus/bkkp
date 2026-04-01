@@ -2,6 +2,7 @@
 
 namespace atc\Bkkp\Modules\Employment;
 
+use atc\WXC\Logger;
 use atc\WXC\Module as BaseModule;
 use atc\WXC\Shortcodes\ShortcodeManager;
 use atc\WXC\PostTypes\PostTypeHandler;
