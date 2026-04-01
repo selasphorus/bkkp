@@ -73,7 +73,7 @@ final class AccountsShortcode implements ShortcodeInterface
         // Get filtered accounts
         $accounts = $this->resolveAccounts($atts);
         
-        #error_log('Accounts found: ' . count($accounts));
+        //Logger::debug('Accounts found: ' . count($accounts));
         
         if (empty($accounts)) {
             return '<p>No accounts found matching the specified criteria.</p>';
@@ -91,7 +91,7 @@ final class AccountsShortcode implements ShortcodeInterface
         
         $viewSpecs = ['kind' => 'partial', 'module' => 'accounting', 'post_type' => 'account'];
         
-        #error_log('About to render with group_by: ' . $groupMode);
+        //Logger::debug('About to render with group_by: ' . $groupMode);
         
         // Branch based on grouping mode
         switch ($groupMode) {
@@ -163,11 +163,11 @@ final class AccountsShortcode implements ShortcodeInterface
                 ],
             ];
         }
-        #error_log('Filters: ' . print_r($filters, true));
+        //Logger::debug('Filters', $filters, 'shortcodes' );
         
         $query = new \WP_Query($filters);
         
-        #error_log('Query found: ' . $query->found_posts . ' posts');
+        //Logger::debug('Query found: ' . $query->found_posts . ' posts');
         
         return $query->posts;
     }
@@ -177,32 +177,32 @@ final class AccountsShortcode implements ShortcodeInterface
      */
     /*private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
 	{
-		error_log('Starting with ' . count($accounts) . ' accounts');
-		error_log('Scope: ' . $atts['scope']);
+		Logger::debug( 'Starting with ' . count($accounts) . ' accounts' );
+		Logger::debug( 'Scope: ' . $atts['scope'] );
 		
 		$bounds = ScopedDateResolver::resolve($atts['scope'], ['mode' => 'DATE']);
-		error_log('Bounds: ' . print_r($bounds, true));
+		Logger::debug( 'Bounds', $bounds, 'shortcodes' );
 		
 		$periods = DateHelper::generateMonthPeriods($bounds['start'], $bounds['end']);
-		error_log('Periods generated: ' . count($periods));
-		error_log('Periods: ' . print_r($periods, true));
+		Logger::debug( 'Periods generated: ' . count($periods) );
+		Logger::debug( 'Periods', $periods, 'shortcodes' );
 		
 		$periodLabels = $this->formatPeriodLabels($periods, 'month');
 		
 		$pivotData = $this->buildPivotData($accounts, $atts, $periods, 'month');
-		error_log('Pivot rows: ' . count($pivotData['rows']));
+		Logger::debug( 'Pivot rows: ' . count($pivotData['rows']) );
 		
 		$result = $this->renderPivotView('accounts-pivot-months', $pivotData, $periods, $periodLabels, $viewVars, $viewSpecs);
-		error_log('View rendered, length: ' . strlen($result));
+		Logger::debug( 'View rendered, length: ' . strlen($result) );
 		
 		return $result;
 	}*/
 	private function renderAccountMonths(array $accounts, array $atts, array $viewVars, array $viewSpecs): string
     {
-        error_log('Scope: ' . $atts['scope']);
+        Logger::debug( 'Scope: ' . $atts['scope'] );
 		
 		$bounds = ScopedDateResolver::resolve($atts['scope'], ['mode' => 'DATE']);
-		error_log('Bounds: ' . print_r($bounds, true));
+		Logger::debug( 'Bounds', $bounds, 'shortcodes' );
 		
         $periods = DateHelper::generateMonthPeriods($bounds['start'], $bounds['end']);
         $periodLabels = $this->formatPeriodLabels($periods, 'month');

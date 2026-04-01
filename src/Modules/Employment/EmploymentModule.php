@@ -71,13 +71,13 @@ final class EmploymentModule extends BaseModule
 	{
 		$postType = ['group','person'];
 		
-		//error_log('scope: ' . $scope);
+		//Logger::debug('scope: ' . $scope);
 		$qvScope = get_query_var('whx4_scope') ?: get_query_var('scope') ?: ($_GET['whx4_scope'] ?? $_GET['scope'] ?? '');
-		//error_log('qvScope:' . $qvScope);
+		//Logger::debug('qvScope:' . $qvScope);
 		$sanitized = PostTypeHandler::sanitizeScopeParam($qvScope);
-		//error_log('sanitized qvScope: ' . $sanitized);
+		//Logger::debug('sanitized qvScope: ' . $sanitized);
 		if ($sanitized !== null){ $scope = $sanitized; }
-		//error_log('FINAL scope: ' . $scope);
+		//Logger::debug('FINAL scope: ' . $scope);
 		
 		// NTS: The array_replace() function replaces the values of the first array with the values from following arrays.
 		$filters = array_replace([
@@ -146,7 +146,7 @@ final class EmploymentModule extends BaseModule
 		// Taxonomies
 		$taxSpec = $filters['tax'] ?? [];
 		$taxSpec['document_category'] = array_unique(array_merge($taxSpec['document_category'] ?? [], ['tax-forms'])); // limit to tax forms
-		error_log('taxSpec: ' . print_r($taxSpec,true));
+		Logger::debug('taxSpec', $taxSpec, 'query');
 	
 		// Base params (all docs by default)
 		$params = [
