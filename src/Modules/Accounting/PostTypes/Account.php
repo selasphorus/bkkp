@@ -303,6 +303,9 @@ class Account extends PostTypeHandler
 						'total' => $monthData['total'],
 						'credits' => $monthData['credits'],
 						'debits' => $monthData['debits'],
+						'credit_amount' => $monthData['credit_amount'],
+						'debit_amount' => $monthData['debit_amount'],
+						'net' => $monthData['net'],
 						'url' => $monthData['url'],
 						'has_gap' => $hasGap
 					];
