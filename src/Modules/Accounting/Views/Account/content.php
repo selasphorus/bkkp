@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
         <h3>Transaction History</h3>
         
         <?php foreach ($viewData['years'] as $yearData): ?>
-            <details class="transaction-year">
+            <details class="transaction-year"<?php if (count($viewData['years']) === 1) echo ' open'; ?>>
                 <summary class="year-summary">
                     <span class="year-label"><?php echo esc_html($yearData['year']); ?></span>
                     <span class="year-count">(<?php echo $yearData['stats']['total']; ?> transactions)</span>
