@@ -64,6 +64,9 @@ if (!defined('ABSPATH')) {
                                     <th class="col-total">Total</th>
                                     <th class="col-credits">Credits</th>
                                     <th class="col-debits">Debits</th>
+                                    <th class="col-amount">Credit $</th>
+                                    <th class="col-amount">Debit $</th>
+                                    <th class="col-amount">Net $</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,6 +80,9 @@ if (!defined('ABSPATH')) {
                                         <td class="col-total"><?php echo $monthData['total']; ?></td>
                                         <td class="col-credits credit"><?php echo $monthData['credits']; ?></td>
                                         <td class="col-debits debit"><?php echo $monthData['debits']; ?></td>
+                                        <td class="col-amount credit">$<?php echo number_format($monthData['credit_amount'], 2); ?></td>
+                                        <td class="col-amount debit">$<?php echo number_format($monthData['debit_amount'], 2); ?></td>
+                                        <td class="col-amount net">$<?php echo number_format($monthData['net'], 2); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
