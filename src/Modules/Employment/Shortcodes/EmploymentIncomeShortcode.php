@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atc\Bkkp\Modules\Employment\Shortcodes;
 
 use atc\WXC\App;
+use atc\WXC\Logger;
 use atc\WXC\Utils\ClassInfo;
 use atc\WXC\PostTypes\PostTypeHandler;
 use atc\WXC\Templates\ViewLoader;
@@ -113,6 +114,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 			
 			$docsResult = $module->findEmployerTaxDocs($employer, $docFilters);
 			$docs = $docsResult['posts'] ?? [];
+			Logger::debug('docs found for employer: ' . $employer, $docs, ['employers', 'shortcodes'] );
 			
 			// Get transactions
 			$txnsResult = $module->findEmployerTransactions($employer, ['scope' => $scope]);
