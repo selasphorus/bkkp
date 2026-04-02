@@ -114,7 +114,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 			
 			$docsResult = $module->findEmployerTaxDocs($employer, $docFilters);
 			$docs = $docsResult['posts'] ?? [];
-			Logger::debug('docs found for employer: ' . $employer, $docs, ['employers', 'shortcodes'] );
+			Logger::debug( 'docs found for employer: '.$employer->post_title, $docs, ['employers', 'shortcodes'] );
 			
 			// Get transactions
 			$txnsResult = $module->findEmployerTransactions($employer, ['scope' => $scope]);
