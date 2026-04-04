@@ -50,6 +50,8 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         }
         // Extract years for columns
         $years = ScopedDateResolver::extractYears($scope);
+        Logger::debug( 'scope: '.$scope, null, $logCtx );
+        Logger::debug( 'years', $years, $logCtx );
         
         // v1
         // Fetch tax docs per employer (optionally scoped)
