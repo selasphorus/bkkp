@@ -69,9 +69,10 @@ final class EmploymentModule extends BaseModule
      */
     public function findEmployers(string $scope, array $options = []): array
 	{
-		$postType = ['group','person'];
+		$postType = ['group'];
+		//$postType = ['group','person'];
 		
-		//Logger::debug('scope: ' . $scope);
+		Logger::debug('scope: ' . $scope);
 		$qvScope = get_query_var('whx4_scope') ?: get_query_var('scope') ?: ($_GET['whx4_scope'] ?? $_GET['scope'] ?? '');
 		//Logger::debug('qvScope:' . $qvScope);
 		$sanitized = PostTypeHandler::sanitizeScopeParam($qvScope);
