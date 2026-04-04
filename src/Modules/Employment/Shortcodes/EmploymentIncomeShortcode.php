@@ -35,9 +35,10 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         if (!$module) {
             return '<p>Employment module inactive.</p>';
         }
-
-        // Determine scope
-        if ( isset($atts['scope']) ) { $scope = $atts['scope']; } else { $scope = date('Y'); }
+        
+        // Resolve scope with query-var override
+        $scope = PostTypeHandler::getScopeFromRequest($atts, $atts['scope']);
+        $atts['scope'] = $scope;
         
         // Query employers
         $employers = $module->findEmployers($scope) ?? [];
