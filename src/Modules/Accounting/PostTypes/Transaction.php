@@ -478,7 +478,7 @@ class Transaction extends PostTypeHandler
 	 * @param string $taxonomy The taxonomy name (defaults to same as $filterKey)
 	 */
 	// WIP -- this doesn't work yet -- breaks the transactions shortcode (no records found)
-	private function mapTaxonomyToTaxQuery(array &$filters, string $filterKey, string $taxonomy = null): void
+	private function mapTaxonomyToTaxQuery(array &$filters, string $filterKey, ?string $taxonomy = null): void
 	{
 		if (!isset($filters[$filterKey]) || $filters[$filterKey] === '') {
 			return;
@@ -523,7 +523,7 @@ class Transaction extends PostTypeHandler
 	 * @param string $metaKey The ACF field name (defaults to same as $filterKey)
 	 * @param bool $isRelationship Whether this is a relationship field (vs post_object)
 	 */
-	private function mapPostObjectFieldToMeta(array &$filters, string $filterKey, string $postType, string $metaKey = null, bool $isRelationship = false): void
+	private function mapPostObjectFieldToMeta(array &$filters, string $filterKey, string $postType, ?string $metaKey = null, bool $isRelationship = false): void
 	{
 		if (!isset($filters[$filterKey]) || $filters[$filterKey] === '') {
 			return;
