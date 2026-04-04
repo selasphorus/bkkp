@@ -36,6 +36,23 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             return '<p>Employment module inactive.</p>';
         }
         
+        // Defaults
+        $defaults = [
+            'scope' => 'this_year',
+            //'date_key' => '',
+            //'key_type' => '',
+            //'limit' => '',
+            //'group_by' => 'account_months',
+            //'include_empty' => '1',
+            'print_header' => '',
+            'print_footer' => '',
+            'order' => 'ASC',
+            'orderby' => 'title',
+        ];
+        
+        $rawAtts = (array)$atts;
+        $atts = shortcode_atts($defaults, $rawAtts, self::tag());
+        
         // Resolve scope with query-var override
         $scope = PostTypeHandler::getScopeFromRequest($atts, $atts['scope']);
         $atts['scope'] = $scope;
