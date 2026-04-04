@@ -69,8 +69,7 @@ final class EmploymentModule extends BaseModule
      */
     public function findEmployers(string $scope, array $options = []): array
 	{
-		$postType = ['group'];
-		//$postType = ['group','person'];
+		$postType = ['group','person'];
 		
 		Logger::debug('scope: ' . $scope);
 		$qvScope = get_query_var('whx4_scope') ?: get_query_var('scope') ?: ($_GET['whx4_scope'] ?? $_GET['scope'] ?? '');
@@ -97,19 +96,10 @@ final class EmploymentModule extends BaseModule
 				['key' => 'group_category', 'value' => 'employers', 'compare' => '='],
 				//['key' => 'group_category', 'equals' => 'employers'], // TODO: enable this shorthand for tax queries
 			],
-			'limit'  => "-1",
-			//'per_page'  => -1,
-			//'limit' => 30, //posts_per_page
+			'limit'  => "-1", //'limit' => 30, //posts_per_page
 			'orderby'   => 'title',
 			'order'     => 'ASC',
 		], $options);
-		
-		/*
-		$filters['date_meta'] = [
-			'key'       => 'transaction_date',
-			'meta_type' => 'NUMERIC', // because ACF stores dates funny yyyymmdd so can't use DATE
-		];
-		*/
 	
 		return $this->findViaHandler($postType, $filters);
 	}
