@@ -241,6 +241,8 @@ a.data-gap::before {
 
 .whx4.employment .tax-amount {
     margin-bottom: 0rem;
+    float: left;
+    text-align: left;
 }
 
 .whx4.employment .tax-amount:last-child {
