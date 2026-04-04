@@ -26,6 +26,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
     
     public function render(array $atts = [], string $content = '', string $tag = ''): string
     {
+        $logCtx = ['employers', 'shortcodes'];
         $info = "";
         
         $ctx = App::ctx();
@@ -41,6 +42,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
         // Query employers
         $employers = $module->findEmployers($scope) ?? [];
         $employerPosts = $employers['posts'] ?? [];
+        Logger::debug( count($employerPosts).'employer posts found', null, $logCtx );
         
         // Check if scope was revised via findEmployers
         if (isset($employers['debug']['scope'])) { 
@@ -114,7 +116,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 			
 			$docsResult = $module->findEmployerTaxDocs($employer, $docFilters);
 			$docs = $docsResult['posts'] ?? [];
-			Logger::debug( 'docs found for employer: '.$employer->post_title, $docs, ['employers', 'shortcodes'] );
+			Logger::debug( 'docs found for employer: '.$employer->post_title, $docs, $logCtx );
 			
 			// Get transactions
 			$txnsResult = $module->findEmployerTransactions($employer, ['scope' => $scope]);
