@@ -97,9 +97,9 @@ final class EmploymentModule extends BaseModule
 				['key' => 'group_category', 'value' => 'employers', 'compare' => '='],
 				//['key' => 'group_category', 'equals' => 'employers'], // TODO: enable this shorthand for tax queries
 			],
-			//'limit'  => "-1",
+			'limit'  => "-1",
 			//'per_page'  => -1,
-			'limit' => -1, //posts_per_page
+			//'limit' => 30, //posts_per_page
 			'orderby'   => 'title',
 			'order'     => 'ASC',
 		], $options);
