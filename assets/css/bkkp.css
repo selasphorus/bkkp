@@ -424,6 +424,10 @@ a.data-gap::before {
         color: #000;
     }
     
+    .whx4.employment th.year {
+		min-width: none;
+	}
+    
     .whx4.accounting .txn-count {
         display: none;
     }
