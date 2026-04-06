@@ -428,6 +428,12 @@ a.data-gap::before {
         display: none;
     }
     
+    .whx4.employment .comp-amount,
+    .whx4.employment .txn-total {
+		font-weight: 500;
+		font-size: 1rem;
+	}
+    
     /* Basic page setup */
     @page {
         margin: 0.5in;
