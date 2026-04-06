@@ -361,6 +361,10 @@ a.data-gap::before {
 }
 
 @media print {
+    .print-only {
+        display: block;
+    }
+    
     /* Hide specific site chrome - adjust selectors to match your theme */
     body > header,
     .wp-site-blocks header,
@@ -375,7 +379,7 @@ a.data-gap::before {
     }
     
     /* Show print header */
-	.whx4 .print-header {
+    .whx4 .print-header {
 		display: block;
 		margin-bottom: 1em;
 		border-bottom: 2px solid #000;
