@@ -86,7 +86,7 @@ if (!defined('ABSPATH')) {
                                 </a>
                                 <?php if ($yearData['mismatch']): ?>
                                     <span class="difference <?php echo $yearData['difference'] > 0 ? 'over' : 'under'; ?>">
-                                        <br />(<?php echo $yearData['difference'] > 1 ? 'tx-under' : 'tx-over'; ?>:<?php echo number_format($yearData['difference'], 0); ?>)
+                                        <br />(<?php echo $yearData['difference'] > 0 ? 'tx-under' : 'tx-over'; ?>:<?php echo number_format($yearData['difference'], 0); ?>)
                                     </span>
                                 <?php endif; ?>
                             </div>
