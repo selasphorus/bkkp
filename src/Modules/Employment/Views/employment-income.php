@@ -53,7 +53,7 @@ if (!defined('ABSPATH')) {
                         <?php echo esc_html(get_the_title($bundle['post'])); ?>
                     </a>
                 </td>
-                <td><?php echo esc_html($bundle['work_category']); ?></td>
+                <td class="screen-only"><?php echo esc_html($bundle['work_category']); ?></td>
                 <td><?php echo esc_html($bundle['employment_classification']); ?></td>
                 
                 <?php foreach ($years as $year): 
