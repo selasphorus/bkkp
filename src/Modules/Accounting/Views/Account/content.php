@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 <div class="account-view">
     <div class="account-summary">
         <p><strong>Account Status:</strong> <?php echo esc_html($status); ?></p>
-        <p><strong>Total Transactions on Record:</strong> <?php echo $viewData['total_count']; ?></p>
+        <!--p><strong>Total Transactions on Record:</strong> <?php echo $viewData['total_count']; ?></p-->
     </div>
     
     <?php if ($viewData['has_data']): ?>

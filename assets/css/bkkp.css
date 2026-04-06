@@ -26,6 +26,11 @@ table.bkkp tr td {
 
 table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 
+table.bkkp tbody tr:hover td,
+tbody tr:hover td {
+    background-color: #f0f0f0;
+}
+
 table.bkkp a {
     text-decoration: none;
 }
