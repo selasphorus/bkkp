@@ -101,7 +101,8 @@ if (!defined('ABSPATH')) {
         <!-- Totals row -->
         <?php //if ($print_footer): // WIP ?>
         <tr class="totals-row">
-            <td colspan="3"><strong>Totals</strong></td>
+            <td class="screen-only" colspan="3"><strong>Totals</strong></td>
+            <td class="print-only" colspan="2"><strong>Totals</strong></td>
             <?php foreach ($years as $year): ?>
                 <td class="tax-year-cell">
                     <?php if ($totals[$year]['employer_count'] > 0): ?>
