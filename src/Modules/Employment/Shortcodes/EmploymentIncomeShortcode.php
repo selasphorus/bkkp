@@ -197,6 +197,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 				$txnUrl = Transaction::getFilteredAdminUrl([
 					'tax_year' => $year,
 					'related_group' => $employer->ID,
+					//'related_person' => $employer->ID,
 				]);
 				
 				$yearlyData[$year] = [

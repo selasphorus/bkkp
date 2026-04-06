@@ -419,11 +419,32 @@ class Transaction extends PostTypeHandler
 			]);
 		}
 		
+		///
 		// Map ACF post object fields to meta queries
 		$this->mapPostObjectFieldToMeta($filters, 'account', 'account', null, false);  // post_object
-		$this->mapPostObjectFieldToMeta($filters, 'related_group', 'group', null, true);  // relationship
+		$this->mapPostObjectFieldToMeta($filters, 'related_group', 'group', null, true); // relationship
+		$this->mapPostObjectFieldToMeta($filters, 'related_person', 'person', null, true);
+		
+		/*$hasBoth = isset($filters['related_group']) && isset($filters['related_person']);
+		
+		if ($hasBoth && isset($filters['meta']['clauses'])) {
+			// Pull out the two entity relationship clauses and wrap them in an OR group
+			$clauses = $filters['meta']['clauses'];
+			$groupClause  = array_pop($clauses); // related_person (added last)
+			$personClause = array_pop($clauses); // related_group (added first)
+		
+			$clauses[] = [
+				'type'     => 'group',
+				'relation' => 'OR',
+				'clauses'  => [$personClause, $groupClause],
+			];
+		
+			$filters['meta']['clauses'] = $clauses;
+		}*/
+		///
+		
 		// Normalize per_page alias
-		if(isset($filters['per_page']) && !isset($filters['limit'])){
+		if (isset($filters['per_page']) && !isset($filters['limit'])){
 			$filters['limit'] = (int)$filters['per_page'];
 		}
 	
