@@ -628,7 +628,7 @@ final class TransactionFields implements FieldGroupInterface
                     ),
                     'ui' => 1,
                 ),
-                array(
+                /*array(
                     'key' => 'field_65cbcdc4ca53f',
                     'label' => 'Related Person (v1)',
                     'name' => 'transactions_people',
@@ -655,7 +655,7 @@ final class TransactionFields implements FieldGroupInterface
                         0 => 'field_65e73424b2b39',
                     ),
                     'ui' => 1,
-                ),
+                ),*/
                 array(
                     'key' => 'field_65e7317bbd9f6',
                     'label' => 'Related Paycheck',
