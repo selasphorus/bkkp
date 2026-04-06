@@ -221,8 +221,10 @@ final class EmploymentModule extends BaseModule
 		$transactionHandler = new Transaction();
 		
 		$base = [
-			'related_group' => $employer->ID,  // Filter to this employer
-			'limit'         => -1,             // Get all by default
+			'related_group'  => $employer->ID,
+			'related_person' => $employer->ID,
+			'meta_relation'  => 'OR',
+			'limit'          => -1,
 		];
 		
 		// Merge with any programmatic filters
