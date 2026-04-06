@@ -217,21 +217,18 @@ final class EmploymentModule extends BaseModule
 	 */
 	public function findEmployerTransactions(\WP_Post $employer, array $filters = []): array
 	{
-		// Instantiate a Transaction handler
 		$transactionHandler = new Transaction();
-		
+	
+		$relationKey = $employer->post_type === 'person' ? 'related_person' : 'related_group';
+	
 		$base = [
-			'related_group'  => $employer->ID,
-			'related_person' => $employer->ID,
-			'meta_relation'  => 'OR',
-			'limit'          => -1,
+			$relationKey => $employer->ID,
+			//'meta_relation'  => 'OR',
+			'limit'      => -1,
 		];
 		
-		// Merge with any programmatic filters
-		$merged = array_merge($base, $filters);
-		
-		$result = $transactionHandler->getTransactions($merged);
-		
+		$result = $transactionHandler->getTransactions(array_merge($base, $filters)); // Merge $base with any programmatic filters
+	
 		return [
 			'posts' => $result['posts'] ?? [],
 			'debug' => $result['debug'] ?? null,
