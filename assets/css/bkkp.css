@@ -354,7 +354,8 @@ a.data-gap::before {
     font-size: 0.9em;
 }
 
-/* Hide print header on screen */
+/* Hide print-only content on screen */
+.print-only,
 .print-header {
 	display: none;
 }
