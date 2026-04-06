@@ -360,11 +360,7 @@ a.data-gap::before {
 	display: none;
 }
 
-@media print {
-    .print-only {
-        display: block;
-    }
-    
+@media print {    
     /* Hide specific site chrome - adjust selectors to match your theme */
     body > header,
     .wp-site-blocks header,
@@ -421,6 +417,10 @@ a.data-gap::before {
     
     .whx4.employment table.bkkp thead {
         display: table-header-group;
+    }
+    
+    .whx4.employment table.bkkp  td.print-only {
+        display: table-cell;
     }
     
     /* Remove link styling */
