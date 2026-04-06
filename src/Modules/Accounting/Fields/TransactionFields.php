@@ -512,8 +512,8 @@ final class TransactionFields implements FieldGroupInterface
                 ),
                 array(
                     'key' => 'field_65baa6447817a',
-                    'label' => 'Category TMP',
-                    'name' => 'category_tmp',
+                    'label' => 'Vendor Category',
+                    'name' => 'category_tmp', // TODO: rename
                     'aria-label' => '',
                     'type' => 'text',
                     'instructions' => '',
@@ -599,8 +599,38 @@ final class TransactionFields implements FieldGroupInterface
                     'ui' => 1,
                 ),
                 array(
-                    'key' => 'field_65cbcdc4ca53f',
+                    'key' => 'field_bkkp_transactions_related_person',
                     'label' => 'Related Person',
+                    'name' => 'related_person',
+                    'aria-label' => '',
+                    'type' => 'relationship',
+                    'post_type' => array(
+                        0 => 'person',
+                    ),
+                    'instructions' => '',
+                    'required' => 0,
+                    'conditional_logic' => 0,
+                    'wrapper' => array(
+                        'width' => '20',
+                        'class' => '',
+                        'id' => '',
+                    ),
+                    'post_status' => '',
+                    'taxonomy' => '',
+                    'return_format' => 'id',                    
+					'min' => '',
+					'max' => 1,  // Enforce single selection
+                    'multiple' => 0,
+                    'allow_null' => 0,
+                    'bidirectional' => 1,
+                    'bidirectional_target' => array(
+                        0 => 'field_65e73424b2b39',
+                    ),
+                    'ui' => 1,
+                ),
+                array(
+                    'key' => 'field_65cbcdc4ca53f',
+                    'label' => 'Related Person (v1)',
                     'name' => 'transactions_people',
                     'aria-label' => '',
                     'type' => 'post_object',
