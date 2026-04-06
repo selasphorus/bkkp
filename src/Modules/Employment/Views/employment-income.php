@@ -8,7 +8,7 @@
  * @var array $employer_data Prepared employer data
  * @var array $years Array of years to display
  * @var array $totals Aggregated totals by year
- * @var bool $print_header Whether to print header
+ * @var string $print_header Optional text to use as print header
  * @var bool $print_footer Whether to print footer
  * @var array $pagination Pagination info
  * @var string $troubleshooting Debug/troubleshooting info
@@ -99,7 +99,7 @@ if (!defined('ABSPATH')) {
         <?php endforeach; ?>
         
         <!-- Totals row -->
-        <?php if ($print_footer): ?>
+        <?php //if ($print_footer): // WIP ?>
         <tr class="totals-row">
             <td colspan="3"><strong>Totals</strong></td>
             <?php foreach ($years as $year): ?>
@@ -120,7 +120,7 @@ if (!defined('ABSPATH')) {
                 </td>
             <?php endforeach; ?>
         </tr>
-        <?php endif; ?>
+        <?php //endif; ?>
         </table>
     <?php endif; ?>
 </div>

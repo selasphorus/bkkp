@@ -45,7 +45,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
             //'group_by' => 'account_months',
             //'include_empty' => '1',
             'print_header' => '',
-            'print_footer' => '',
+            'print_footer' => true,
             'order' => 'ASC',
             'orderby' => 'title',
         ];
