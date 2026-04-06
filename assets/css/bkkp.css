@@ -434,6 +434,7 @@ a.data-gap::before {
 		font-weight: 500;
 		font-size: 1rem;
 		text-align: center;
+		float: none;
 	}
     
     /* Basic page setup */
