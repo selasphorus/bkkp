@@ -102,7 +102,7 @@
 	<div class="troubleshooting">
 		<details>
 			<summary><strong>Debug Information</strong></summary>
-			<pre>debug: <?php echo esc_html(print_r($debug, true)); ?></pre>
+			<pre>debug: <?php //echo esc_html(print_r($debug, true)); ?></pre>
 			<pre>info: <?php echo esc_html(print_r($info, true)); ?></pre>
 		</details>
 	</div>
