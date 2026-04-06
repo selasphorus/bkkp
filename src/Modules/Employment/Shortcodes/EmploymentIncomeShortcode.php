@@ -190,7 +190,7 @@ final class EmploymentIncomeShortcode implements ShortcodeInterface
 				}
 				
 				$txnTotal = $transactionTotalsByYear[$year] ?? 0;
-				$mismatch = $hasDocs && (abs($docTotal - $txnTotal) > 0.10); // previously checked for > 0.01 but this was too precise to allow for rounding discrepancies
+				$mismatch = $hasDocs && (abs($docTotal - $txnTotal) > 1); // previously checked for > 0.01 but this was too precise to allow for rounding discrepancies
 				$difference = $docTotal - $txnTotal;
 				
 				// Build transaction URL
