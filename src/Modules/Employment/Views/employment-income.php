@@ -39,7 +39,7 @@ if (!defined('ABSPATH')) {
         <table class="bkkp">
         <tr>
             <th>Employer</th>
-            <th>Category</th>
+            <th class="screen-only">Category</th>
             <th>W2/1099</th>
             <?php foreach ($years as $year): ?>
                 <th class="year"><?php echo $year; ?></th>
