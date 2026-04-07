@@ -395,7 +395,15 @@ final class TransactionFields implements FieldGroupInterface
                         'payment' => 'Payment',
                         'installment' => 'Installment',
                         'other' => 'Other',
-                        //TODO: Add Investment-related options like 'Contribution'?
+                        // Investment-related options:
+                        'contribution' => 'Contribution',
+                        'deposit' => 'Deposit',
+                        'funds_received' => 'Funds Received',
+                        'dividend' => 'Dividend',
+                        'reinvestment' => 'Reinvestment',
+                        'buy' => 'Buy',
+                        'sweep_in' => 'Sweep in',
+                        'interest' => 'Interest',
                     ),
                     'default_value' => 'unknown',
                     'return_format' => 'value',
