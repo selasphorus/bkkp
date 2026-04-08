@@ -463,7 +463,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 					// Only add synthetic row if there are direct assignments
 					if ($hasAny) {
 						$syntheticTerm = (object)[
-							'term_id' => 'synthetic_' . $termId,
+							'term_id' => $termId, // 'synthetic_' . $termId,
 							'name' => $row['term']->name, // Same name as parent
 							'slug' => 'synthetic_' . $row['term']->slug,
 						];
