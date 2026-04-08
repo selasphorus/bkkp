@@ -407,12 +407,26 @@ final class TransactionsShortcode implements ShortcodeInterface
 				if (isset($hierarchy['children'][$termId]) && !empty($hierarchy['children'][$termId])) {
 					// Find all child rows that follow this parent
 					$childRows = [];
+					$childrenHaveTransactions = false;
+					
 					for ($i = $idx + 1; $i < count($rows) && $rows[$i]['level'] > 0; $i++) {
 						if ($rows[$i]['level'] === 1) { // Direct children only
 							$childRows[] = $rows[$i];
+							
+							// Check if this child has any transactions
+							foreach ($years as $y) {
+								if ($rows[$i]['cols'][$y]['count'] > 0) {
+									$childrenHaveTransactions = true;
+								}
+							}
 						}
 					}
 					
+					// Only proceed if children actually have transactions
+					if (!$childrenHaveTransactions) {
+						continue; // Skip to next parent
+					}
+
 					// Calculate synthetic amounts (parent minus children)
 					$syntheticCols = [];
 					$hasAny = false;
