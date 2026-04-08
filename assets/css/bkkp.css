@@ -402,7 +402,7 @@ a.data-gap::before {
 	div.whx4.employment {
 	    max-width: none;
 	    font-size: 0.9rem;
-	    color: purple; /*tft*/
+	    font-family: arial, helvetica, sans-serif;
 	}
     
     /* Hide transaction totals and debug info */
