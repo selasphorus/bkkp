@@ -297,6 +297,9 @@ final class TransactionsShortcode implements ShortcodeInterface
 			
 			// Calculate year totals from the completed rows
 			$yearTotals = $this->calculateYearTotals($rows, $years, $hierarchy);
+			
+			// Insert "Other" rows for parents with direct category assignments
+			$rows = $this->insertOtherRows($rows, $years, $hierarchy);
 
 			// Build URLs for each cell
 			foreach ($rows as &$row) {
@@ -374,5 +377,95 @@ final class TransactionsShortcode implements ShortcodeInterface
 		}
 		
 		return $yearTotals;
+	}
+	
+	/**
+	 * Insert "Other" rows for parent categories with direct assignments
+	 * Shows transactions assigned directly to parent (not to any subcategory)
+	 * 
+	 * @param array $rows The pivot table rows
+	 * @param array $years Array of years  
+	 * @param array|null $hierarchy Hierarchy structure
+	 * @return array Enhanced rows with "Other" entries
+	 */
+	private function insertOtherRows(array $rows, array $years, ?array $hierarchy = null): array
+	{
+		if (!$hierarchy) {
+			return $rows;
+		}
+		
+		$enhanced = [];
+		
+		foreach ($rows as $idx => $row) {
+			$enhanced[] = $row;
+			
+			// Check if this parent has children
+			if ($row['level'] === 0) {
+				$termId = $row['term']->term_id;
+				
+				if (isset($hierarchy['children'][$termId]) && !empty($hierarchy['children'][$termId])) {
+					// Find all child rows that follow this parent
+					$childRows = [];
+					for ($i = $idx + 1; $i < count($rows) && $rows[$i]['level'] > 0; $i++) {
+						if ($rows[$i]['level'] === 1) { // Direct children only
+							$childRows[] = $rows[$i];
+						}
+					}
+					
+					// Calculate "Other" amounts (parent minus children)
+					$otherCols = [];
+					$hasAnyOther = false;
+					
+					foreach ($years as $y) {
+						$parentSum = $row['cols'][$y]['sum'];
+						$parentCount = $row['cols'][$y]['count'];
+						
+						// Sum all children
+						$childSum = 0.0;
+						$childCount = 0;
+						foreach ($childRows as $cr) {
+							$childSum += $cr['cols'][$y]['sum'];
+							$childCount += $cr['cols'][$y]['count'];
+						}
+						
+						$otherSum = $parentSum - $childSum;
+						$otherCount = $parentCount - $childCount;
+						
+						if ($otherCount > 0) {
+							$hasAnyOther = true;
+						}
+						
+						$otherCols[$y] = [
+							'sum' => $otherSum,
+							'count' => $otherCount,
+							'url' => Transaction::getFilteredAdminUrl([
+								'tax_year' => $y,
+								'transaction_category' => $termId,
+							])
+						];
+					}
+					
+					// Only add "Other" if there are direct assignments
+					if ($hasAnyOther) {
+						$otherTerm = (object)[
+							'term_id' => 'other_' . $termId,
+							'name' => 'Other',
+							'slug' => 'other_' . $row['term']->slug,
+						];
+						
+						// Queue for insertion after children (will be added in next loop iteration)
+						$enhanced[] = [
+							'term' => $otherTerm,
+							'cols' => $otherCols,
+							'level' => 1,
+							'is_synthetic' => true,
+							'result' => []
+						];
+					}
+				}
+			}
+		}
+		
+		return $enhanced;
 	}
 }
