@@ -414,6 +414,10 @@ a.data-gap::before {
 		display: none;
 	}
 	
+	table.bkkp {
+	    min-width: 700px;
+	}
+	
 	table.bkkp tr:nth-child(even) {
         print-color-adjust: exact; 
 	}
