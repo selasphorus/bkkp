@@ -36,7 +36,7 @@
         <tr>
             <th>Category</th><!-- previously: Term -->
             <?php foreach ($years as $year): ?>
-            <th><?php echo $year; ?></th>
+            <th class="year-col"><?php echo $year; ?></th>
             <?php endforeach; ?>
             <!--th>TS</th-->
         </tr>
@@ -45,7 +45,7 @@
         <tr class="screen-only">
 			<th>Total</th>
 			<?php foreach ($years as $year): ?>
-			<th class="year-col">
+			<th>
 			    <a href="<?php echo esc_url($yearUrls[$year]); ?>" target="_blank">
 				<?php 
 				$yearTotal = $yearTotals[$year] ?? ['sum' => 0.0, 'count' => 0];
