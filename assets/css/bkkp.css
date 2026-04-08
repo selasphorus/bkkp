@@ -398,6 +398,12 @@ a.data-gap::before {
 	h1.wp-block-post-title {
 		display: none;
 	}
+	
+	div.whx4.employment {
+	    max-width: none;
+	    font-size: 0.9rem;
+	    color: purple; /*tft*/
+	}
     
     /* Hide transaction totals and debug info */
     .whx4.employment .txn-total:not(.no_docs),
