@@ -299,7 +299,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 			$yearTotals = $this->calculateYearTotals($rows, $years, $hierarchy);
 			
 			// Insert "Other" rows for parents with direct category assignments
-			$rows = $this->insertOtherRows($rows, $years, $hierarchy);
+			$rows = $this->insertDirectParentRows($rows, $years, $hierarchy);
 
 			// Build URLs for each cell
 			foreach ($rows as &$row) {
@@ -389,7 +389,7 @@ final class TransactionsShortcode implements ShortcodeInterface
 	 * @param array|null $hierarchy Hierarchy structure
 	 * @return array Enhanced rows with synthetic entries
 	 */
-	private function insertOtherRows(array $rows, array $years, ?array $hierarchy = null): array
+	private function insertDirectParentRows(array $rows, array $years, ?array $hierarchy = null): array
 	{
 		if (!$hierarchy) {
 			return $rows;
