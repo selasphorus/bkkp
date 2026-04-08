@@ -387,6 +387,10 @@ a.data-gap::before {
 		font-size: 20pt;
 	}
 	
+	.whx4 {
+	    font-size: 0.9rem;
+	}
+	
 	/* Hide main page title */
 	.entry-title,
 	.page-title,
