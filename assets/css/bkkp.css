@@ -401,7 +401,7 @@ a.data-gap::before {
 	}
 	
 	table.bkkp tr:nth-child(even) {
-	    background-color: #c7e0f2 !important;
+	    background-color: #f2faff !important;
         print-color-adjust: exact; 
 	}
 	
