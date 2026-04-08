@@ -400,7 +400,10 @@ a.data-gap::before {
 		display: none;
 	}
 	
-	table.bkkp tr:nth-child(even) { background-color: #777777; }
+	table.bkkp tr:nth-child(even) {
+	    background-color: #c7e0f2 !important;
+        print-color-adjust: exact; 
+	}
 	
 	table.bkkp tr th,
 	table.bkkp tr td {
