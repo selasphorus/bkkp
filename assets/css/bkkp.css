@@ -49,6 +49,14 @@ table.bkkp a:hover {
     color: #CC5500;
 }
 
+.parent-category {
+    font-size:1rem;
+}
+
+.child-category {
+    font-size:0.9rem;
+}
+
 .category-name.synthetic {
     font-style: italic;
     opacity: 0.9;
