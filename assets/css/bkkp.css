@@ -400,6 +400,8 @@ a.data-gap::before {
 		display: none;
 	}
 	
+	table.bkkp tr:nth-child(even) { background-color: #777777; }
+	
 	table.bkkp tr th,
 	table.bkkp tr td {
 	    font-size: 0.75rem;
