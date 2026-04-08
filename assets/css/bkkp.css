@@ -26,6 +26,11 @@ table.bkkp tr td {
     font-size: 1rem;
 }
 
+table.bkkp td.synthetic {
+    font-style: italic;
+    opacity: 0.9;
+}
+
 table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 
 table.bkkp tbody tr:hover td,

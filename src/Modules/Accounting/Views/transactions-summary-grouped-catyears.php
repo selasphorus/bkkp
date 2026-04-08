@@ -60,7 +60,7 @@
 		</tr>
 		<?php foreach ($rows as $row): ?>
 			<tr class="<?php echo $row['level'] > 0 ? 'child-category' : 'parent-category'; ?>">
-				<td class="category-name" style="<?php echo $row['level'] > 0 ? 'padding-left: ' . ($row['level'] * 2) . 'em;' : ''; ?>">
+				<td class="category-name" style="<?php echo $row['level'] > 0 ? 'padding-left: ' . ($row['level'] * 2) . 'em;' : ''; ?><?php if ($row['is_synthetic'] ?? false) echo ' synthetic'; ?>">
 					<?php if ($row['level'] > 0): ?>
 						<span class="indent-marker">↳ <?php //echo str_repeat('↳ ', $row['level']); ?></span>
 					<?php endif; ?>
@@ -73,12 +73,13 @@
 					// We'll display negative numbers without the negative sign but style positive vs negative totals distinctly
 					$txn_class = "numeric";
 					if ($col['sum'] > 0) { $txn_class .= " positive"; }
+					$amount = number_format(round(abs($col['sum']), 2));
 					?>
 					<a href="<?php echo esc_url($col['url']); ?>" class="txn-total" target="_blank">
 					<?php if ($col['sum'] == 0.0): ?>
 						<span class="zero-amount">—</span>
 					<?php else: ?>
-						<span class="<?php echo $txn_class; ?>">$<?php echo number_format(abs($col['sum']), 2); ?></span>
+						<span class="<?php echo $txn_class; ?>">$<?php echo $amount; ?></span>
 					<?php endif; ?>
 					<?php
 					// Show count if non-zero, even if sum is zero

@@ -380,13 +380,14 @@ final class TransactionsShortcode implements ShortcodeInterface
 	}
 	
 	/**
-	 * Insert "Other" rows for parent categories with direct assignments
+	 * Insert synthetic rows for parent categories with direct assignments
 	 * Shows transactions assigned directly to parent (not to any subcategory)
+	 * Uses parent name in italics to distinguish from actual parent totals
 	 * 
 	 * @param array $rows The pivot table rows
 	 * @param array $years Array of years  
 	 * @param array|null $hierarchy Hierarchy structure
-	 * @return array Enhanced rows with "Other" entries
+	 * @return array Enhanced rows with synthetic entries
 	 */
 	private function insertOtherRows(array $rows, array $years, ?array $hierarchy = null): array
 	{
@@ -412,9 +413,9 @@ final class TransactionsShortcode implements ShortcodeInterface
 						}
 					}
 					
-					// Calculate "Other" amounts (parent minus children)
-					$otherCols = [];
-					$hasAnyOther = false;
+					// Calculate synthetic amounts (parent minus children)
+					$syntheticCols = [];
+					$hasAny = false;
 					
 					foreach ($years as $y) {
 						$parentSum = $row['cols'][$y]['sum'];
@@ -428,16 +429,16 @@ final class TransactionsShortcode implements ShortcodeInterface
 							$childCount += $cr['cols'][$y]['count'];
 						}
 						
-						$otherSum = $parentSum - $childSum;
-						$otherCount = $parentCount - $childCount;
+						$syntheticSum = $parentSum - $childSum;
+						$syntheticCount = $parentCount - $childCount;
 						
-						if ($otherCount > 0) {
-							$hasAnyOther = true;
+						if ($syntheticCount > 0) {
+							$hasAny = true;
 						}
 						
-						$otherCols[$y] = [
-							'sum' => $otherSum,
-							'count' => $otherCount,
+						$syntheticCols[$y] = [
+							'sum' => $syntheticSum,
+							'count' => $syntheticCount,
 							'url' => Transaction::getFilteredAdminUrl([
 								'tax_year' => $y,
 								'transaction_category' => $termId,
@@ -445,20 +446,19 @@ final class TransactionsShortcode implements ShortcodeInterface
 						];
 					}
 					
-					// Only add "Other" if there are direct assignments
-					if ($hasAnyOther) {
-						$otherTerm = (object)[
-							'term_id' => 'other_' . $termId,
-							'name' => 'Other',
-							'slug' => 'other_' . $row['term']->slug,
+					// Only add synthetic row if there are direct assignments
+					if ($hasAny) {
+						$syntheticTerm = (object)[
+							'term_id' => 'synthetic_' . $termId,
+							'name' => $row['term']->name, // Same name as parent
+							'slug' => 'synthetic_' . $row['term']->slug,
 						];
 						
-						// Queue for insertion after children (will be added in next loop iteration)
 						$enhanced[] = [
-							'term' => $otherTerm,
-							'cols' => $otherCols,
+							'term' => $syntheticTerm,
+							'cols' => $syntheticCols,
 							'level' => 1,
-							'is_synthetic' => true,
+							'is_synthetic' => true, // Flag for italic styling
 							'result' => []
 						];
 					}
@@ -468,4 +468,5 @@ final class TransactionsShortcode implements ShortcodeInterface
 		
 		return $enhanced;
 	}
+	
 }
