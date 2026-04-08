@@ -19,10 +19,10 @@ table.bkkp {
 
 table.bkkp tr th,
 table.bkkp tr td {
-    border: 1px solid grey;
     min-width: 5rem;
     margin: 0;
     padding: 0 3px;
+    border: 1px solid grey;
     font-size: 1rem;
 }
 
@@ -31,10 +31,6 @@ table.bkkp tr:nth-child(even) { background: #f7f7f7; }
 table.bkkp tbody tr:hover td,
 tbody tr:hover td {
     background-color: #D6ECFF;
-}
-
-table.bkkp th.year-col {
-    max-width: 200px;
 }
 
 table.bkkp a {
