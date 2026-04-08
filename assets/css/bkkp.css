@@ -382,9 +382,9 @@ a.data-gap::before {
     /* Show print header */
     .whx4 .print-header {
 		display: block;
-		margin-bottom: 1em;
+		margin-bottom: 1rem;
 		border-bottom: 2px solid #000;
-		padding-bottom: 0.5em;
+		padding-bottom: 0.5rem;
 	}
 	
 	.whx4 .print-header h1 {
@@ -404,7 +404,7 @@ a.data-gap::before {
 	table.bkkp tr td {
 	    font-size: 0.75rem;
         border: 1px solid #000;
-        padding: 2px;
+        padding: 1px;
 	}
 	
 	table.bkkp,
