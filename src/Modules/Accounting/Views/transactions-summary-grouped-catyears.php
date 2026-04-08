@@ -73,7 +73,8 @@
 					// We'll display negative numbers without the negative sign but style positive vs negative totals distinctly
 					$txn_class = "numeric";
 					if ($col['sum'] > 0) { $txn_class .= " positive"; }
-					$amount = number_format(round(abs($col['sum']), 2));
+					$amount = number_format(abs($col['sum']), 2);
+					$amount_rounded = number_format(round(abs($col['sum']), 2)); // Not currently in use -- maybe build in the option to display either way?
 					?>
 					<a href="<?php echo esc_url($col['url']); ?>" class="txn-total" target="_blank">
 					<?php if ($col['sum'] == 0.0): ?>
