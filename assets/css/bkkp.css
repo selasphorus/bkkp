@@ -416,6 +416,7 @@ a.data-gap::before {
 	
 	table.bkkp {
 	    min-width: 700px;
+	    color: black;
 	}
 	
 	table.bkkp tr:nth-child(even) {
