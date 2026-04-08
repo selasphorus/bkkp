@@ -49,7 +49,7 @@ table.bkkp a:hover {
     color: #CC5500;
 }
 
-category-name.synthetic {
+.category-name.synthetic {
     font-style: italic;
     opacity: 0.9;
 }
