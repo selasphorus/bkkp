@@ -45,7 +45,7 @@
         <tr class="screen-only">
 			<th>Total</th>
 			<?php foreach ($years as $year): ?>
-			<th>
+			<th class="year-col">
 			    <a href="<?php echo esc_url($yearUrls[$year]); ?>" target="_blank">
 				<?php 
 				$yearTotal = $yearTotals[$year] ?? ['sum' => 0.0, 'count' => 0];

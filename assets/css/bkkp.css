@@ -31,6 +31,10 @@ tbody tr:hover td {
     background-color: #D6ECFF;
 }
 
+table.bkkp th.year-col {
+    max-width: 200px;
+}
+
 table.bkkp a {
     text-decoration: none;
 }
