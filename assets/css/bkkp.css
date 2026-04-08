@@ -12,6 +12,7 @@
 
 table.bkkp {
     width: 100%;
+    font-family: verdana, sans-serif;
 }
 
 table.bkkp tr th,
@@ -20,7 +21,6 @@ table.bkkp tr td {
     min-width: 5rem;
     margin: 0;
     padding: 0 3px;
-    font-family: verdana;
     font-size: 1rem;
 }
 
@@ -387,10 +387,6 @@ a.data-gap::before {
 		font-size: 20pt;
 	}
 	
-	.whx4 {
-	    font-size: 0.9rem;
-	}
-	
 	/* Hide main page title */
 	.entry-title,
 	.page-title,
@@ -399,10 +395,16 @@ a.data-gap::before {
 		display: none;
 	}
 	
+	table.bkkp tr th,
+	table.bkkp tr td {
+	    font-size: 0.9rem;
+        border: 1px solid #000;
+        padding: 2px;
+	}
+	
+	table.bkkp,
 	div.employment {
 	    max-width: none;
-	    font-size: 0.9rem;
-	    font-family: arial, helvetica, sans-serif;
 	}
     
     /* Hide transaction totals and debug info */
@@ -413,22 +415,18 @@ a.data-gap::before {
     }
     
     /* Optimize table for printing */
+    table.bkkp,
     .whx4.employment table.bkkp {
         width: 100%;
         border-collapse: collapse;
-        font-size: 1rem;
     }
     
-    .whx4.employment table.bkkp th,
-    .whx4.employment table.bkkp td {
-        border: 1px solid #000;
-        padding: 2px;
-    }
-    
+    table.bkkp thead,
     .whx4.employment table.bkkp thead {
         display: table-header-group;
     }
     
+    table.bkkp  td.print-only,
     .whx4.employment table.bkkp  td.print-only {
         display: table-cell;
     }
@@ -451,7 +449,7 @@ a.data-gap::before {
     .whx4.employment .comp-amount,
     .whx4.employment .txn-total {
 		font-weight: 500;
-		font-size: 1rem;
+		font-size: inherit;
 		text-align: right;
 		float: none;
 	}
