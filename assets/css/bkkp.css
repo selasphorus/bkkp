@@ -374,6 +374,11 @@ a.data-gap::before {
         display: none !important;
     }
     
+    :root :where(.wp-block-group) {
+        padding-top: 0;
+        padding-bottom:0;
+    }
+    
     /* Show print header */
     .whx4 .print-header {
 		display: block;
