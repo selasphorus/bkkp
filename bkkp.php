@@ -4,7 +4,7 @@
  * Description:       A WordPress plugin for personal bookkeeping
  * Dependencies:      Requires WHx4-Core, WHx4
  * Requires Plugins:  whx4-core, whx4
- * Version:           0.1.040126
+ * Version:           0.1.260409
  * Author:            atc
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
