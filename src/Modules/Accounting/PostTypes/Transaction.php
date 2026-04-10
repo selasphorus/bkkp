@@ -24,16 +24,17 @@ class Transaction extends PostTypeHandler
 	// '68f62156839f4'; // "Transaction Basics+" layout
 	// '68b630c2630dd' -- "Import Audit"
 	
-	public function __construct(?\WP_Post $post = null) {
-		$config = [
-			'slug'        => 'transaction',
-			'menu_icon'   => 'dashicons-yes-alt',
-			'capability_type' => ['account','accounts'],
-			'taxonomies'   => [ 'transaction_tag', 'transaction_category' ],
-		];
-
-		parent::__construct( $config, $post );
-	}
+	protected static function defineConfig(): array
+    {
+        return [
+            'slug'             => 'transaction',
+            'menu_icon'        => 'dashicons-yes-alt',
+			'capability_type'  => ['account','accounts'],
+            'supports'         => ['title', 'author', 'thumbnail', 'editor', 'excerpt', 'revisions'],
+			'taxonomies'       => [ 'transaction_tag', 'transaction_category' ],
+            'default_taxonomy' => 'transaction_category',
+        ];
+    }
 
 	public function boot(): void
 	{

@@ -11,17 +11,21 @@ use atc\Bkkp\Modules\Accounting\PostTypes\Transaction;
 
 class Account extends PostTypeHandler
 {
-	public function __construct(?\WP_Post $post = null) 
-	{
-		$config = [
-			'slug'        => 'account',
+	protected static function defineConfig(): array
+    {
+        return [
+            'slug'        => 'account',
 			'menu_icon'   => 'dashicons-bank',
 			'capability_type' => ['account','accounts'],
-			'taxonomies'   => [ 'account_category' ],
-		];
-
-		parent::__construct( $config, $post );
-	}
+			'supports' => ['title', 'author', 'thumbnail', 'editor', 'excerpt', 'revisions'],
+			'taxonomies'   => ['account_category'],
+            'default_taxonomy' => 'account_category',
+            'labels'      => [
+				//'add_new_item' => 'Summon New Monster',
+				//'not_found'    => 'No monsters lurking nearby',
+			],
+        ];
+    }
 
 	public function boot(): void
 	{

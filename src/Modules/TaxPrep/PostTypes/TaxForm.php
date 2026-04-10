@@ -6,18 +6,17 @@ use atc\WXC\PostTypes\PostTypeHandler;
 
 class TaxForm extends PostTypeHandler
 {
-    public function __construct(?\WP_Post $post = null) {
-        $config = [
-            'slug'        => 'tax_form',
-            'plural_slug' => 'tax_forms',
-            //'rewrite' => ['slug' => 'whimsy'],
-            'menu_icon'   => 'dashicons-forms',
-            'capability_type' => ['account','accounts'], // ??? separate caps? or fold in to accounts?
-            //'hierarchical' => false,
-            'taxonomies' => ['item_label'],//'admin_tag', 'income_category'
+    protected static function defineConfig(): array
+    {
+        return [
+            'slug'             => 'tax_form',
+            'plural_slug'      => 'tax_forms',
+			'rewrite'          => ['slug' => 'ledger'],
+            'menu_icon'        => 'dashicons-forms',
+			'capability_type'  => ['account','accounts'],
+            'supports'         => ['title', 'author', 'thumbnail', 'editor', 'excerpt', 'revisions', 'page-attributes'],
+			'taxonomies'       => ['item_label'],
         ];
-
-        parent::__construct( $config, $post );
     }
 
     public function boot(): void

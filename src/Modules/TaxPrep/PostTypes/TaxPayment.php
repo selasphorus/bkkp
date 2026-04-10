@@ -7,18 +7,19 @@ use atc\WXC\PostTypes\PostTypeHandler;
 // DEPRECATED! TODO: convert all TaxPayment posts to Documents in tax-payments category
 class TaxPayment extends PostTypeHandler
 {
-    public function __construct(?\WP_Post $post = null) {
-        $config = [
-            'slug'        => 'tax_payment',
-            //'plural_slug' => 'tax_payments',
-            //'rewrite' => ['slug' => 'whimsy'],
-            'menu_icon'   => 'dashicons-hourglass', //'dashicons-money-alt'
-            'capability_type' => ['account','accounts'], // ??? separate caps? or fold in to accounts?
-            //'hierarchical' => false,
-            'taxonomies' => ['income_category'],//'admin_tag', 'document_category'
+    protected static function defineConfig(): array
+    {
+        return [
+            'slug'             => 'tax_payment',
+            'menu_icon'        => 'dashicons-hourglass',
+			'capability_type'  => ['account','account'],
+            'supports'         => ['title', 'author', 'thumbnail', 'editor', 'excerpt', 'revisions', 'page-attributes'],
+			'taxonomies'       => ['income_category'],
+            'default_taxonomy' => 'income_category',
+            'labels'           => [
+				//'add_new_item' => 'Gather a new Group',
+            ],
         ];
-
-        parent::__construct( $config, $post );
     }
 
     public function boot(): void

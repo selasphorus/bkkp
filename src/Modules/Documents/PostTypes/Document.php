@@ -6,18 +6,21 @@ use atc\WXC\PostTypes\PostTypeHandler;
 
 class Document extends PostTypeHandler
 {
-    public function __construct(?\WP_Post $post = null) {
-        $config = [
-            'slug'        => 'document',
-            //'plural_slug' => 'documents',
-            //'rewrite' => ['slug' => 'whimsy'],
-            'menu_icon'   => 'dashicons-media-document',
-            'capability_type' => ['document','documents'],
-            //'hierarchical' => false,
-            'taxonomies' => ['document_category'],//'admin_tag', 'income_category'
+    protected static function defineConfig(): array
+    {
+        return [
+            'slug'             => 'document',
+			//'rewrite'          => ['slug' => 'ledger'],
+            'menu_icon'        => 'dashicons-media-document',
+			'capability_type'  => ['document','documents'],
+            'supports'         => ['title', 'author', 'thumbnail', 'editor', 'excerpt', 'revisions', 'page-attributes'],
+			'taxonomies'       => ['document_category'],
+            'default_taxonomy' => 'document_category',
+            'labels'           => [
+				//'add_new_item' => 'Gather a new Group',
+            ],
+			'hierarchical' => true,
         ];
-
-        parent::__construct( $config, $post );
     }
 
     public function boot(): void
