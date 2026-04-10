@@ -6,13 +6,13 @@ use atc\WXC\Taxonomies\TaxonomyHandler;
 
 class TransactionTag extends TaxonomyHandler
 {
-    public function __construct(\WP_Term|null $term = null)
+    protected static function defineConfig(): array
     {
-        parent::__construct([
+        return [
             'slug'         => 'transaction_tag',
-            //'plural_slug'  => 'transaction_tags',
+            'plural_slug'  => 'transaction_tags',
             'object_types' => ['transaction'],
             'hierarchical' => true,
-        ], $term);
+        ];
     }
 }

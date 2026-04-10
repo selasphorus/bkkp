@@ -8,13 +8,13 @@ use atc\WXC\Taxonomies\TaxonomyHandler;
 // e.g. "1099", "1099-INT", "1099-MISC", "W2"
 class IncomeCategory extends TaxonomyHandler
 {
-    public function __construct(\WP_Term|null $term = null)
+    protected static function defineConfig(): array
     {
-        parent::__construct([
+        return [
             'slug'         => 'income_category',
             'plural_slug'  => 'income_categories',
-            'object_types' => [ 'tax_payment' ], // 'paycheck',
+            'object_types' => ['tax_payment'], //paycheck...
             'hierarchical' => true,
-        ], $term);
+        ];
     }
 }

@@ -8,14 +8,13 @@ use atc\WXC\Taxonomies\TaxonomyHandler;
 // This is WIP -- to be integrated properly into repeater-row form building or similar
 class ItemLabel extends TaxonomyHandler
 {
-    public function __construct(\WP_Term|null $term = null)
+    protected static function defineConfig(): array
     {
-        parent::__construct([
+        return [
             'slug'         => 'item_label',
-            //'plural_slug'  => 'item_labels',
-            'object_types' => [ 'document', 'tax_form' ],
+            'plural_slug'  => 'item_labels',
+            'object_types' => ['document', 'tax_form'],
             'hierarchical' => false,
-            //'menu_name' => 'Labels',
-        ], $term);
+        ];
     }
 }

@@ -6,13 +6,13 @@ use atc\WXC\Taxonomies\TaxonomyHandler;
 
 class TransactionCategory extends TaxonomyHandler
 {
-    public function __construct(\WP_Term|null $term = null)
+    protected static function defineConfig(): array
     {
-        parent::__construct([
+        return [
             'slug'         => 'transaction_category',
             'plural_slug'  => 'transaction_categories',
             'object_types' => ['transaction'],
             'hierarchical' => true,
-        ], $term);
+        ];
     }
 }

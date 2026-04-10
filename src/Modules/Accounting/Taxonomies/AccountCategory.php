@@ -6,13 +6,13 @@ use atc\WXC\Taxonomies\TaxonomyHandler;
 
 class AccountCategory extends TaxonomyHandler
 {
-    public function __construct(\WP_Term|null $term = null)
+    protected static function defineConfig(): array
     {
-        parent::__construct([
+        return [
             'slug'         => 'account_category',
             'plural_slug'  => 'account_categories',
             'object_types' => ['account'],
             'hierarchical' => true,
-        ], $term);
+        ];
     }
 }
