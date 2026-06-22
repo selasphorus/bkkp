@@ -16,13 +16,12 @@ function build_document_title( $post_id = null, $arr = array() )
     if ( $post_id == null ) { return false; }
     
     // Init vars
-    $ts_info = "";
     $new_title = "";
     
      // Set var values
     if ( !empty($arr) ) {
         
-        //wxc_log( "[btt] running btt using array derived from _POST.");
+        //wxc_log("running btt using array derived from _POST.", null, 'bkkp');
         //$field_name = $arr['field_name'];
         
     } else if ( $post_id ) {
@@ -46,7 +45,7 @@ function build_document_title( $post_id = null, $arr = array() )
     
     // Taxonomies
     if ( empty($arr) && $post_id ) {
-        //wxc_log( "[btt] get taxonomy info from post_id: ".$post_id);
+        //wxc_log("get taxonomy info from post_id: ".$post_id, null, 'bkkp');
         
         $doc_categories = wp_get_post_terms( $post_id, 'document_category', array( 'fields' => 'ids' ) );
         
@@ -59,7 +58,7 @@ function build_document_title( $post_id = null, $arr = array() )
         if ( empty($keys_str) ) {
             $keys_str = get_field('key_name_txt', $post_id, false);
         }
-        wxc_log( "[btt] keys_str: ".$keys_str);*/
+        wxc_log("keys_str: ".$keys_str, null, 'bkkp');*/
     }
     
     // Build the title
