@@ -144,9 +144,6 @@
 
 /* Print styles */
 @media print {
-    .screen-only {
-        display: none !important;
-    }
     
     .print-header {
         margin-bottom: 20px;

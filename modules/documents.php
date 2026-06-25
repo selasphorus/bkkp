@@ -20,12 +20,10 @@ function build_document_title( $post_id = null, $arr = array() )
     
      // Set var values
     if ( !empty($arr) ) {
-        
         //wxc_log("running btt using array derived from _POST.", null, 'bkkp');
         //$field_name = $arr['field_name'];
         
     } else if ( $post_id ) {
-        
         // If no array of data was submitted, get info via the post_id
         $tax_year = get_field('tax_year', $post_id);
         $statement_date = get_field('statement_date', $post_id); // returned in format e.g. 20230113 (YYYYMMDD)        
@@ -110,8 +108,5 @@ function build_document_title( $post_id = null, $arr = array() )
     // Trim trailing hyphens and space
     if ( substr($new_title, -4) == ' -- ' ) { $new_title = substr($new_title, 0, -4); }
     
-    return $new_title;
-    
+    return $new_title;  
 }
-
-?>
